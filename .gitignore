@@ -1,0 +1,36 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# JavaScript dependencies and build outputs
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Python environments and generated files
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Tool caches and reports
+.cache/
+coverage/
+playwright-report/
+test-results/
+dist/
+build/
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
