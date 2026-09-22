@@ -6,9 +6,10 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 1 establishes the development foundation: a minimal Next.js page,
-an importable FastAPI application, locked dependencies, and code-quality tools.
-Authentication, monitoring, persistence, and the product interface are not implemented yet.
+Milestone 2 adds a dark-first application shell, responsive navigation,
+accessible shared controls, and loading, empty, and error states. The Overview
+page is an interface preview; it does not display simulated monitoring results.
+Authentication, monitoring, and persistence are not implemented yet.
 
 ## Local development
 
@@ -24,6 +25,10 @@ and cloud services are not required for this milestone.
 - `frontend/`: Next.js App Router, React, TypeScript, and Tailwind CSS.
 - `backend/`: Python and the minimal FastAPI entrypoint.
 - `docs/`: development instructions.
+
+See the [design system](docs/design-system.md) for tokens, component behavior,
+and accessibility checks. Run `npm run check` in `frontend/` for formatting,
+linting, type checking, and component tests; run `npm run build` separately.
 
 Development proceeds one explicitly authorized milestone at a time. Repository
 operations and commits remain with the repository owner.

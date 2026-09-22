@@ -1,6 +1,6 @@
 # Local development
 
-## Milestone 1 prerequisites
+## Current prerequisites
 
 The supported development environment is Ubuntu under WSL2, with Node.js 24,
 npm 11, and Python 3.13 including `venv` and `pip`. Supply these prerequisites
@@ -13,7 +13,7 @@ Linux tools, not executables under `/mnt/c/Program Files/`.
 
 No global package installation, shell-profile edit, repository ownership change,
 or system-permission adjustment is part of project setup. PostgreSQL, Redis,
-Mailpit, Docker, and AWS are not needed for milestone 1. They are introduced only
+Mailpit, Docker, and AWS are not needed for milestones 1–2. They are introduced only
 when their features are implemented.
 
 The examples use the existing project location:
@@ -38,8 +38,9 @@ npm ci --cache ../.cache/npm
 npm run dev
 ```
 
-Open <http://localhost:3000>. The page currently contains only the product name
-and tagline. The development server listens on loopback.
+Open <http://localhost:3000>. The root redirects to `/dashboard`, which shows
+the application shell and an honest empty state. Only Overview is available in
+navigation. The development server listens on loopback.
 
 Optionally copy the root `.env.example` to `frontend/.env.local` to disable
 Next.js telemetry. Next.js loads that frontend-local file; neither application
@@ -53,8 +54,8 @@ npm run check
 npm run build
 ```
 
-`check` runs Prettier, ESLint with zero tolerated warnings, and strict TypeScript
-checking. `typecheck` generates Next.js route types first, so it also works before
+`check` runs Prettier, ESLint with zero tolerated warnings, strict TypeScript
+checking, and Vitest component tests. `typecheck` generates Next.js route types first, so it also works before
 the first development server or build. Linting runs independently of the build.
 
 To check the production entrypoint after a successful build:
@@ -65,6 +66,16 @@ npm run start
 
 Stop the development server first because both commands use port 3000. Use
 `npm run format` when intentionally formatting frontend files.
+
+Run `npm run test` for the component and contrast tests, or `npm run test:watch`
+while editing. Tests exercise keyboard interaction, dialog focus, mobile menu
+dismissal, labeled fields, feedback announcements, and palette contrast. They
+run locally in jsdom without an API server or external websites. Browser-based
+responsive and focus checks remain necessary because jsdom does not lay out CSS.
+
+The initial Windows checks do not replace a WSL validation run. Ubuntu/WSL was
+not available during the foundation work. Continue to keep platform-specific
+dependency directories separate.
 
 ## Backend
 
@@ -101,9 +112,9 @@ contains the same runtime versions plus development tools. Both include hashes
 and platform markers from a universal Python 3.13 resolution, supporting WSL
 Linux and Windows without maintaining separate version lists.
 
-There are no behavioral test suites in milestone 1: there is no product behavior
-yet. The checks above validate the entrypoints and toolchain. Tests are added
-with the functionality they exercise rather than as placeholder test cases.
+The backend still has no product behavior or behavioral test suite. The commands
+above validate its entrypoint and toolchain. Backend tests will arrive with the
+functionality they exercise.
 
 ## Dependency changes
 
