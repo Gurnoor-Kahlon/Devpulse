@@ -25,6 +25,31 @@ class ErrorResponse(BaseModel):
     request_id: str
 
 
+class ApiError(Exception):
+    """Only use fixed, safe messages and codes, never exception or input values."""
+
+    def __init__(
+        self, status: int, code: str, message: str, headers: Mapping[str, str] | None = None
+    ) -> None:
+        self.status, self.code, self.message, self.headers = status, code, message, headers
+
+
+async def api_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    assert isinstance(exc, ApiError)
+    return error_response(
+        request.state.request_id, exc.status, exc.code, exc.message, headers=exc.headers
+    )
+
+
+async def database_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    return error_response(
+        request.state.request_id,
+        503,
+        "service_unavailable",
+        "The service is temporarily unavailable. Try again later.",
+    )
+
+
 def error_response(
     request_id: str,
     status_code: int,

@@ -58,8 +58,14 @@ def test_clean_database_migration_roundtrip(database_engine: Engine) -> None:
         assert inspect(connection).get_table_names() == []
         connection.commit()
         command.upgrade(config, "head")
-        assert inspect(connection).get_table_names() == ["alembic_version"]
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0001"
+        assert set(inspect(connection).get_table_names()) == {
+            "alembic_version",
+            "users",
+            "sessions",
+            "auth_tokens",
+            "rate_limit_buckets",
+        }
+        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "a4c16df5c2ab"
         connection.commit()
         command.current(config, check_heads=True)
         command.check(config)
@@ -69,8 +75,8 @@ def test_clean_database_migration_roundtrip(database_engine: Engine) -> None:
         assert connection.scalar(text("SELECT count(*) FROM alembic_version")) == 0
         connection.commit()
         command.upgrade(config, "head")
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0001"
-    assert "0001" in output.getvalue()
+        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "a4c16df5c2ab"
+    assert "a4c16df5c2ab" in output.getvalue()
 
 
 def test_session_commits_and_rollbacks_stay_inside_outer_transaction(

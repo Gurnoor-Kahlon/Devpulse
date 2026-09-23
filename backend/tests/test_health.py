@@ -42,7 +42,12 @@ def test_factory_instances_do_not_share_runtime_state() -> None:
 
 @pytest.mark.parametrize(
     "settings",
-    [Settings(environment="production"), Settings(api_docs_enabled=False)],
+    [
+        Settings(
+            environment="production", app_origin="https://devpulse.example.com", smtp_mode="tls"
+        ),
+        Settings(api_docs_enabled=False),
+    ],
 )
 def test_docs_can_be_disabled_without_disabling_health(settings: Settings) -> None:
     with TestClient(create_app(settings)) as client:
@@ -55,7 +60,8 @@ def test_openapi_documents_health_and_actual_error_models(application: FastAPI) 
     with TestClient(application) as client:
         assert client.get("/docs").status_code == 200
         schema = client.get("/openapi.json").json()
-    assert set(schema["paths"]) == {"/health/live", "/health/ready"}
+    assert {"/health/live", "/health/ready"}.issubset(schema["paths"])
+    assert len([path for path in schema["paths"] if path.startswith("/api/v1/auth/")]) == 9
     ready_responses = schema["paths"]["/health/ready"]["get"]["responses"]
     assert ready_responses["200"]["content"]["application/json"]["schema"]["$ref"].endswith(
         "/HealthResponse"

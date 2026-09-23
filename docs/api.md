@@ -1,7 +1,9 @@
 # API foundation
 
-DevPulse currently exposes process/database health and development API documentation.
-Authentication, monitors, and jobs belong to later milestones.
+DevPulse exposes process/database health, the account/session API, and development
+API documentation. See the [authentication guide](authentication.md) for account
+endpoints, cookies, CSRF, SMTP configuration, and recovery. Monitors and jobs
+belong to later milestones.
 
 ## Application lifecycle
 
@@ -24,8 +26,9 @@ responses, including in development.
 
 Both health endpoints are intentionally unversioned. Readiness checks PostgreSQL
 connectivity, not schema version, Redis, workers, or monitored targets. Run the
-documented migrations before starting the API. Future business endpoints will use `/api/v1`; that
-namespace has no routes yet. Unknown routes, including `/`, return a structured 404. No frontend-to-backend proxy is introduced in this milestone.
+documented migrations before starting the API. Account endpoints use
+`/api/v1/auth`. Unknown routes, including `/`, return a structured 404.
+Frontend-to-backend forwarding arrives with the authentication UI milestone.
 
 ## Configuration
 

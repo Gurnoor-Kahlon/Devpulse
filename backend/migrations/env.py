@@ -6,6 +6,7 @@ from app.core.config import load_settings
 from app.core.logging import configure_logging
 from app.db.base import Base
 from app.db.session import create_database_engine
+from app.models import auth  # noqa: F401 -- register model metadata for autogeneration
 
 
 def migrate(connection: Connection) -> None:

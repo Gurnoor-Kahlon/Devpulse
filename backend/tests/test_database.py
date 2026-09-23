@@ -57,6 +57,9 @@ def test_database_outage_preserves_liveness_and_sanitizes_readiness(
         assert response.status_code == 503
         assert response.json()["error"]["code"] == "service_unavailable"
         assert response.json()["request_id"] == response.headers["x-request-id"]
+        failed_auth = client.get("/api/v1/auth/csrf")
+        assert failed_auth.status_code == 503
+        assert "database-redaction-canary" not in failed_auth.text
     output = capsys.readouterr().out + response.text
     assert "database-redaction-canary" not in output
     assert "psycopg" not in output
@@ -75,8 +78,8 @@ def test_failed_query_is_sanitized_and_pool_disposed(unavailable_url: str) -> No
     assert engine.pool is not original_pool
 
 
-def test_metadata_has_conventions_without_feature_tables() -> None:
-    assert not Base.metadata.tables
+def test_metadata_has_conventions_and_only_authorized_tables() -> None:
+    assert set(Base.metadata.tables) == {"users", "sessions", "auth_tokens", "rate_limit_buckets"}
     table = Table(
         "example",
         MetaData(naming_convention=Base.metadata.naming_convention),

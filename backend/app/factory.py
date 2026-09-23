@@ -3,12 +3,21 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from sqlalchemy.exc import OperationalError, TimeoutError
 from sqlalchemy.orm import sessionmaker
 from starlette.exceptions import HTTPException
 
+from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.core.config import Settings, load_settings
-from app.core.errors import ErrorResponse, http_exception_handler, validation_exception_handler
+from app.core.errors import (
+    ApiError,
+    ErrorResponse,
+    api_error_handler,
+    database_error_handler,
+    http_exception_handler,
+    validation_exception_handler,
+)
 from app.core.logging import configure_logging, logger
 from app.core.middleware import RequestContextMiddleware
 from app.db.session import create_database_engine
@@ -59,5 +68,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.add_middleware(RequestContextMiddleware)
     application.add_exception_handler(HTTPException, http_exception_handler)
     application.add_exception_handler(RequestValidationError, validation_exception_handler)
+    application.add_exception_handler(ApiError, api_error_handler)
+    application.add_exception_handler(OperationalError, database_error_handler)
+    application.add_exception_handler(TimeoutError, database_error_handler)
     application.include_router(health_router)
+    application.include_router(auth_router)
     return application

@@ -1,8 +1,9 @@
 # PostgreSQL and migrations
 
-Milestone 4 establishes synchronous SQLAlchemy sessions and Alembic migrations.
-There are no feature tables yet. Revision `0001` records an empty baseline in
-`alembic_version`; account and monitoring tables arrive with their features.
+Milestone 4 established synchronous SQLAlchemy sessions and Alembic migrations.
+Revision `0001` records an empty baseline in `alembic_version`. Milestone 5 adds
+revision `a4c16df5c2ab` with users, sessions, auth tokens, and rate-limit buckets.
+Monitoring tables remain deferred.
 
 ## Local setup
 
@@ -48,7 +49,7 @@ From `backend/`, with the project virtual environment active:
 python -m alembic upgrade head
 python -m alembic current --check-heads
 python -m alembic check
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000 --no-proxy-headers
 ```
 
 Run migrations explicitly before starting the API. Startup never calls
@@ -78,7 +79,7 @@ To inspect baseline SQL without connecting:
 python -m alembic upgrade head --sql
 ```
 
-`python -m alembic downgrade base` removes the baseline version record. Only
+`python -m alembic downgrade base` removes all current feature tables and the baseline version record. Only
 rehearse downgrades on a disposable database; future revisions may remove data.
 Validate downgrade and re-upgrade before publishing each future migration.
 

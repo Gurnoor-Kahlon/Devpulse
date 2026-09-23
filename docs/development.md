@@ -13,8 +13,9 @@ Linux tools, not executables under `/mnt/c/Program Files/`.
 
 No global package installation, shell-profile edit, repository ownership change,
 or system-permission adjustment is part of project setup. Milestone 4 requires a
-user-provided PostgreSQL 18 server and client. Redis, Mailpit, Docker, and AWS
-remain deferred.
+user-provided PostgreSQL 18 server and client. Milestone 5 also uses local Mailpit
+for verification/reset emails; see the [authentication guide](authentication.md).
+Redis, Docker, and AWS remain deferred.
 
 The examples use the existing project location:
 
@@ -95,7 +96,7 @@ databases and configure `backend/.env`. Then, from the activated backend termina
 ```bash
 python -m alembic upgrade head
 python -m alembic current --check-heads
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000 --no-proxy-headers
 ```
 
 Open <http://localhost:8000/docs> for the API documentation. Both
@@ -132,11 +133,13 @@ and platform markers from a universal Python 3.13 resolution, supporting WSL
 Linux and Windows without maintaining separate version lists.
 
 The backend tests cover configuration, lifecycle health, OpenAPI, safe errors,
-request-ID concurrency, and log privacy. Test-only routes are attached to fresh
+request-ID concurrency, log privacy, and authentication security. Test-only routes are attached to fresh
 factory instances; they are not application endpoints. These tests do not need
 PostgreSQL or Redis. Database integration tests run separately with
 `TEST_DATABASE_URL` and `python -m pytest --run-integration`; see the
-[database guide](database.md) for isolation and setup. HTTPX is currently a development dependency
+[database guide](database.md) for isolation and setup. Add `--run-mailpit` to verify
+real SMTP account emails; see the [authentication guide](authentication.md).
+HTTPX is currently a development dependency
 for in-process API tests; outbound monitoring is not implemented.
 
 The locked Starlette test client currently emits upstream deprecation warnings

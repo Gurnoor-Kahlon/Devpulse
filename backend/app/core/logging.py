@@ -7,7 +7,13 @@ from logging.config import dictConfig
 request_id_context: ContextVar[str | None] = ContextVar("request_id", default=None)
 logger = logging.getLogger("devpulse")
 
-_EVENTS = {"application_started", "application_stopped", "request_completed", "request_failed"}
+_EVENTS = {
+    "application_started",
+    "application_stopped",
+    "request_completed",
+    "request_failed",
+    "auth_email_failed",
+}
 _FIELDS = {"method", "route", "status_code", "duration_ms", "environment", "error_code"}
 
 
