@@ -20,7 +20,7 @@ def test_environment_overrides_dotenv_without_changing_defaults(
     assert settings.environment == "development"
 
 
-@pytest.mark.parametrize("field", ["ENVIRONMENT", "LOG_LEVEL", "API_DOCS_ENABLED"])
+@pytest.mark.parametrize("field", ["ENVIRONMENT", "LOG_LEVEL", "API_DOCS_ENABLED", "DATABASE_URL"])
 def test_invalid_configuration_fails_without_exposing_values(
     monkeypatch: pytest.MonkeyPatch, field: str
 ) -> None:

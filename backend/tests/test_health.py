@@ -48,7 +48,7 @@ def test_docs_can_be_disabled_without_disabling_health(settings: Settings) -> No
     with TestClient(create_app(settings)) as client:
         assert client.get("/docs").status_code == 404
         assert client.get("/openapi.json").status_code == 404
-        assert client.get("/health/ready").status_code == 200
+        assert client.get("/health/live").status_code == 200
 
 
 def test_openapi_documents_health_and_actual_error_models(application: FastAPI) -> None:

@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from sqlalchemy.orm import sessionmaker
 from starlette.exceptions import HTTPException
 
 from app.api.health import router as health_router
@@ -10,6 +11,7 @@ from app.core.config import Settings, load_settings
 from app.core.errors import ErrorResponse, http_exception_handler, validation_exception_handler
 from app.core.logging import configure_logging, logger
 from app.core.middleware import RequestContextMiddleware
+from app.db.session import create_database_engine
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -18,6 +20,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         configure_logging(settings.log_level)
+        engine = create_database_engine(settings)
+        application.state.engine = engine
+        application.state.session_factory = sessionmaker(engine, expire_on_commit=False)
         application.state.ready = True
         logger.info(
             "application_started",
@@ -27,6 +32,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             yield
         finally:
             application.state.ready = False
+            engine.dispose()
             logger.info("application_stopped", extra={"event": "application_stopped"})
 
     expose_docs = settings.api_docs_enabled and settings.environment != "production"
@@ -35,7 +41,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         description=(
             "Reliability at a glance. Every HTTP response includes a server-generated "
             "X-Request-ID. Errors use a consistent error object and matching request_id. "
-            "Only process health is implemented at this stage."
+            "Readiness checks application startup and PostgreSQL connectivity."
         ),
         version="0.1.0",
         debug=False,

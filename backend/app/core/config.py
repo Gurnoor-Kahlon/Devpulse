@@ -1,8 +1,10 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import ValidationError
+from pydantic import SecretStr, ValidationError, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict, SettingsError
+from sqlalchemy.engine import make_url
+from sqlalchemy.exc import ArgumentError
 
 
 class Settings(BaseSettings):
@@ -18,6 +20,23 @@ class Settings(BaseSettings):
     environment: Literal["development", "test", "production"] = "development"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     api_docs_enabled: bool = True
+    database_url: SecretStr = SecretStr("postgresql+psycopg://devpulse@127.0.0.1:5432/devpulse")
+
+    @field_validator("database_url")
+    @classmethod
+    def validate_database_url(cls, value: SecretStr) -> SecretStr:
+        try:
+            url = make_url(value.get_secret_value())
+            valid = (
+                url.drivername == "postgresql+psycopg"
+                and bool(url.host and url.database and url.username)
+                and (url.port is None or 1 <= url.port <= 65535)
+            )
+        except (ArgumentError, ValueError):
+            valid = False
+        if not valid:
+            raise ValueError("Use a PostgreSQL psycopg URL with host, database, and username.")
+        return value
 
 
 class ConfigurationError(ValueError):

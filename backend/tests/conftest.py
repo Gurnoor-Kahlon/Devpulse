@@ -3,10 +3,23 @@ import os
 from collections.abc import Iterator
 
 import pytest
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 from app.core.config import Settings
+from app.db.session import database_is_ready
 from app.factory import create_app
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:
+    parser.addoption("--run-integration", action="store_true", help="Run real PostgreSQL tests")
+
+
+def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
+    if not config.getoption("--run-integration"):
+        skip = pytest.mark.skip(reason="Use --run-integration with TEST_DATABASE_URL")
+        for item in items:
+            if "integration" in item.keywords:
+                item.add_marker(skip)
 
 
 @pytest.fixture(autouse=True)
@@ -28,4 +41,11 @@ def isolate_configuration(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
 
 @pytest.fixture
 def application() -> FastAPI:
-    return create_app(Settings(environment="test"))
+    application = create_app(Settings(environment="test"))
+
+    def startup_ready(request: Request) -> bool:
+        return bool(request.app.state.ready)
+
+    # Unit HTTP tests isolate PostgreSQL; integration tests use the real dependency.
+    application.dependency_overrides[database_is_ready] = startup_ready
+    return application

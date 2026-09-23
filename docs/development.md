@@ -12,9 +12,9 @@ Use Linux executables inside WSL. Check `node --version`, `npm --version`, and
 Linux tools, not executables under `/mnt/c/Program Files/`.
 
 No global package installation, shell-profile edit, repository ownership change,
-or system-permission adjustment is part of project setup. PostgreSQL, Redis,
-Mailpit, Docker, and AWS are not needed for milestones 1–3. They are introduced only
-when their features are implemented.
+or system-permission adjustment is part of project setup. Milestone 4 requires a
+user-provided PostgreSQL 18 server and client. Redis, Mailpit, Docker, and AWS
+remain deferred.
 
 The examples use the existing project location:
 
@@ -87,19 +87,28 @@ cd backend
 python3.13 -m venv .venv
 source .venv/bin/activate
 python -m pip install --require-hashes -r requirements-dev.lock --cache-dir ../.cache/pip
+```
+
+Follow the [database guide](database.md) to create dedicated development/test
+databases and configure `backend/.env`. Then, from the activated backend terminal:
+
+```bash
+python -m alembic upgrade head
+python -m alembic current --check-heads
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 Open <http://localhost:8000/docs> for the API documentation. Both
 <http://localhost:8000/health/live> and <http://localhost:8000/health/ready>
-return `{"status":"ok"}` after startup. Readiness currently checks application
-lifecycle only; no database or queue is connected. The frontend still runs
+return `{"status":"ok"}` after startup when PostgreSQL is reachable. Readiness
+returns `503` when the database is unavailable; liveness remains available. The frontend still runs
 independently of the API.
 
 The application factory is `app.factory.create_app`; `app.main:app` keeps the
 existing Uvicorn entrypoint. Settings load from `backend/.env` regardless of the
 working directory, and process environment variables take precedence. Defaults
-work without creating an environment file. Invalid configuration stops startup
+allow import without an environment file, but database readiness requires a
+working database connection. Invalid configuration stops startup
 without printing supplied values. See the [API foundation](api.md) for details.
 
 Validation, from `backend/` with its virtual environment active:
@@ -125,7 +134,9 @@ Linux and Windows without maintaining separate version lists.
 The backend tests cover configuration, lifecycle health, OpenAPI, safe errors,
 request-ID concurrency, and log privacy. Test-only routes are attached to fresh
 factory instances; they are not application endpoints. These tests do not need
-PostgreSQL, Redis, or network access. HTTPX is currently a development dependency
+PostgreSQL or Redis. Database integration tests run separately with
+`TEST_DATABASE_URL` and `python -m pytest --run-integration`; see the
+[database guide](database.md) for isolation and setup. HTTPX is currently a development dependency
 for in-process API tests; outbound monitoring is not implemented.
 
 The locked Starlette test client currently emits upstream deprecation warnings

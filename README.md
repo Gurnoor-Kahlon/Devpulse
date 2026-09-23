@@ -6,11 +6,11 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 3 adds a configurable FastAPI application factory, process health
-endpoints, consistent errors, request IDs, and structured logging. The frontend
+Milestone 4 adds PostgreSQL connection/session handling, database readiness,
+an Alembic migration baseline, and isolated database integration tests. The frontend
 has a dark-first shell with accessible controls and feedback states; its Overview
 page remains an interface preview without simulated monitoring results.
-Authentication, monitoring, and persistence are not implemented yet.
+Authentication and monitoring are not implemented yet; no feature tables exist.
 
 ## Local development
 
@@ -18,7 +18,9 @@ Use Node.js 24 and Python 3.13 in WSL2 Ubuntu. See the
 [development guide](docs/development.md) for installation, startup, validation,
 and dependency-update commands.
 
-The frontend and backend currently run independently. PostgreSQL, Redis, Docker,
+The frontend and backend currently run independently. PostgreSQL 18 is required
+for API readiness and database integration tests. See the
+[database guide](docs/database.md) for local setup and migrations. Redis, Docker,
 and cloud services are not required for this milestone.
 
 ## Project layout

@@ -1,7 +1,7 @@
 # API foundation
 
-DevPulse currently exposes process health and development API documentation.
-Database access, authentication, monitors, and jobs belong to later milestones.
+DevPulse currently exposes process/database health and development API documentation.
+Authentication, monitors, and jobs belong to later milestones.
 
 ## Application lifecycle
 
@@ -11,19 +11,20 @@ The factory does not open network connections. `app.main:app` remains the
 Uvicorn entrypoint.
 
 The lifespan configures process logging, marks application startup complete,
-and clears readiness on shutdown. The application never enables debug traceback
+creates a process-local database pool, and clears readiness and disposes the pool
+on shutdown. The application never enables debug traceback
 responses, including in development.
 
-| Endpoint            | Behavior                                                                       |
-| ------------------- | ------------------------------------------------------------------------------ |
-| `GET /health/live`  | `200` with `{"status":"ok"}` when the API can handle a request                 |
-| `GET /health/ready` | `200` with `{"status":"ok"}` after application startup; `503` before readiness |
-| `GET /docs`         | Swagger UI in development/test when enabled                                    |
-| `GET /openapi.json` | Generated schema in development/test when enabled                              |
+| Endpoint            | Behavior                                                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| `GET /health/live`  | `200` with `{"status":"ok"}` when the API can handle a request                                |
+| `GET /health/ready` | `200` with `{"status":"ok"}` after startup and a successful PostgreSQL query; otherwise `503` |
+| `GET /docs`         | Swagger UI in development/test when enabled                                                   |
+| `GET /openapi.json` | Generated schema in development/test when enabled                                             |
 
-Both health endpoints are intentionally unversioned. Readiness does **not** yet
-check PostgreSQL, Redis, workers, or monitored targets. Database readiness will
-arrive with milestone 4. Future business endpoints will use `/api/v1`; that
+Both health endpoints are intentionally unversioned. Readiness checks PostgreSQL
+connectivity, not schema version, Redis, workers, or monitored targets. Run the
+documented migrations before starting the API. Future business endpoints will use `/api/v1`; that
 namespace has no routes yet. Unknown routes, including `/`, return a structured 404. No frontend-to-backend proxy is introduced in this milestone.
 
 ## Configuration
@@ -32,17 +33,19 @@ Copy `backend/.env.example` to `backend/.env` only if overriding defaults.
 Process environment variables override file values. The backend reads only its
 own environment file, not the frontend or repository-root environment files.
 
-| Variable                    | Default       | Allowed values                      |
-| --------------------------- | ------------- | ----------------------------------- |
-| `DEVPULSE_ENVIRONMENT`      | `development` | `development`, `test`, `production` |
-| `DEVPULSE_LOG_LEVEL`        | `INFO`        | `DEBUG`, `INFO`, `WARNING`, `ERROR` |
-| `DEVPULSE_API_DOCS_ENABLED` | `true`        | Boolean                             |
+| Variable                    | Default                                                 | Allowed values                                           |
+| --------------------------- | ------------------------------------------------------- | -------------------------------------------------------- |
+| `DEVPULSE_ENVIRONMENT`      | `development`                                           | `development`, `test`, `production`                      |
+| `DEVPULSE_LOG_LEVEL`        | `INFO`                                                  | `DEBUG`, `INFO`, `WARNING`, `ERROR`                      |
+| `DEVPULSE_API_DOCS_ENABLED` | `true`                                                  | Boolean                                                  |
+| `DEVPULSE_DATABASE_URL`     | `postgresql+psycopg://devpulse@127.0.0.1:5432/devpulse` | PostgreSQL psycopg URL with host, database, and username |
 
 Interactive documentation and the schema endpoint are always disabled in
 production, even when the documentation flag is true. Health endpoints remain
 available. Settings are validated once per app construction and cannot be
 mutated afterward. Invalid startup configuration reports setting names without
-echoing their values. No secrets are needed at this stage.
+echoing their values. Database URLs are stored as masked settings. Configure
+credentials using the [database setup guide](database.md), not source files.
 
 ## Request IDs and errors
 
@@ -125,4 +128,5 @@ python -m pytest
 The suite exercises startup configuration, independent factory state, health
 lifecycle, documentation settings, error contracts, concurrent request IDs,
 late response failures, and sensitive-value exclusion. Test fixtures use
-synthetic canary strings and test-only routes, not real credentials or services.
+synthetic canary strings and test-only routes. Database integration tests use
+real PostgreSQL when explicitly enabled; see the [database guide](database.md).

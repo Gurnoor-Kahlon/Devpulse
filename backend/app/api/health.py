@@ -1,9 +1,10 @@
-from typing import Literal
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.core.errors import ErrorResponse
+from app.db.session import database_is_ready
 
 router = APIRouter(prefix="/health", tags=["Health"])
 
@@ -21,11 +22,13 @@ async def live() -> HealthResponse:
 @router.get(
     "/ready",
     response_model=HealthResponse,
-    responses={503: {"model": ErrorResponse, "description": "Application startup is incomplete."}},
+    responses={
+        503: {"model": ErrorResponse, "description": "Startup or PostgreSQL is unavailable."}
+    },
     summary="Check API readiness",
 )
-async def ready(request: Request) -> HealthResponse:
-    """Check completed application startup. Database readiness will be added with persistence."""
-    if not request.app.state.ready:
+def ready(available: Annotated[bool, Depends(database_is_ready)]) -> HealthResponse:
+    """Check startup and a bounded PostgreSQL query in the thread pool."""
+    if not available:
         raise HTTPException(status_code=503)
     return HealthResponse()
