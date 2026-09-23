@@ -1,9 +1,9 @@
 # Account and session API
 
 Milestone 5 implements account access at the API level. Milestone 6 adds browser
-forms, route protection, and same-origin forwarding; see the [account UI guide](account-ui.md). No monitor
-endpoints exist yet. Unverified accounts may log in; verified-email enforcement
-for monitor creation/enabling belongs to milestone 7.
+forms, route protection, and same-origin forwarding; see the [account UI guide](account-ui.md).
+Unverified accounts may log in. Milestone 7 requires verified email for creating
+or enabling monitors; see the [monitor API guide](monitors.md).
 
 ## Local prerequisites and startup
 

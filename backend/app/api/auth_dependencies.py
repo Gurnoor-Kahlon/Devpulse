@@ -1,4 +1,5 @@
 from typing import Annotated, cast
+from uuid import UUID
 
 from fastapi import Depends, Request, Response
 from sqlalchemy.orm import Session
@@ -7,7 +8,7 @@ from app.core.config import Settings
 from app.core.errors import ApiError
 from app.core.security import now_utc
 from app.db.session import get_session
-from app.models.auth import AuthSession
+from app.models.auth import AuthSession, User
 from app.services.auth import active_session, csrf_matches
 
 Database = Annotated[Session, Depends(get_session)]
@@ -74,3 +75,20 @@ def require_csrf(request: Request, db: Database) -> AuthSession:
 
 
 CsrfSession = Annotated[AuthSession, Depends(require_csrf)]
+
+
+def require_user(request: Request, db: Database) -> UUID:
+    session = request_session(request, db)
+    user = db.get(User, session.user_id) if session and session.user_id else None
+    if user is None or session is None:
+        raise ApiError(401, "authentication_required", "Sign in to continue.")
+    if request.method not in ("GET", "HEAD", "OPTIONS"):
+        check_origin(request)
+        if not csrf_matches(session, request.headers.get("x-csrf-token")):
+            raise ApiError(403, "csrf_rejected", "Refresh the page and try again.")
+    session.last_activity_at = now_utc()
+    db.commit()
+    return user.id
+
+
+CurrentUser = Annotated[UUID, Depends(require_user)]

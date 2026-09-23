@@ -9,6 +9,7 @@ from starlette.exceptions import HTTPException
 
 from app.api.auth import router as auth_router
 from app.api.health import router as health_router
+from app.api.monitors import router as monitors_router
 from app.core.config import Settings, load_settings
 from app.core.errors import (
     ApiError,
@@ -73,4 +74,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.add_exception_handler(TimeoutError, database_error_handler)
     application.include_router(health_router)
     application.include_router(auth_router)
+    application.include_router(monitors_router)
     return application

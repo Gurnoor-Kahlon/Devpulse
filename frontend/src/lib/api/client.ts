@@ -2,11 +2,10 @@ import type { components, paths } from "./schema";
 
 export type User = components["schemas"]["UserResponse"];
 type ErrorBody = components["schemas"]["ErrorResponse"];
+type AuthPath = Extract<keyof paths, `/api/v1/auth/${string}`>;
 type PostPath = {
-  [P in keyof paths]: paths[P]["post"] extends { responses: unknown }
-    ? P
-    : never;
-}[keyof paths];
+  [P in AuthPath]: paths[P]["post"] extends { responses: unknown } ? P : never;
+}[AuthPath];
 type Body<P extends PostPath> = paths[P]["post"] extends {
   requestBody: { content: { "application/json": infer B } };
 }

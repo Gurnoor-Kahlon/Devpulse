@@ -79,7 +79,13 @@ def test_failed_query_is_sanitized_and_pool_disposed(unavailable_url: str) -> No
 
 
 def test_metadata_has_conventions_and_only_authorized_tables() -> None:
-    assert set(Base.metadata.tables) == {"users", "sessions", "auth_tokens", "rate_limit_buckets"}
+    assert set(Base.metadata.tables) == {
+        "users",
+        "sessions",
+        "auth_tokens",
+        "rate_limit_buckets",
+        "monitors",
+    }
     table = Table(
         "example",
         MetaData(naming_convention=Base.metadata.naming_convention),

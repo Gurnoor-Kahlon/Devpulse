@@ -1,9 +1,10 @@
 # API foundation
 
-DevPulse exposes process/database health, the account/session API, and development
-API documentation. See the [authentication guide](authentication.md) for account
-endpoints, cookies, CSRF, SMTP configuration, and recovery. Monitors and jobs
-belong to later milestones.
+DevPulse exposes process/database health, account/session and monitor APIs, and
+development API documentation. See the [authentication guide](authentication.md)
+for account endpoints, cookies, CSRF, SMTP configuration, and recovery, and the
+[monitor guide](monitors.md) for owned configuration CRUD. Probe execution and
+jobs belong to later milestones.
 
 ## Application lifecycle
 
