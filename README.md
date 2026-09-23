@@ -6,12 +6,11 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 5 adds the account API: registration, email verification, session login/logout,
-password recovery, CSRF protection, and shared throttling. PostgreSQL stores account
-state, and local Mailpit captures verification/reset emails. The frontend
-has a dark-first shell with accessible controls and feedback states; its Overview
-page remains an interface preview without simulated monitoring results.
-Authentication UI and monitoring are not implemented yet.
+Milestone 6 connects the account API to accessible registration, verification,
+login, recovery, and reset pages. The workspace checks authentication on the
+server and revalidates browser sessions. PostgreSQL stores account state, and
+local Mailpit captures account emails. Monitoring remains unimplemented; the
+Overview shows an honest empty state without simulated results.
 
 ## Local development
 
@@ -19,10 +18,11 @@ Use Node.js 24 and Python 3.13 in WSL2 Ubuntu. See the
 [development guide](docs/development.md) for installation, startup, validation,
 and dependency-update commands.
 
-The frontend and backend currently run independently. PostgreSQL 18 is required
+The frontend forwards `/api/v1` to the local backend. PostgreSQL 18 is required
 for API readiness and database integration tests. See the
 [database guide](docs/database.md) for local setup and migrations, and the
-[authentication guide](docs/authentication.md) for Mailpit and an API walkthrough. Redis, Docker,
+[authentication guide](docs/authentication.md) for Mailpit and an API walkthrough.
+The [account UI guide](docs/account-ui.md) covers browser flows and tests. Redis, Docker,
 and cloud services are not required for this milestone.
 
 ## Project layout

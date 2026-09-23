@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 
-import { ApplicationShell } from "@/components/shell/application-shell";
+import { SessionGate } from "@/components/auth/session-gate";
+import { requireUser } from "@/lib/auth/server";
 
-export default function WorkspaceLayout({ children }: { children: ReactNode }) {
-  return <ApplicationShell>{children}</ApplicationShell>;
+export default async function WorkspaceLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const user = await requireUser();
+  return <SessionGate initialUser={user}>{children}</SessionGate>;
 }

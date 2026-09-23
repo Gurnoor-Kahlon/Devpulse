@@ -28,7 +28,7 @@ Both health endpoints are intentionally unversioned. Readiness checks PostgreSQL
 connectivity, not schema version, Redis, workers, or monitored targets. Run the
 documented migrations before starting the API. Account endpoints use
 `/api/v1/auth`. Unknown routes, including `/`, return a structured 404.
-Frontend-to-backend forwarding arrives with the authentication UI milestone.
+The frontend forwards `/api/v1` through its own origin; see the [account UI guide](account-ui.md).
 
 ## Configuration
 

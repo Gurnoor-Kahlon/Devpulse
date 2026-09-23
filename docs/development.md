@@ -39,9 +39,12 @@ npm ci --cache ../.cache/npm
 npm run dev
 ```
 
-Open <http://localhost:3000>. The root redirects to `/dashboard`, which shows
-the application shell and an honest empty state. Only Overview is available in
-navigation. The development server listens on loopback.
+Open <http://localhost:3000>. The root redirects to `/dashboard`; anonymous
+visitors continue to login. Start the backend and Mailpit for account flows.
+The workspace shows account status and an honest monitoring empty state. Only
+Overview is available in navigation. The development server listens on loopback.
+See the [account UI guide](account-ui.md) for the browser walkthrough, generated
+API types, and production-build Playwright tests.
 
 Optionally copy the root `.env.example` to `frontend/.env.local` to disable
 Next.js telemetry. Next.js loads that frontend-local file; neither application
@@ -102,8 +105,8 @@ python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000 --no-proxy-
 Open <http://localhost:8000/docs> for the API documentation. Both
 <http://localhost:8000/health/live> and <http://localhost:8000/health/ready>
 return `{"status":"ok"}` after startup when PostgreSQL is reachable. Readiness
-returns `503` when the database is unavailable; liveness remains available. The frontend still runs
-independently of the API.
+returns `503` when the database is unavailable; liveness remains available. The
+frontend forwards same-origin `/api/v1` requests to this backend on port 8000.
 
 The application factory is `app.factory.create_app`; `app.main:app` keeps the
 existing Uvicorn entrypoint. Settings load from `backend/.env` regardless of the

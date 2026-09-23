@@ -7,7 +7,13 @@ import { WorkspaceNavigation } from "@/components/shell/workspace-navigation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 
-export function ApplicationShell({ children }: { children: ReactNode }) {
+export function ApplicationShell({
+  children,
+  account,
+}: {
+  children: ReactNode;
+  account?: ReactNode;
+}) {
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[232px_minmax(0,1fr)]">
       <a href="#main-content" className="skip-link">
@@ -53,9 +59,11 @@ export function ApplicationShell({ children }: { children: ReactNode }) {
               <span>Overview</span>
             </div>
           </div>
-          <span className="rounded-sm border border-border px-2 py-1 font-mono text-[10px] tracking-wide text-muted">
-            Interface preview
-          </span>
+          {account ?? (
+            <span className="rounded-sm border border-border px-2 py-1 font-mono text-[10px] tracking-wide text-muted">
+              Interface preview
+            </span>
+          )}
         </header>
         <main
           id="main-content"

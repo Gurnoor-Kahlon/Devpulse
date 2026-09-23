@@ -4,6 +4,8 @@ The interface uses flat dark surfaces, restrained borders, compact controls,
 and a pale blue accent. Monitoring values are not displayed until real data
 exists. The current `/dashboard` route is explicitly labeled as an interface
 preview; the root redirects there until the public landing page is implemented.
+The workspace now requires a session. Account pages use a compact public layout
+with shared fields, buttons, validation, and feedback states; see [account UI](account-ui.md).
 
 ## Tokens
 
