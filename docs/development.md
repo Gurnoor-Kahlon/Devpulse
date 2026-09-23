@@ -13,7 +13,7 @@ Linux tools, not executables under `/mnt/c/Program Files/`.
 
 No global package installation, shell-profile edit, repository ownership change,
 or system-permission adjustment is part of project setup. PostgreSQL, Redis,
-Mailpit, Docker, and AWS are not needed for milestones 1–2. They are introduced only
+Mailpit, Docker, and AWS are not needed for milestones 1–3. They are introduced only
 when their features are implemented.
 
 The examples use the existing project location:
@@ -44,7 +44,8 @@ navigation. The development server listens on loopback.
 
 Optionally copy the root `.env.example` to `frontend/.env.local` to disable
 Next.js telemetry. Next.js loads that frontend-local file; neither application
-automatically loads a root `.env`. The backend needs no environment file yet.
+automatically loads a root `.env`. Optional backend configuration belongs in
+`backend/.env`, based on `backend/.env.example`.
 Never put credentials in variables prefixed with `NEXT_PUBLIC_`.
 
 Validation, from `frontend/`:
@@ -89,9 +90,17 @@ python -m pip install --require-hashes -r requirements-dev.lock --cache-dir ../.
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Open <http://localhost:8000/docs> to inspect the minimal application. No product
-or health routes exist yet, so `/` returns 404. The frontend does not call the
-backend in this milestone.
+Open <http://localhost:8000/docs> for the API documentation. Both
+<http://localhost:8000/health/live> and <http://localhost:8000/health/ready>
+return `{"status":"ok"}` after startup. Readiness currently checks application
+lifecycle only; no database or queue is connected. The frontend still runs
+independently of the API.
+
+The application factory is `app.factory.create_app`; `app.main:app` keeps the
+existing Uvicorn entrypoint. Settings load from `backend/.env` regardless of the
+working directory, and process environment variables take precedence. Defaults
+work without creating an environment file. Invalid configuration stops startup
+without printing supplied values. See the [API foundation](api.md) for details.
 
 Validation, from `backend/` with its virtual environment active:
 
@@ -100,6 +109,7 @@ python -m pip check
 python -m ruff check .
 python -m ruff format --check .
 python -m mypy
+python -m pytest
 python -c "from app.main import app; print(app.title)"
 ```
 
@@ -112,9 +122,16 @@ contains the same runtime versions plus development tools. Both include hashes
 and platform markers from a universal Python 3.13 resolution, supporting WSL
 Linux and Windows without maintaining separate version lists.
 
-The backend still has no product behavior or behavioral test suite. The commands
-above validate its entrypoint and toolchain. Backend tests will arrive with the
-functionality they exercise.
+The backend tests cover configuration, lifecycle health, OpenAPI, safe errors,
+request-ID concurrency, and log privacy. Test-only routes are attached to fresh
+factory instances; they are not application endpoints. These tests do not need
+PostgreSQL, Redis, or network access. HTTPX is currently a development dependency
+for in-process API tests; outbound monitoring is not implemented.
+
+The locked Starlette test client currently emits upstream deprecation warnings
+for its HTTPX adapter and an AnyIO portal alias. Tests still pass. Keep these
+visible when evaluating a later coordinated dependency update; do not suppress
+them or replace the monitoring HTTP stack merely to silence warnings.
 
 ## Dependency changes
 

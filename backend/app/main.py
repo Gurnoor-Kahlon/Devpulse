@@ -1,3 +1,3 @@
-from fastapi import FastAPI
+from app.factory import create_app
 
-app = FastAPI(title="DevPulse", description="Reliability at a glance.", version="0.1.0")
+app = create_app()
