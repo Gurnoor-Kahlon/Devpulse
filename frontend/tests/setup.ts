@@ -4,6 +4,11 @@ import { afterEach, vi } from "vitest";
 
 afterEach(cleanup);
 
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/dashboard",
+  useRouter: () => ({ push: vi.fn() }),
+}));
+
 Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn((query: string) => ({

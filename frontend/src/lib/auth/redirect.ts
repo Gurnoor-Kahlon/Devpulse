@@ -1,6 +1,13 @@
 // Extend this allowlist only when another protected destination is implemented.
 export function safeReturnPath(value: unknown): string {
-  const allowed = new Set(["/dashboard"]);
+  const allowed = new Set(["/dashboard", "/monitors", "/monitors/new"]);
+  if (
+    typeof value === "string" &&
+    /^\/monitors\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/edit$/i.test(
+      value,
+    )
+  )
+    return value;
   return typeof value === "string" && allowed.has(value) ? value : "/dashboard";
 }
 

@@ -3,6 +3,10 @@
 Milestone 6 connects the account API to browser forms. It adds no monitor APIs,
 monitor forms, or monitoring data.
 
+Milestone 8 adds [monitor management](monitor-ui.md). Background session refresh
+now preserves the mounted workspace and unsaved forms. Refresh outages show a
+retry banner; a confirmed `401` still hides private content and redirects to login.
+
 ## Start the local application
 
 Use the [database guide](database.md) to configure PostgreSQL, dedicated roles,
@@ -82,7 +86,8 @@ before executing the operation. Network failures and other mutation errors are
 never automatically retried. Cookies remain HttpOnly; the browser sends them
 through the same-origin rewrite.
 
-Only `/dashboard` is currently an allowed login return destination. External,
+Allowed login return destinations are `/dashboard`, `/monitors`, `/monitors/new`,
+and `/monitors/{UUID}/edit`. External,
 protocol-relative, encoded, script, and unimplemented destinations fall back to
 the dashboard. Redirect query values are never copied directly into navigation.
 

@@ -52,8 +52,9 @@ usually in 8px increments. Corner radii are 4px, 6px, and 8px.
   callback. It never displays exception details.
 
 The workspace shell is kept in the `(app)` route group so later public and
-authentication pages can use their own layouts. Only the implemented Overview
-route appears in navigation. The About dialog explains the preview's current
+authentication pages can use their own layouts. The implemented Overview and
+Monitors routes appear in navigation, with the current destination highlighted.
+The About dialog explains the preview's current
 limits and has working dismissal controls.
 
 ## Accessibility and responsive behavior

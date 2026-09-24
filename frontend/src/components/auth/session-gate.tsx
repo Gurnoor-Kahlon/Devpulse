@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, type ReactNode } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { ApplicationShell } from "@/components/shell/application-shell";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,13 @@ import { ErrorState } from "@/components/ui/error-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { ApiError, authPost, getMe, type User } from "@/lib/api/client";
 import { leaveWorkspace } from "@/lib/auth/redirect";
+
+export const AccountContext = createContext<User | null>(null);
+export function useAccount() {
+  const user = useContext(AccountContext);
+  if (!user) throw new Error("Account context is required.");
+  return user;
+}
 
 export function SessionGate({
   initialUser,
@@ -44,13 +51,13 @@ export function SessionGate({
       leaveWorkspace("signed-out");
     },
   });
-  if (expired || session.isFetching)
+  if (expired)
     return (
       <main className="p-8">
         <LoadingState label="Checking your session" />
       </main>
     );
-  if (session.isError)
+  if (session.isError && !session.data)
     return (
       <main className="mx-auto max-w-lg p-8">
         <ErrorState onRetry={() => void session.refetch()} />
@@ -68,6 +75,14 @@ export function SessionGate({
         </Button>
       }
     >
+      {session.isError && (
+        <div role="alert" className="mb-4 text-warning">
+          Session refresh failed. Your edits are preserved.
+          <Button variant="ghost" onClick={() => void session.refetch()}>
+            Retry session check
+          </Button>
+        </div>
+      )}
       {logout.isError && (
         <p role="alert" className="mb-4 text-danger">
           Sign out failed. Please try again.
@@ -89,7 +104,9 @@ export function SessionGate({
           </Link>
         )}
       </section>
-      {children}
+      <AccountContext.Provider value={session.data}>
+        {children}
+      </AccountContext.Provider>
     </ApplicationShell>
   );
 }

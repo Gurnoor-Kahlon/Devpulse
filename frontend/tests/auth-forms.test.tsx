@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { beforeEach, expect, it, vi } from "vitest";
@@ -198,10 +198,32 @@ it("offers retry for an outage without claiming the user is signed out", async (
   );
   await screen.findByRole("alert");
   expect(leaveWorkspace).not.toHaveBeenCalled();
-  await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+  await userEvent.click(
+    screen.getByRole("button", { name: "Retry session check" }),
+  );
   expect(await screen.findByText("Private workspace")).toBeVisible();
   expect(screen.getByRole("link", { name: "Verify email" })).toHaveAttribute(
     "href",
     "/verify-email",
   );
+});
+
+it("preserves an unsaved draft while the session refreshes and when refresh fails", async () => {
+  let fail!: (error: Error) => void;
+  vi.mocked(getMe).mockImplementation(
+    () =>
+      new Promise((_, reject) => {
+        fail = reject;
+      }),
+  );
+  mount(
+    <SessionGate initialUser={account}>
+      <input aria-label="Draft" defaultValue="Original" />
+    </SessionGate>,
+  );
+  await userEvent.clear(screen.getByLabelText("Draft"));
+  await userEvent.type(screen.getByLabelText("Draft"), "Unsaved edit");
+  await act(async () => fail(new ApiError(503, "unavailable")));
+  await screen.findByRole("alert");
+  expect(screen.getByLabelText("Draft")).toHaveValue("Unsaved edit");
 });

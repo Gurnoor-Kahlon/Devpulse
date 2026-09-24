@@ -4,7 +4,7 @@ Milestone 7 stores owned monitor configurations in PostgreSQL. It does not make
 outbound requests, schedule jobs, or generate checks. Every new monitor has
 `current_state: "unknown"` and `last_completed_check_at: null`. An enabled
 configuration is eligible for future scheduling; it does not mean monitoring is
-running in this milestone. Monitor UI arrives in milestone 8.
+running in this milestone. Milestone 8 adds the [monitor management UI](monitor-ui.md).
 
 ## Startup and contracts
 

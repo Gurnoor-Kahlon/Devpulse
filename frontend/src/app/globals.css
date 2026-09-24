@@ -56,7 +56,8 @@
   }
 
   button,
-  input {
+  input,
+  select {
     font: inherit;
   }
 
@@ -167,13 +168,19 @@
     min-height: 44px;
     align-items: center;
     gap: 12px;
-    border: 1px solid #344361;
+    border: 1px solid transparent;
     border-radius: var(--radius-md);
-    background: var(--accent-subtle);
+    background: transparent;
     padding: 10px 12px;
-    color: var(--accent);
+    color: var(--muted);
     font-size: 13px;
     font-weight: 600;
+  }
+
+  .nav-link[aria-current="page"] {
+    border-color: #344361;
+    background: var(--accent-subtle);
+    color: var(--accent);
   }
 
   .nav-link:hover {

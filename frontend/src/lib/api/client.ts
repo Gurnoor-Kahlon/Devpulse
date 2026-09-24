@@ -25,6 +25,15 @@ const messages: Record<string, string> = {
   authentication_required: "Your session has expired. Sign in again.",
   validation_error: "Check the highlighted fields and try again.",
   rate_limited: "Too many attempts. Please wait before trying again.",
+  email_verification_required:
+    "Verify your email before creating or enabling a monitor.",
+  monitor_quota_exceeded:
+    "Your account has reached its limit of 10 monitors. Archive a monitor to add another.",
+  enabled_monitor_quota_exceeded:
+    "The service has reached its limit of 100 enabled monitors. Save this monitor paused or try again later.",
+  configuration_conflict:
+    "This monitor changed elsewhere. Reload the latest settings before trying again.",
+  monitor_not_found: "This monitor is unavailable. It may have been archived.",
 };
 
 export class ApiError extends Error {
@@ -38,7 +47,10 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function request<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
   let response: Response;
   try {
     const timeout = AbortSignal.timeout(15_000);
@@ -54,6 +66,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   } catch {
     throw new ApiError(0, "unavailable");
   }
+  if (response.status === 204 && response.ok) return undefined as T;
   const data = await response.json().catch(() => null);
   if (!response.ok) {
     throw new ApiError(
@@ -74,7 +87,7 @@ export function clearCsrf() {
   csrfPending = undefined;
 }
 
-async function csrf(): Promise<string> {
+export async function csrf(): Promise<string> {
   if (csrfToken) return csrfToken;
   csrfPending ??= request<components["schemas"]["CsrfResponse"]>(
     "/api/v1/auth/csrf",

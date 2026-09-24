@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/status-indicator";
 
 describe("Application shell", () => {
-  it("provides a focusable skip target and navigation only to the implemented overview", () => {
+  it("provides a focusable skip target and navigation only to implemented destinations", () => {
     render(
       <ApplicationShell>
         <OverviewPage />
@@ -30,7 +30,7 @@ describe("Application shell", () => {
       "page",
     );
     for (const link of screen.getAllByRole("link")) {
-      expect(["/dashboard", "#main-content"]).toContain(
+      expect(["/dashboard", "/monitors", "#main-content"]).toContain(
         link.getAttribute("href"),
       );
     }

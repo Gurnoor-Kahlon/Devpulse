@@ -56,7 +56,7 @@ export function ApplicationShell({
               <span aria-hidden="true" className="text-muted">
                 /
               </span>
-              <span>Overview</span>
+              <span>Personal account</span>
             </div>
           </div>
           {account ?? (

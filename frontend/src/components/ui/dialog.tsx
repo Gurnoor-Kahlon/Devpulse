@@ -14,12 +14,14 @@ type DialogContentProps = ComponentProps<typeof DialogPrimitive.Content> & {
   title: string;
   description: string;
   variant?: "dialog" | "drawer";
+  closeDisabled?: boolean;
 };
 
 export function DialogContent({
   title,
   description,
   variant = "dialog",
+  closeDisabled = false,
   children,
   className = "",
   ...props
@@ -43,6 +45,7 @@ export function DialogContent({
             variant="ghost"
             size="icon"
             aria-label="Close dialog"
+            disabled={closeDisabled}
             className="absolute top-3 right-3"
           >
             <Icon name="close" />
