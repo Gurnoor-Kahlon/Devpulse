@@ -13,10 +13,17 @@ from app.factory import create_app
 def pytest_addoption(parser: pytest.Parser) -> None:
     parser.addoption("--run-integration", action="store_true", help="Run real PostgreSQL tests")
     parser.addoption("--run-mailpit", action="store_true", help="Exercise local Mailpit SMTP/API")
+    parser.addoption(
+        "--run-worker", action="store_true", help="Run Linux prefork/Redis worker tests"
+    )
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     for item in items:
+        if "worker" in item.keywords and not config.getoption("--run-worker"):
+            item.add_marker(
+                pytest.mark.skip(reason="Use --run-integration --run-worker on Linux with Redis")
+            )
         if "mailpit" in item.keywords and not config.getoption("--run-mailpit"):
             item.add_marker(
                 pytest.mark.skip(reason="Use --run-integration --run-mailpit with Mailpit")

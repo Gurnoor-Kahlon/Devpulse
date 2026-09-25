@@ -6,7 +6,10 @@ revision `a4c16df5c2ab` with users, sessions, auth tokens, and rate-limit bucket
 Milestone 7 adds revision `488e9f6fd6c1` with monitor configurations, constraints,
 an owner/history index, and a partial due-time index. Milestone 9 adds revision
 `277e61607ff2` with run/check evidence, active-run and attempt uniqueness, and
-run-history indexes. Incidents remain deferred. See [probes](probes.md) for result
+run-history indexes. Milestone 10 adds revision `b31d8e0c6a10`: pending timing,
+fenced worker leases, lifecycle constraints, and pending/expired-lease indexes.
+Stop existing probe executors and workers before this migration; unfinished
+running rows become pending and can be republished. Incidents remain deferred. See [probes](probes.md) for result
 transactions and [monitor persistence](monitors.md) for write transactions,
 quotas, and archive semantics. Run `python -m alembic upgrade head` before using
 the monitor API.
@@ -39,6 +42,16 @@ The password prompts avoid putting passwords into SQL files or shell history.
 If these names already exist, inspect their purpose before reusing them; do not
 drop an existing database to repeat setup. The database-owning roles can run
 local migrations without superuser or cluster-wide database-creation privileges.
+
+The current Ubuntu workspace already has `devpulse` and `devpulse_test` configured
+for peer authentication. Do not recreate roles or databases. The local backend
+uses a URL shaped like
+`postgresql+psycopg://mail2@localhost/devpulse?host=/var/run/postgresql`.
+The explicit Unix-socket query parameter selects peer authentication; `localhost`
+satisfies the application's explicit-host validation and is not used for TCP in
+this example. Substitute the existing matching local database role if different.
+Use `devpulse_test` for tests. No password or authentication-service changes are
+needed for this existing setup.
 
 Copy `backend/.env.example` to the ignored `backend/.env` and replace the database
 password placeholder. Percent-encode URL-special characters in credentials.
@@ -157,7 +170,7 @@ non-superuser development/test roles, and separate databases. The existing
 PostgreSQL service was not changed. The temporary cluster was stopped afterward.
 Its loopback trust authentication was only for this disposable validation run;
 normal setup uses the password prompts above. WSL2 Ubuntu remains the development
-target and still needs a Linux validation run once supplied.
+target. Milestone 10 now has a separate [Linux validation record](jobs.md#validation).
 
 References: [SQLAlchemy transaction test isolation](https://docs.sqlalchemy.org/en/20/orm/session_transaction.html#joining-a-session-into-an-external-transaction-such-as-for-test-suites),
 [Alembic tutorial](https://alembic.sqlalchemy.org/en/latest/tutorial.html), and

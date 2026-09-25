@@ -6,11 +6,12 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 9 adds real, bounded HTTP/HTTPS probes through a local operator command
-using saved monitor IDs. PostgreSQL stores run and attempt evidence; destination
-validation, pinned connections, TLS verification, and response limits protect
-outbound requests. Account access and browser monitor management are available.
-Automatic monitoring, incident decisions, and analytics remain deferred.
+Milestone 10 executes saved-monitor probes in real Celery prefork workers through
+Redis. PostgreSQL owns pending runs, expiring leases, and deduplicated check
+results. Local operators can enqueue a manual run and republish its durable ID
+after publication failure or worker loss. Existing bounded HTTP/HTTPS and SSRF
+protections also apply to worker probes. Account and monitor management remain
+available; automatic scheduling, retries, incidents, and analytics are deferred.
 
 ## Local development
 
@@ -27,8 +28,9 @@ The [monitor API guide](docs/monitors.md) covers configuration, quotas, and edit
 The [monitor UI guide](docs/monitor-ui.md) covers browser workflows and validation.
 The [probe guide](docs/probes.md) covers manual execution, security boundaries,
 controlled tests, and current limitations.
-Redis, Docker,
-and cloud services are not required for this milestone.
+Redis is required for worker execution. See the [job execution guide](docs/jobs.md)
+for migration, worker startup, manual recovery, and real-worker tests. Docker and
+cloud services remain deferred.
 
 ## Project layout
 

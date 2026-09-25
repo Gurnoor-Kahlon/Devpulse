@@ -55,6 +55,29 @@ class Settings(BaseSettings):
     smtp_password: SecretStr | None = None
     mail_from: EmailStr = "devpulse@localhost.localdomain"
     probe_fixture_destinations: tuple[ProbeFixtureDestination, ...] = ()
+    broker_url: SecretStr = SecretStr("redis://127.0.0.1:6379/0")
+    broker_key_prefix: str = Field(default="devpulse:", pattern=r"^[a-zA-Z0-9_-]{1,64}:$")
+
+    @field_validator("broker_url")
+    @classmethod
+    def validate_broker_url(cls, value: SecretStr) -> SecretStr:
+        try:
+            parts = urlsplit(value.get_secret_value())
+            valid = (
+                parts.scheme in {"redis", "rediss"}
+                and bool(parts.hostname)
+                and (parts.port is None or 1 <= parts.port <= 65535)
+                and parts.path.startswith("/")
+                and parts.path[1:].isdigit()
+                and 0 <= int(parts.path[1:]) <= 15
+                and not parts.query
+                and not parts.fragment
+            )
+        except ValueError:
+            valid = False
+        if not valid:
+            raise ValueError("Use a Redis URL with a host and database number from 0 to 15.")
+        return value
 
     @field_validator("app_origin")
     @classmethod

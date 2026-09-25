@@ -128,7 +128,8 @@ async def execute_probe(
         outcome = "failure"
     return ProbeResult(
         started,
-        now_utc(),
+        # Wall-clock corrections must not violate persisted time ordering. Duration stays monotonic.
+        max(started, now_utc()),
         round((time.perf_counter() - clock) * 1000, 3),
         outcome,
         status,

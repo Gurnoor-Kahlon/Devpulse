@@ -1,8 +1,9 @@
 import asyncio
 from dataclasses import asdict, dataclass
-from uuid import UUID
+from datetime import timedelta
+from uuid import UUID, uuid4
 
-from sqlalchemy import Engine, select
+from sqlalchemy import Engine, func, select
 from sqlalchemy.orm import Session
 
 from app.core.config import Settings
@@ -27,9 +28,13 @@ class ProbeSpec:
     method: str
     expected_status: int
     timeout_seconds: int
+    lease_token: UUID
 
 
-def begin_run(engine: Engine, monitor_id: UUID) -> ProbeSpec:
+LEASE_SECONDS = 60
+
+
+def create_pending_run(engine: Engine, monitor_id: UUID) -> UUID:
     with Session(engine) as db, db.begin():
         monitor = db.scalar(select(Monitor).where(Monitor.id == monitor_id).with_for_update())
         if monitor is None or not monitor.enabled or monitor.deleted_at is not None:
@@ -39,7 +44,7 @@ def begin_run(engine: Engine, monitor_id: UUID) -> ProbeSpec:
             raise RunError("The monitor owner must verify their email.")
         if db.scalar(
             select(CheckRun.id).where(
-                CheckRun.monitor_id == monitor_id, CheckRun.state == "running"
+                CheckRun.monitor_id == monitor_id, CheckRun.state.in_(("pending", "running"))
             )
         ):
             raise RunError("A run is already active for this monitor.")
@@ -50,6 +55,41 @@ def begin_run(engine: Engine, monitor_id: UUID) -> ProbeSpec:
         )
         db.add(run)
         db.flush()
+        return run.id
+
+
+def claim_run(engine: Engine, run_id: UUID) -> ProbeSpec | None:
+    with Session(engine) as db, db.begin():
+        monitor_id = db.scalar(select(CheckRun.monitor_id).where(CheckRun.id == run_id))
+        if monitor_id is None:
+            return None
+        # All paths lock monitor before run; no locks or sessions survive the HTTP request.
+        monitor = db.scalar(select(Monitor).where(Monitor.id == monitor_id).with_for_update())
+        run = db.scalar(select(CheckRun).where(CheckRun.id == run_id).with_for_update())
+        now = db.scalar(select(func.clock_timestamp()))
+        assert run is not None and now is not None
+        if run.state not in {"pending", "running"}:
+            return None
+        if run.state == "running" and run.lease_expires_at and run.lease_expires_at > now:
+            return None
+        if run.state == "pending" and run.next_attempt_at and run.next_attempt_at > now:
+            return None
+        user = db.get(User, monitor.user_id) if monitor else None
+        if (
+            monitor is None
+            or not monitor.enabled
+            or monitor.deleted_at is not None
+            or monitor.configuration_version != run.configuration_version
+            or user is None
+            or user.email_verified_at is None
+        ):
+            run.state, run.completed_at = "cancelled", now
+            run.next_attempt_at = run.lease_expires_at = None
+            run.lease_token = None
+            return None
+        run.state, run.next_attempt_at = "running", None
+        run.lease_token = uuid4()
+        run.lease_expires_at = now + timedelta(seconds=LEASE_SECONDS)
         return ProbeSpec(
             run.id,
             monitor.id,
@@ -58,19 +98,37 @@ def begin_run(engine: Engine, monitor_id: UUID) -> ProbeSpec:
             monitor.method,
             monitor.expected_status,
             monitor.timeout_seconds,
+            run.lease_token,
         )
+
+
+def begin_run(engine: Engine, monitor_id: UUID) -> ProbeSpec:
+    spec = claim_run(engine, create_pending_run(engine, monitor_id))
+    if spec is None:
+        raise RunError("The run is no longer eligible or another executor claimed it.")
+    return spec
 
 
 def finish_run(engine: Engine, spec: ProbeSpec, result: ProbeResult) -> UUID | None:
     with Session(engine) as db, db.begin():
         monitor = db.scalar(select(Monitor).where(Monitor.id == spec.monitor_id).with_for_update())
         run = db.scalar(select(CheckRun).where(CheckRun.id == spec.run_id).with_for_update())
-        if run is None or run.state != "running":
+        now = db.scalar(select(func.clock_timestamp()))
+        assert now is not None
+        if (
+            run is None
+            or run.state != "running"
+            or run.lease_token != spec.lease_token
+            or run.lease_expires_at is None
+            or run.lease_expires_at <= now
+        ):
             return None
         check = Check(run_id=run.id, attempt_number=1, **asdict(result))
         db.add(check)
         run.completed_at = result.finished_at
         run.final_outcome = result.outcome
+        run.lease_token = None
+        run.lease_expires_at = run.next_attempt_at = None
         stale = (
             monitor is None
             or not monitor.enabled
@@ -108,6 +166,12 @@ def run_monitor(
     engine: Engine, settings: Settings, monitor_id: UUID
 ) -> tuple[UUID, UUID | None, ProbeResult]:
     spec = begin_run(engine, monitor_id)
+    result = execute_spec(spec, settings)
+    check_id = finish_run(engine, spec, result)
+    return spec.run_id, check_id, result
+
+
+def execute_spec(spec: ProbeSpec, settings: Settings) -> ProbeResult:
     # Explicit sync/async boundary; no session or transaction survives across outbound I/O.
     try:
         result = asyncio.run(
@@ -126,5 +190,4 @@ def run_monitor(
             "infrastructure_error",
             ERROR_MESSAGES["infrastructure_error"],
         )
-    check_id = finish_run(engine, spec, result)
-    return spec.run_id, check_id, result
+    return result

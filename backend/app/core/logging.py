@@ -14,6 +14,14 @@ _EVENTS = {
     "request_failed",
     "auth_email_failed",
     "probe_completed",
+    "worker_ready",
+    "job_rejected",
+    "job_ignored",
+    "job_started",
+    "job_finished",
+    "job_deferred",
+    "job_publish_failed",
+    "job_published",
 }
 _FIELDS = {
     "method",
@@ -25,6 +33,8 @@ _FIELDS = {
     "run_id",
     "monitor_id",
     "outcome",
+    "job_id",
+    "worker_pid",
 }
 
 

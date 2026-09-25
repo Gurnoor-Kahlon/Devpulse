@@ -15,12 +15,13 @@ No global package installation, shell-profile edit, repository ownership change,
 or system-permission adjustment is part of project setup. Milestone 4 requires a
 user-provided PostgreSQL 18 server and client. Milestone 5 also uses local Mailpit
 for verification/reset emails; see the [authentication guide](authentication.md).
-Redis, Docker, and AWS remain deferred.
+Milestone 10 requires user-provided Redis for Celery workers; see the
+[job execution guide](jobs.md). Docker and AWS remain deferred.
 
 The examples use the existing project location:
 
 ```bash
-cd /mnt/c/Users/mail2/vs-code-workspace/devpulse
+cd /home/mail2/projects/devpulse
 ```
 
 Do not share `node_modules`, Python virtual environments, or `.next` output
@@ -87,10 +88,10 @@ dependency directories separate.
 In a separate WSL terminal, from the project root:
 
 ```bash
-cd backend
-python3.13 -m venv .venv
+# Use the existing root .venv (Python 3.13.15 in this workspace).
 source .venv/bin/activate
-python -m pip install --require-hashes -r requirements-dev.lock --cache-dir ../.cache/pip
+cd backend
+python -m pip install --require-hashes -r requirements-dev.lock --cache-dir /tmp/devpulse-pip-cache
 ```
 
 Follow the [database guide](database.md) to create dedicated development/test
@@ -142,6 +143,8 @@ PostgreSQL or Redis. Database integration tests run separately with
 `TEST_DATABASE_URL` and `python -m pytest --run-integration`; see the
 [database guide](database.md) for isolation and setup. Add `--run-mailpit` to verify
 real SMTP account emails; see the [authentication guide](authentication.md).
+Add `--run-worker` with `TEST_REDIS_URL` for real Linux prefork worker tests;
+see [job execution](jobs.md) for the isolated test configuration and commands.
 HTTPX, HTTPCore, and dnspython are runtime dependencies for bounded outbound
 probes. The [probe guide](probes.md) documents the saved-monitor operator command
 and controlled HTTP/HTTPS tests. These tests use ephemeral loopback servers and

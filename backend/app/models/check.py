@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column
 
+from app.core.security import now_utc
 from app.db.base import Base
 
 
@@ -14,23 +15,40 @@ class CheckRun(Base):
         CheckConstraint("configuration_version > 0", name="configuration_version"),
         CheckConstraint("trigger IN ('manual', 'scheduled')", name="trigger"),
         CheckConstraint(
-            "state IN ('running', 'completed', 'cancelled', 'infrastructure_failed')", name="state"
+            "state IN ('pending', 'running', 'completed', 'cancelled', 'infrastructure_failed')",
+            name="state",
         ),
         CheckConstraint(
             "final_outcome IN ('success', 'failure', 'blocked', 'infrastructure_failure')",
             name="final_outcome",
         ),
         CheckConstraint(
-            "(state = 'running' AND completed_at IS NULL AND final_outcome IS NULL) "
-            "OR (state <> 'running' AND completed_at IS NOT NULL)",
+            "(state IN ('pending', 'running') AND completed_at IS NULL AND final_outcome IS NULL) "
+            "OR (state NOT IN ('pending', 'running') AND completed_at IS NOT NULL)",
             name="completion",
+        ),
+        CheckConstraint(
+            "(state = 'running' AND lease_token IS NOT NULL AND lease_expires_at IS NOT NULL "
+            "AND next_attempt_at IS NULL) OR (state = 'pending' AND lease_token IS NULL "
+            "AND lease_expires_at IS NULL AND next_attempt_at IS NOT NULL) OR "
+            "(state NOT IN ('pending', 'running') AND lease_token IS NULL "
+            "AND lease_expires_at IS NULL AND next_attempt_at IS NULL)",
+            name="lease",
+        ),
+        Index(
+            "ix_check_runs_pending", "next_attempt_at", postgresql_where=text("state = 'pending'")
+        ),
+        Index(
+            "ix_check_runs_expired_lease",
+            "lease_expires_at",
+            postgresql_where=text("state = 'running'"),
         ),
         Index("ix_check_runs_monitor_id_scheduled_at", "monitor_id", text("scheduled_at DESC")),
         Index(
             "uq_check_runs_active_monitor",
             "monitor_id",
             unique=True,
-            postgresql_where=text("state = 'running'"),
+            postgresql_where=text("state IN ('pending', 'running')"),
         ),
     )
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
@@ -38,7 +56,12 @@ class CheckRun(Base):
     scheduled_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     configuration_version: Mapped[int]
     trigger: Mapped[str] = mapped_column(String(10), default="manual")
-    state: Mapped[str] = mapped_column(String(24), default="running")
+    state: Mapped[str] = mapped_column(String(24), default="pending")
+    next_attempt_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), default=now_utc
+    )
+    lease_token: Mapped[UUID | None]
+    lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     final_outcome: Mapped[str | None] = mapped_column(String(24))
 

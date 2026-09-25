@@ -2,8 +2,8 @@
 
 Milestone 9 executes one real GET or HEAD for an enabled, saved monitor owned by
 a verified account. There is no browser action or API endpoint for immediate
-probing. Scheduling, Celery, retries, incidents, assertions, and history views
-arrive in later milestones.
+probing. Milestone 10 adds [Celery execution and lease recovery](jobs.md).
+Scheduling, retries, incidents, assertions, and history views remain deferred.
 
 ## Run a saved monitor
 
@@ -11,7 +11,7 @@ Use the WSL backend virtual environment and database configuration from the
 [development guide](development.md). In a separate backend terminal:
 
 ```bash
-source .venv/bin/activate
+source ../.venv/bin/activate
 python -m alembic upgrade head
 python -m app.monitoring.cli --help
 python -m app.monitoring.cli YOUR_SAVED_MONITOR_UUID
@@ -39,8 +39,9 @@ the monitor, checks eligibility, and creates a manual run. The synchronous
 entrypoint invokes the asynchronous executor with `asyncio.run`; no database
 session or transaction remains open during network I/O. A second transaction
 persists attempt 1 and completes the run. Database constraints enforce one active
-run per monitor, unique scheduled times, and unique attempt numbers. Repeated
-completion cannot insert another attempt.
+run per monitor, unique scheduled times, and unique attempt numbers. Milestone 10
+uses the same pending-run and fenced-lease path for direct and queued probes.
+Repeated or expired-lease completion cannot insert another attempt.
 
 If the monitor was edited, paused, or archived during execution, the attempt is
 retained but its run is cancelled and current monitor data is not updated.
@@ -132,16 +133,16 @@ exceptions in production. Never enable fixture exceptions for public deployment.
 ## Current operational limits
 
 A process crash or database failure after run creation can leave a run active.
-Inspect its evidence before retrying; there is no automatic reclaim/retry in this
-milestone. Lease-based recovery belongs to milestone 10. A request may have
+Inspect its evidence before retrying. Milestone 10 permits republishing the same
+durable run ID after lease expiry; see [manual recovery](jobs.md#manual-recovery).
+There is still no automatic reconciliation or retry dispatcher. A request may have
 reached its target even if persistence failed, so do not assume exactly-once
 network execution. DNS resolver/service and local-resource failures are separated
 from ordinary target failures where identifiable; the total deadline can also
 expire while awaiting DNS.
 
 Validation in this milestone used Python 3.13 and PostgreSQL 18 on Windows because
-Ubuntu WSL2 was unavailable. The documented WSL workflow still requires a Linux
-validation run. No external monitored websites or cloud resources were used in
+Ubuntu WSL2 was unavailable. Milestone 10 separately records [Linux validation](jobs.md#validation). No external monitored websites or cloud resources were used in
 the test evidence.
 
 ## Milestone validation
@@ -158,4 +159,5 @@ concurrency needed a fresh CSRF token before a subsequent login, and browser
 registration needed to wait for navigation before filling fields shared with
 Login. The tests now model those transitions explicitly; authentication behavior
 was unchanged. The two existing Starlette/AnyIO deprecation warnings remain
-visible. The WSL validation limitation above still applies.
+visible. These are historical milestone 9 results; current worker validation is
+recorded in the milestone 10 guide.
