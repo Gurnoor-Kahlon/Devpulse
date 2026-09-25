@@ -85,6 +85,8 @@ def test_metadata_has_conventions_and_only_authorized_tables() -> None:
         "auth_tokens",
         "rate_limit_buckets",
         "monitors",
+        "check_runs",
+        "checks",
     }
     table = Table(
         "example",

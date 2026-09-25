@@ -396,6 +396,8 @@ def test_password_reset_serializes_with_login(
             assert logging_in.result().status_code in {200, 401}
             assert resetting.result().status_code == 200
         assert other.get(f"{PREFIX}/me").status_code == 401
+        # Reset may revoke the session after the concurrent login refreshed its CSRF token.
+        other.headers["X-CSRF-Token"] = other.get(f"{PREFIX}/csrf").json()["csrf_token"]
         assert login(other, password="replacement-password").status_code == 200
     finally:
         other.close()

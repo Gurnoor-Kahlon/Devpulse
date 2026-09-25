@@ -4,8 +4,10 @@ Milestone 4 established synchronous SQLAlchemy sessions and Alembic migrations.
 Revision `0001` records an empty baseline in `alembic_version`. Milestone 5 adds
 revision `a4c16df5c2ab` with users, sessions, auth tokens, and rate-limit buckets.
 Milestone 7 adds revision `488e9f6fd6c1` with monitor configurations, constraints,
-an owner/history index, and a partial due-time index. Runs, checks, and incidents
-remain deferred. See [monitor persistence](monitors.md) for write transactions,
+an owner/history index, and a partial due-time index. Milestone 9 adds revision
+`277e61607ff2` with run/check evidence, active-run and attempt uniqueness, and
+run-history indexes. Incidents remain deferred. See [probes](probes.md) for result
+transactions and [monitor persistence](monitors.md) for write transactions,
 quotas, and archive semantics. Run `python -m alembic upgrade head` before using
 the monitor API.
 

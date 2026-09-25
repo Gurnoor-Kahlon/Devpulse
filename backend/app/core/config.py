@@ -1,11 +1,36 @@
+from ipaddress import ip_address
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit
 
-from pydantic import EmailStr, Field, SecretStr, ValidationError, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    SecretStr,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict, SettingsError
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import ArgumentError
+
+
+class ProbeFixtureDestination(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    host: str = Field(min_length=1, max_length=253, pattern=r"^[a-z0-9.:-]+$")
+    port: int = Field(ge=1, le=65535)
+    address: str
+
+    @field_validator("address")
+    @classmethod
+    def loopback_only(cls, value: str) -> str:
+        address = ip_address(value)
+        if not address.is_loopback or "%" in value:
+            raise ValueError("Fixture exceptions require an exact loopback address.")
+        return str(address)
 
 
 class Settings(BaseSettings):
@@ -29,6 +54,7 @@ class Settings(BaseSettings):
     smtp_username: SecretStr | None = None
     smtp_password: SecretStr | None = None
     mail_from: EmailStr = "devpulse@localhost.localdomain"
+    probe_fixture_destinations: tuple[ProbeFixtureDestination, ...] = ()
 
     @field_validator("app_origin")
     @classmethod
@@ -49,6 +75,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_mail_security(self) -> "Settings":
+        if self.environment == "production" and self.probe_fixture_destinations:
+            raise ValueError("Production cannot allow fixture probe destinations.")
         if bool(self.smtp_username) != bool(self.smtp_password):
             raise ValueError("SMTP username and password must be configured together.")
         if self.smtp_mode == "plain" and self.smtp_username:

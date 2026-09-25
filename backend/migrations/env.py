@@ -8,6 +8,7 @@ from app.db.base import Base
 from app.db.session import create_database_engine
 from app.models import (
     auth,  # noqa: F401 -- register model metadata for autogeneration
+    check,  # noqa: F401 -- register probe metadata
     monitor,  # noqa: F401 -- register model metadata for autogeneration
 )
 

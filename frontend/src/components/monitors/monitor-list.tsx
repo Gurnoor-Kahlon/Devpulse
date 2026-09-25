@@ -29,6 +29,8 @@ function health(monitor: Monitor) {
   if (!monitor.enabled) return "paused";
   if (monitor.current_state === "down") return "failing";
   if (monitor.current_state === "confirming_failure") return "confirming";
+  if (monitor.current_state === "unknown" && monitor.last_completed_check_at)
+    return "pending";
   return monitor.current_state;
 }
 
@@ -140,7 +142,7 @@ export function MonitorList() {
       );
       setNotice(
         monitor.enabled
-          ? "Monitor enabled. Health checks are not running yet."
+          ? "Monitor enabled. Automatic checks are not running yet."
           : "Monitor paused.",
       );
       await cache.invalidateQueries({ queryKey: ["monitors"] });

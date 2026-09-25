@@ -53,6 +53,11 @@ test("account lifecycle uses the API, database, and real email", async ({
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login\?/);
   await page.getByRole("link", { name: "Create an account" }).click();
+  // Login and registration share field labels; wait for the destination form before typing.
+  await expect(page).toHaveURL(/\/register$/);
+  await expect(
+    page.getByRole("heading", { name: "Create your account" }),
+  ).toBeVisible();
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel("Password", { exact: true }).fill(password);
   await page.getByLabel("Confirm password").fill(password);

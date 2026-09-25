@@ -237,6 +237,15 @@ it("searches the complete owned list, filters paused monitors, and shows no inve
   expect(screen.getAllByRole("article")).toHaveLength(2);
 });
 
+it("distinguishes a manual observation from an evaluated health state", async () => {
+  vi.mocked(listMonitors).mockResolvedValue([
+    { ...monitor, last_completed_check_at: "2026-01-01T00:01:00Z" },
+  ]);
+  mount(<MonitorList />);
+  expect(await screen.findByText("Health not evaluated")).toBeVisible();
+  expect(screen.queryByText("No data")).not.toBeInTheDocument();
+});
+
 it("retains the saved state when pause fails and shows a recoverable error", async () => {
   vi.mocked(updateMonitor).mockRejectedValue(new ApiError(503, "unavailable"));
   mount(<MonitorList />);

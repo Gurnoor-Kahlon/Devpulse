@@ -22,6 +22,7 @@ from app.core.errors import (
 from app.core.logging import configure_logging, logger
 from app.core.middleware import RequestContextMiddleware
 from app.db.session import create_database_engine
+from app.models import check  # noqa: F401 -- register persisted probe metadata
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

@@ -13,8 +13,19 @@ _EVENTS = {
     "request_completed",
     "request_failed",
     "auth_email_failed",
+    "probe_completed",
 }
-_FIELDS = {"method", "route", "status_code", "duration_ms", "environment", "error_code"}
+_FIELDS = {
+    "method",
+    "route",
+    "status_code",
+    "duration_ms",
+    "environment",
+    "error_code",
+    "run_id",
+    "monitor_id",
+    "outcome",
+}
 
 
 class JsonFormatter(logging.Formatter):

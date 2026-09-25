@@ -6,11 +6,11 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 8 adds monitor management in the browser: search/filter, create/edit,
-pause/resume, and archive confirmation. Settings persist through the owned,
-versioned PostgreSQL API. Account registration, verification, login, recovery,
-and reset are also available. Health checks are not running yet; monitors show
-no observations and the Overview remains empty without simulated results.
+Milestone 9 adds real, bounded HTTP/HTTPS probes through a local operator command
+using saved monitor IDs. PostgreSQL stores run and attempt evidence; destination
+validation, pinned connections, TLS verification, and response limits protect
+outbound requests. Account access and browser monitor management are available.
+Automatic monitoring, incident decisions, and analytics remain deferred.
 
 ## Local development
 
@@ -25,6 +25,8 @@ for API readiness and database integration tests. See the
 The [account UI guide](docs/account-ui.md) covers browser flows and tests.
 The [monitor API guide](docs/monitors.md) covers configuration, quotas, and editing.
 The [monitor UI guide](docs/monitor-ui.md) covers browser workflows and validation.
+The [probe guide](docs/probes.md) covers manual execution, security boundaries,
+controlled tests, and current limitations.
 Redis, Docker,
 and cloud services are not required for this milestone.
 

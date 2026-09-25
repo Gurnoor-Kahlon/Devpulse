@@ -17,7 +17,9 @@ python -m alembic current --check-heads
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-The head revision is `488e9f6fd6c1`. Development OpenAPI documentation is at
+The current head revision is `277e61607ff2` (milestone 9 adds run/check tables).
+Manual execution is documented in the [probe guide](probes.md).
+Development OpenAPI documentation is at
 `http://127.0.0.1:8000/docs`. Next.js forwards `/api/v1` through the frontend
 origin. Log in using the account UI or the API walkthrough; mutation requests
 need the session cookie, exact configured `Origin`, and `X-CSRF-Token` returned

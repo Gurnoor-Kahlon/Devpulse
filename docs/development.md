@@ -42,7 +42,7 @@ npm run dev
 Open <http://localhost:3000>. The root redirects to `/dashboard`; anonymous
 visitors continue to login. Start the backend and Mailpit for account flows.
 The workspace shows account status and an honest monitoring empty state. Only
-Overview is available in navigation. The development server listens on loopback.
+Overview and Monitors are available in navigation. The development server listens on loopback.
 See the [account UI guide](account-ui.md) for the browser walkthrough, generated
 API types, and production-build Playwright tests.
 
@@ -142,8 +142,10 @@ PostgreSQL or Redis. Database integration tests run separately with
 `TEST_DATABASE_URL` and `python -m pytest --run-integration`; see the
 [database guide](database.md) for isolation and setup. Add `--run-mailpit` to verify
 real SMTP account emails; see the [authentication guide](authentication.md).
-HTTPX is currently a development dependency
-for in-process API tests; outbound monitoring is not implemented.
+HTTPX, HTTPCore, and dnspython are runtime dependencies for bounded outbound
+probes. The [probe guide](probes.md) documents the saved-monitor operator command
+and controlled HTTP/HTTPS tests. These tests use ephemeral loopback servers and
+locally generated certificates; they do not contact external monitored websites.
 
 The locked Starlette test client currently emits upstream deprecation warnings
 for its HTTPX adapter and an AnyIO portal alias. Tests still pass. Keep these

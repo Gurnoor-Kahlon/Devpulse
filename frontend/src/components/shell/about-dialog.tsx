@@ -19,9 +19,9 @@ export function AboutDialog({ trigger }: { trigger: ReactElement }) {
         description="Reliability at a glance. A workspace for API monitoring and incident history."
       >
         <p className="text-sm leading-6 text-muted">
-          You can save and manage monitor configurations. Health checks are not
-          running yet. Your overview will show real results once monitoring is
-          connected.
+          You can save and manage monitor configurations. Automatic checks are
+          not running yet. Your overview will show real results once monitoring
+          is connected.
         </p>
         <DialogClose asChild>
           <Button className="mt-6">Got it</Button>

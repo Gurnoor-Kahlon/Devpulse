@@ -4,6 +4,7 @@ const statuses = {
   failing: { label: "Failing", color: "text-danger" },
   paused: { label: "Paused", color: "text-muted" },
   unknown: { label: "No data", color: "text-muted" },
+  pending: { label: "Health not evaluated", color: "text-muted" },
 } as const;
 
 export type MonitorStatus = keyof typeof statuses;

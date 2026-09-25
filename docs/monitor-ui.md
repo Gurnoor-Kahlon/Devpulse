@@ -33,7 +33,9 @@ polling or browser-triggered probing.
 
 Enabled is a configuration setting. New monitors display **No data** and
 **Never checked**, and paused monitors display **Paused**. All pages explain that
-health checks are not running yet. The UI never invents latency, uptime, or checks.
+automatic checks are not running yet. Milestone 9 adds a local operator command:
+an accepted manual observation updates the latest-check timestamp while health
+remains unevaluated. The UI never invents latency, uptime, or checks.
 
 ## Forms and concurrent changes
 
