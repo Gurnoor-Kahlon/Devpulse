@@ -55,7 +55,7 @@ open/resolve incidents. Scheduled probes use the [milestone 12 retry policy](inc
 and unknown health displays **Health not evaluated**. The command reports the
 attempt's outcome; inspect the run state to distinguish a subsequently cancelled
 run. Manual runs are explicitly tagged `trigger = 'manual'` so future scheduled
-uptime calculations can exclude them. No analytics are calculated yet.
+[dashboard uptime calculations](dashboard.md) exclude them.
 
 To inspect evidence without retrieving URLs or bodies, connect to the development
 database with `psql` and substitute the reported run ID:

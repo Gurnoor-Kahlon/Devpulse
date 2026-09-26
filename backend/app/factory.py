@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from starlette.exceptions import HTTPException
 
 from app.api.auth import router as auth_router
+from app.api.dashboard import router as dashboard_router
 from app.api.health import router as health_router
 from app.api.incidents import router as incidents_router
 from app.api.monitors import router as monitors_router
@@ -78,4 +79,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(auth_router)
     application.include_router(monitors_router)
     application.include_router(incidents_router)
+    application.include_router(dashboard_router)
     return application

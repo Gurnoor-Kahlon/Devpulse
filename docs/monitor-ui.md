@@ -1,8 +1,9 @@
 # Monitor management UI
 
 Milestone 8 connects monitor settings to the PostgreSQL API from milestone 7.
-Milestone 11 adds observation freshness from the real scheduler; analytics remain
-deferred and no observations are fabricated.
+Milestone 11 adds observation freshness from the real scheduler. Milestone 13
+adds [dashboard analytics and visible-tab polling](dashboard.md); no observations
+are fabricated.
 Start the application using the [development guide](development.md), apply
 `python -m alembic upgrade head`, and use Mailpit to verify your account as
 described in the [account guide](account-ui.md).
@@ -16,7 +17,7 @@ described in the [account guide](account-ui.md).
 | `/monitors/[id]/edit` | Edit an owned configuration with its last-read version.                             |
 
 The desktop sidebar and mobile drawer link to Overview, Monitors, and Incidents. Monitor
-names link directly to their settings; analytics/detail routes are deferred.
+names link directly to their settings; per-monitor analytics/detail routes remain deferred.
 The account layout checks authentication on the server. FastAPI independently
 enforces authentication, ownership, verification, CSRF, and quotas on every API
 request. Unverified accounts get a verification link instead of the list's create
@@ -29,8 +30,9 @@ configuration filtering remain small and cover the entire list. Loading uses
 skeletons; an empty account and an empty filtered result have different messages.
 Refresh failures preserve the previously loaded list and expose a retry action.
 Confirmed mutation responses update cached records before a list refresh, so a
-failed refresh cannot undo a successfully saved state. There is no dashboard
-polling or browser-triggered probing.
+failed refresh cannot undo a successfully saved state. Milestone 13 polls stored
+monitor data every 15 seconds while visible, with error backoff. Forms and
+mutations do not poll, and browser reads never trigger probes.
 
 Enabled is a configuration setting. New monitors display **No data** and
 **Never checked**, and paused monitors display **Paused**. Accepted manual or
@@ -40,7 +42,7 @@ incident policy](incidents.md). Each monitor links to its filtered incident hist
 Milestone 11 displays **Stale observations** ahead of any saved
 health label when scheduled evidence is overdue. This does not claim the target
 is down. Freshness reflects the last API response; use Refresh list for an
-updated reading. Visibility-aware polling remains deferred to milestone 13.
+updated reading. Milestone 13 also refreshes this list automatically while visible.
 The UI never invents latency, uptime, or checks.
 
 ## Forms and concurrent changes

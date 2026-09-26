@@ -264,6 +264,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/dashboard": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get */
+    get: operations["get_api_v1_dashboard_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -272,6 +289,34 @@ export interface components {
     CsrfResponse: {
       /** Csrf Token */
       csrf_token: string;
+    };
+    /** DashboardResponse */
+    DashboardResponse: {
+      /**
+       * Window
+       * @enum {string}
+       */
+      window: "24h" | "7d" | "30d";
+      /**
+       * Start
+       * Format: date-time
+       */
+      start: string;
+      /**
+       * End
+       * Format: date-time
+       */
+      end: string;
+      /** Bucket Seconds */
+      bucket_seconds: number;
+      metrics: components["schemas"]["RunMetrics"];
+      /** Buckets */
+      buckets: components["schemas"]["TrendBucket"][];
+      monitors: components["schemas"]["MonitorCounts"];
+      /** Open Incidents */
+      open_incidents: number;
+      /** Recent Incidents */
+      recent_incidents: components["schemas"]["IncidentResponse"][];
     };
     /** EmailRequest */
     EmailRequest: {
@@ -453,6 +498,49 @@ export interface components {
       /** Message */
       message: string;
     };
+    /** MonitorCounts */
+    MonitorCounts: {
+      /**
+       * Total
+       * @default 0
+       */
+      total: number;
+      /**
+       * Operational
+       * @default 0
+       */
+      operational: number;
+      /**
+       * Down
+       * @default 0
+       */
+      down: number;
+      /**
+       * Confirming Failure
+       * @default 0
+       */
+      confirming_failure: number;
+      /**
+       * Unknown
+       * @default 0
+       */
+      unknown: number;
+      /**
+       * Paused
+       * @default 0
+       */
+      paused: number;
+      /**
+       * Stale
+       * @default 0
+       */
+      stale: number;
+      /**
+       * Awaiting Check
+       * @default 0
+       */
+      awaiting_check: number;
+    };
     /** MonitorCreate */
     MonitorCreate: {
       /** Name */
@@ -592,6 +680,27 @@ export interface components {
        */
       password: string;
     };
+    /** RunMetrics */
+    RunMetrics: {
+      /** Successful Runs */
+      successful_runs: number;
+      /** Failed Runs */
+      failed_runs: number;
+      /** Observations */
+      observations: number;
+      /** Excluded Runs */
+      excluded_runs: number;
+      /** Uptime Percent */
+      uptime_percent: number | null;
+      /** Response Count */
+      response_count: number;
+      /** Mean Latency Ms */
+      mean_latency_ms: number | null;
+      /** First Observation At */
+      first_observation_at: string | null;
+      /** Last Observation At */
+      last_observation_at: string | null;
+    };
     /** TokenRequest */
     TokenRequest: {
       /**
@@ -599,6 +708,39 @@ export interface components {
        * Format: password
        */
       token: string;
+    };
+    /** TrendBucket */
+    TrendBucket: {
+      /** Successful Runs */
+      successful_runs: number;
+      /** Failed Runs */
+      failed_runs: number;
+      /** Observations */
+      observations: number;
+      /** Excluded Runs */
+      excluded_runs: number;
+      /** Uptime Percent */
+      uptime_percent: number | null;
+      /** Response Count */
+      response_count: number;
+      /** Mean Latency Ms */
+      mean_latency_ms: number | null;
+      /** First Observation At */
+      first_observation_at: string | null;
+      /** Last Observation At */
+      last_observation_at: string | null;
+      /**
+       * Start
+       * Format: date-time
+       */
+      start: string;
+      /**
+       * End
+       * Format: date-time
+       */
+      end: string;
+      /** Partial */
+      partial: boolean;
     };
     /** UserResponse */
     UserResponse: {
@@ -2010,6 +2152,64 @@ export interface operations {
       };
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Invalid request values. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unexpected internal error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Service Unavailable */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  get_api_v1_dashboard_get: {
+    parameters: {
+      query?: {
+        window?: "24h" | "7d" | "30d";
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         headers: {
           [name: string]: unknown;
         };

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { usePollingQuery } from "@/lib/use-polling-query";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
@@ -12,14 +12,14 @@ import { listIncidents } from "@/lib/api/incidents";
 export function IncidentList({ monitorId }: { monitorId?: string }) {
   const [status, setStatus] = useState<"all" | "open" | "resolved">("all");
   const [cursor, setCursor] = useState<string>();
-  const query = useQuery({
-    queryKey: ["incidents", monitorId, status, cursor],
-    queryFn: ({ signal }) =>
+  const query = usePollingQuery(
+    ["incidents", monitorId, status, cursor],
+    (signal) =>
       listIncidents(
         { monitorId, status: status === "all" ? undefined : status, cursor },
         signal,
       ),
-  });
+  );
   return (
     <>
       <div className="mb-8">

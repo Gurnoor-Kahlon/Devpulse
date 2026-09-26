@@ -55,10 +55,15 @@ def main() -> None:
         with engine.connect() as connection, patch.dict(Settings.model_config, {"env_file": None}):
             config.attributes["connection"] = connection
             command.upgrade(config, "head")
-        if os.environ.get("TEST_INCIDENT_FIXTURES") == "1":
+        if (
+            os.environ.get("TEST_INCIDENT_FIXTURES") == "1"
+            or os.environ.get("TEST_DASHBOARD_FIXTURES") == "1"
+        ):
             from tests.incident_browser_fixture import seed_incident_browser_fixture
 
-            seed_incident_browser_fixture(engine)
+            seed_incident_browser_fixture(
+                engine, retain_monitor_history=os.environ.get("TEST_DASHBOARD_FIXTURES") == "1"
+            )
         with patch("app.factory.create_database_engine", return_value=engine):
             server = uvicorn.Server(
                 uvicorn.Config(

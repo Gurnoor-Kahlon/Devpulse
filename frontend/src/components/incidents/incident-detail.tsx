@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { usePollingQuery } from "@/lib/use-polling-query";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
@@ -70,10 +70,9 @@ function Evidence({
 }
 
 export function IncidentDetailView({ id }: { id: string }) {
-  const query = useQuery({
-    queryKey: ["incident", id],
-    queryFn: ({ signal }) => getIncident(id, signal),
-  });
+  const query = usePollingQuery(["incident", id], (signal) =>
+    getIncident(id, signal),
+  );
   return (
     <>
       <Link href="/incidents" className="mb-6 inline-block text-sm underline">

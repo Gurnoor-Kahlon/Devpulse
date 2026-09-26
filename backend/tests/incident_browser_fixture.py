@@ -13,7 +13,7 @@ from app.monitoring.runs import claim_run, create_pending_run, execute_spec, fin
 from tests.probe_fixtures import fixture_server, fixture_settings
 
 
-def seed_incident_browser_fixture(engine: Engine) -> None:
+def seed_incident_browser_fixture(engine: Engine, *, retain_monitor_history: bool = False) -> None:
     with fixture_server() as (server, _):
         with Session(engine) as db, db.begin():
             user = User(
@@ -46,6 +46,8 @@ def seed_incident_browser_fixture(engine: Engine) -> None:
                 spec = claim_run(engine, identifier)
                 assert spec is not None
                 finish_run(engine, spec, execute_spec(spec, settings))
+        if retain_monitor_history:
+            return
         # The incident views must remain useful after archive and raw history pruning.
         with Session(engine) as db, db.begin():
             monitor = db.get(Monitor, mid)

@@ -112,8 +112,9 @@ remains usable after archival and raw-history deletion. An empty list does not
 claim uninterrupted availability.
 
 These views use the generated FastAPI TypeScript contract and the existing
-TanStack Query/session handling. They do not add analytics, automatic polling,
-notification delivery, response assertions, or raw check-history pages.
+TanStack Query/session handling. Milestone 13 adds [dashboard analytics](dashboard.md)
+and visible-tab polling to incident lists/details. Notification delivery,
+response assertions, and raw check-history pages remain deferred.
 
 ## Validation
 
@@ -190,5 +191,5 @@ cache; see the [development guide](development.md) for normal browser setup.
 
 Test harnesses stopped their own browser/API/worker/Beat processes. Start the
 three documented scheduler processes for ongoing development monitoring.
-Milestone 13 and later work remain unimplemented. Suggested commit message:
+This historical record predates milestone 13. Suggested milestone 12 commit message:
 `feat: add durable retries and incident lifecycle`.

@@ -2,7 +2,6 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import OverviewPage from "@/app/(app)/dashboard/page";
 import { ApplicationShell } from "@/components/shell/application-shell";
 import { MobileNavigation } from "@/components/shell/mobile-navigation";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -17,7 +16,7 @@ describe("Application shell", () => {
   it("provides a focusable skip target and navigation only to implemented destinations", () => {
     render(
       <ApplicationShell>
-        <OverviewPage />
+        <h1>Overview</h1>
       </ApplicationShell>,
     );
     const main = screen.getByRole("main");
@@ -39,9 +38,6 @@ describe("Application shell", () => {
     }
     expect(
       screen.getByRole("heading", { level: 1, name: "Overview" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Overview analytics are not available yet"),
     ).toBeInTheDocument();
     expect(screen.queryByText(/\d+%|\d+\s*ms/)).not.toBeInTheDocument();
   });

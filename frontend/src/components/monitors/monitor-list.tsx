@@ -1,8 +1,9 @@
 "use client";
+import { usePollingQuery } from "@/lib/use-polling-query";
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount } from "@/components/auth/session-gate";
 import { Button } from "@/components/ui/button";
 import {
@@ -127,10 +128,7 @@ export function MonitorList() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [notice, setNotice] = useState("");
-  const query = useQuery({
-    queryKey: ["monitors"],
-    queryFn: ({ signal }) => listMonitors(signal),
-  });
+  const query = usePollingQuery(["monitors"], listMonitors);
   const toggle = useMutation({
     mutationFn: (monitor: Monitor) =>
       updateMonitor(monitor.id, {

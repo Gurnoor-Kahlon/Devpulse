@@ -3,8 +3,9 @@
 Milestone 11 adds one Beat process, a maintenance-queue dispatcher, and automatic
 recovery of unpublished or expired work. PostgreSQL remains the authority;
 Redis transports task messages only. Milestone 12 adds [durable target retries
-and incidents](incidents.md) through the same dispatcher. Analytics, polling,
-and notification delivery remain deferred.
+and incidents](incidents.md) through the same dispatcher. Milestone 13 adds
+[stored dashboard analytics and polling](dashboard.md). Notification delivery
+remains deferred.
 
 ## Startup
 
@@ -142,8 +143,8 @@ observations, blocked destinations, cancelled work, and infrastructure failures
 do not. The existing latest-check timestamp can still show accepted manual work.
 Freshness is independent of the [milestone 12 health and incident policy](incidents.md).
 The UI shows **Stale observations** ahead of saved health labels and **Paused**
-for disabled monitors. Read time determines freshness; the current list requires
-Refresh list for a new reading. Visibility-aware polling remains milestone 13.
+for disabled monitors. Read time determines freshness. Milestone 13 refreshes the list every 15 seconds
+while visible, with error backoff; Refresh list remains available.
 
 ## Validation
 
