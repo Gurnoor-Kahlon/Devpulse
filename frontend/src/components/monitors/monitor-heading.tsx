@@ -16,8 +16,7 @@ export function MonitorHeading({
         </p>
         <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-2 max-w-lg text-sm text-muted">
-          Save the endpoints you want to monitor. Automatic checks are not
-          running yet.
+          Manage scheduled checks and view the latest observations.
         </p>
       </div>
       {children}

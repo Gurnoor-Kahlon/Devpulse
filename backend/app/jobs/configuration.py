@@ -7,6 +7,8 @@ from app.core.config import Settings
 
 PROBE_TASK = "devpulse.probe.execute"
 PROBE_QUEUE = "probes"
+DISPATCH_TASK = "devpulse.scheduler.dispatch"
+MAINTENANCE_QUEUE = "maintenance"
 
 
 def create_celery(settings: Settings) -> Celery:
@@ -23,8 +25,15 @@ def create_celery(settings: Settings) -> Celery:
         task_reject_on_worker_lost=True,
         task_acks_on_failure_or_timeout=True,
         task_default_queue=PROBE_QUEUE,
-        task_queues=(Queue(PROBE_QUEUE),),
-        task_routes={PROBE_TASK: {"queue": PROBE_QUEUE}},
+        task_queues=(Queue(PROBE_QUEUE), Queue(MAINTENANCE_QUEUE)),
+        task_routes={
+            PROBE_TASK: {"queue": PROBE_QUEUE},
+            DISPATCH_TASK: {"queue": MAINTENANCE_QUEUE},
+        },
+        beat_schedule={
+            "dispatch-monitors": {"task": DISPATCH_TASK, "schedule": 5.0, "options": {"expires": 5}}
+        },
+        beat_max_loop_interval=5,
         task_create_missing_queues=False,
         task_publish_retry=False,
         broker_connection_timeout=3,

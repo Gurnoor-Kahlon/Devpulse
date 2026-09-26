@@ -3,7 +3,8 @@
 Milestone 9 executes one real GET or HEAD for an enabled, saved monitor owned by
 a verified account. There is no browser action or API endpoint for immediate
 probing. Milestone 10 adds [Celery execution and lease recovery](jobs.md).
-Scheduling, retries, incidents, assertions, and history views remain deferred.
+Milestone 11 adds [scheduling](scheduling.md); retries, incidents, assertions, and
+history views remain deferred.
 
 ## Run a saved monitor
 
@@ -135,7 +136,8 @@ exceptions in production. Never enable fixture exceptions for public deployment.
 A process crash or database failure after run creation can leave a run active.
 Inspect its evidence before retrying. Milestone 10 permits republishing the same
 durable run ID after lease expiry; see [manual recovery](jobs.md#manual-recovery).
-There is still no automatic reconciliation or retry dispatcher. A request may have
+Milestone 11 automatically reconciles eligible pending/expired work. This is
+infrastructure recovery, not the later target-failure retry policy. A request may have
 reached its target even if persistence failed, so do not assume exactly-once
 network execution. DNS resolver/service and local-resource failures are separated
 from ordinary target failures where identifiable; the total deadline can also

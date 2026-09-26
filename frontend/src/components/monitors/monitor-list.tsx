@@ -27,6 +27,7 @@ import { MonitorHeading, VerificationNotice } from "./monitor-heading";
 
 function health(monitor: Monitor) {
   if (!monitor.enabled) return "paused";
+  if (monitor.observation_status === "stale") return "stale";
   if (monitor.current_state === "down") return "failing";
   if (monitor.current_state === "confirming_failure") return "confirming";
   if (monitor.current_state === "unknown" && monitor.last_completed_check_at)
@@ -142,7 +143,7 @@ export function MonitorList() {
       );
       setNotice(
         monitor.enabled
-          ? "Monitor enabled. Automatic checks are not running yet."
+          ? "Monitor enabled for scheduled checks."
           : "Monitor paused.",
       );
       await cache.invalidateQueries({ queryKey: ["monitors"] });
@@ -240,7 +241,7 @@ export function MonitorList() {
           {query.data.length === 0 ? (
             <EmptyState
               title="No monitors yet"
-              description="Add an endpoint and choose its check settings. Results will appear after health checks become available."
+              description="Add an endpoint and choose its check settings. Observations will appear after the first check."
             />
           ) : rows.length === 0 ? (
             <EmptyState

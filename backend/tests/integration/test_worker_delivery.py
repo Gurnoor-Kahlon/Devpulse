@@ -79,8 +79,7 @@ def worker_engine(database_engine: Engine) -> Engine:
     return database_engine
 
 
-@contextmanager
-def worker(engine: Engine, settings: Settings, log: Path) -> Iterator[subprocess.Popen[bytes]]:
+def worker_environment(engine: Engine, settings: Settings) -> dict[str, str]:
     with engine.connect() as connection:
         schema = connection.scalar(text("SELECT current_schema()"))
     env = {key: value for key, value in os.environ.items() if not key.startswith("DEVPULSE_")}
@@ -96,6 +95,14 @@ def worker(engine: Engine, settings: Settings, log: Path) -> Iterator[subprocess
             "TEST_WORKER_SCHEMA": schema,
         }
     )
+    return env
+
+
+@contextmanager
+def worker(
+    engine: Engine, settings: Settings, log: Path, queues: str = "probes"
+) -> Iterator[subprocess.Popen[bytes]]:
+    env = worker_environment(engine, settings)
     with log.open("wb") as output:
         process = subprocess.Popen(
             [
@@ -107,6 +114,7 @@ def worker(engine: Engine, settings: Settings, log: Path) -> Iterator[subprocess
                 "--quiet",
                 "worker",
                 "--pool=prefork",
+                f"--queues={queues}",
                 "--concurrency=2",
                 "--without-gossip",
                 "--without-mingle",

@@ -119,6 +119,7 @@ def update_monitor(db: Session, user_id: UUID, monitor_id: UUID, body: MonitorUp
         for key, value in changes.items():
             setattr(monitor, key, value)
         monitor.configuration_version += 1
+        monitor.last_scheduled_check_at = None
         monitor.updated_at = now_utc()
         # Settings become eligible immediately; renaming does not shift the schedule.
         if changes.keys() - {"name"}:

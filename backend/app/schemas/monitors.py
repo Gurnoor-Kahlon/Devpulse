@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Annotated, Literal, Self
 from urllib.parse import urlsplit
 from uuid import UUID
@@ -11,8 +11,11 @@ from pydantic import (
     HttpUrl,
     StrictBool,
     StringConstraints,
+    computed_field,
     model_validator,
 )
+
+from app.core.security import now_utc
 
 
 def normalize_url(value: str) -> str:
@@ -90,8 +93,19 @@ class MonitorResponse(BaseModel):
     next_due_at: datetime | None
     current_state: Literal["unknown", "operational", "down", "confirming_failure"]
     last_completed_check_at: datetime | None
+    last_scheduled_check_at: datetime | None
     created_at: datetime
     updated_at: datetime
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def observation_status(self) -> Literal["paused", "awaiting_check", "current", "stale"]:
+        if not self.enabled:
+            return "paused"
+        baseline = self.last_scheduled_check_at or self.updated_at
+        if now_utc() >= baseline + timedelta(seconds=2 * self.interval_seconds):
+            return "stale"
+        return "current" if self.last_scheduled_check_at else "awaiting_check"
 
 
 class MonitorPage(BaseModel):

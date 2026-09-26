@@ -16,7 +16,8 @@ or system-permission adjustment is part of project setup. Milestone 4 requires a
 user-provided PostgreSQL 18 server and client. Milestone 5 also uses local Mailpit
 for verification/reset emails; see the [authentication guide](authentication.md).
 Milestone 10 requires user-provided Redis for Celery workers; see the
-[job execution guide](jobs.md). Docker and AWS remain deferred.
+[job execution guide](jobs.md). Milestone 11 adds one Beat process and a
+maintenance worker; see [scheduling](scheduling.md). Docker and AWS remain deferred.
 
 The examples use the existing project location:
 

@@ -9,7 +9,9 @@ an owner/history index, and a partial due-time index. Milestone 9 adds revision
 run-history indexes. Milestone 10 adds revision `b31d8e0c6a10`: pending timing,
 fenced worker leases, lifecycle constraints, and pending/expired-lease indexes.
 Stop existing probe executors and workers before this migration; unfinished
-running rows become pending and can be republished. Incidents remain deferred. See [probes](probes.md) for result
+running rows become pending and can be republished. Milestone 11 adds revision
+`c82e7a1d904b`, with a publication reservation timestamp/index and the latest
+accepted scheduled-observation timestamp. Incidents remain deferred. See [probes](probes.md) for result
 transactions and [monitor persistence](monitors.md) for write transactions,
 quotas, and archive semantics. Run `python -m alembic upgrade head` before using
 the monitor API.

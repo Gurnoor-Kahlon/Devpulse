@@ -9,7 +9,13 @@ from sqlalchemy.exc import OperationalError
 from app.core.config import Settings
 from app.core.logging import configure_logging
 from app.jobs import tasks
-from app.jobs.configuration import PROBE_QUEUE, PROBE_TASK, create_celery
+from app.jobs.configuration import (
+    DISPATCH_TASK,
+    MAINTENANCE_QUEUE,
+    PROBE_QUEUE,
+    PROBE_TASK,
+    create_celery,
+)
 
 
 def test_worker_configuration_uses_bounded_json_late_acknowledged_tasks_without_results() -> None:
@@ -26,6 +32,9 @@ def test_worker_configuration_uses_bounded_json_late_acknowledged_tasks_without_
         assert config.worker_cancel_long_running_tasks_on_connection_loss
         assert config.task_time_limit < 60 < config.broker_transport_options["visibility_timeout"]
         assert not config.worker_enable_remote_control
+        assert config.task_routes[DISPATCH_TASK] == {"queue": MAINTENANCE_QUEUE}
+        assert config.beat_schedule["dispatch-monitors"]["schedule"] == 5
+        assert config.beat_schedule["dispatch-monitors"]["options"]["expires"] == 5
     finally:
         app.close()
 

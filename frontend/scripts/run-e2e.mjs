@@ -11,7 +11,7 @@ const frontend = path.resolve(
 );
 const backend = path.resolve(frontend, "../backend");
 const python = path.join(
-  backend,
+  path.resolve(backend, ".."),
   ".venv",
   process.platform === "win32" ? "Scripts/python.exe" : "bin/python",
 );

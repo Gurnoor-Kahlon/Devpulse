@@ -48,6 +48,7 @@ class Monitor(Base):
     next_due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     current_state: Mapped[str] = mapped_column(String(20), default="unknown")
     last_completed_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_scheduled_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -1,7 +1,8 @@
 # Monitor management UI
 
 Milestone 8 connects monitor settings to the PostgreSQL API from milestone 7.
-It adds no probes, workers, schedules, analytics, or fabricated observations.
+Milestone 11 adds observation freshness from the real scheduler; analytics remain
+deferred and no observations are fabricated.
 Start the application using the [development guide](development.md), apply
 `python -m alembic upgrade head`, and use Mailpit to verify your account as
 described in the [account guide](account-ui.md).
@@ -32,10 +33,13 @@ failed refresh cannot undo a successfully saved state. There is no dashboard
 polling or browser-triggered probing.
 
 Enabled is a configuration setting. New monitors display **No data** and
-**Never checked**, and paused monitors display **Paused**. All pages explain that
-automatic checks are not running yet. Milestone 9 adds a local operator command:
-an accepted manual observation updates the latest-check timestamp while health
-remains unevaluated. The UI never invents latency, uptime, or checks.
+**Never checked**, and paused monitors display **Paused**. Accepted manual or
+scheduled observations update the latest-check timestamp while health remains
+unevaluated. Milestone 11 displays **Stale observations** ahead of any saved
+health label when scheduled evidence is overdue. This does not claim the target
+is down. Freshness reflects the last API response; use Refresh list for an
+updated reading. Visibility-aware polling remains deferred to milestone 13.
+The UI never invents latency, uptime, or checks.
 
 ## Forms and concurrent changes
 
@@ -109,9 +113,8 @@ Browser review screenshots are written only to ignored `.cache/` files:
 not monitoring results or public demo data. Public product screenshots remain a
 later milestone.
 
-Development targets WSL2 Linux. Local validation uses the existing Windows
-Node 24, Python 3.13, PostgreSQL 18.3, Mailpit, and Playwright Chromium toolchain
-until a working user-provided WSL distribution is available.
+Development uses WSL2 Ubuntu. The historical milestone 8 validation below used
+Windows; current Linux results are recorded in [scheduling](scheduling.md#validation).
 
 Milestone 8 validation passed 56 component/transport tests and all six production
 browser tests (three account and three monitor workflows), plus formatting,

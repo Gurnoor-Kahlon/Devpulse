@@ -8,7 +8,8 @@ from app.core.config import load_settings
 from app.core.logging import logger
 from app.db.session import create_database_engine
 from app.jobs.celery_app import celery_app
-from app.jobs.configuration import PROBE_TASK
+from app.jobs.configuration import DISPATCH_TASK, PROBE_TASK
+from app.jobs.dispatcher import dispatch_runs
 from app.monitoring.runs import claim_run, execute_spec, finish_run
 
 
@@ -55,3 +56,20 @@ def execute_job(run_id: str) -> None:
 
 
 celery_app.task(name=PROBE_TASK, ignore_result=True)(execute_job)
+
+
+def dispatch_job() -> None:
+    settings = load_settings()
+    engine = create_database_engine(settings)
+    try:
+        dispatch_runs(engine, settings)
+    except SQLAlchemyError:
+        logger.error(
+            "scheduler_deferred",
+            extra={"event": "scheduler_deferred", "error_code": "persistence_unavailable"},
+        )
+    finally:
+        engine.dispose()
+
+
+celery_app.task(name=DISPATCH_TASK, ignore_result=True)(dispatch_job)

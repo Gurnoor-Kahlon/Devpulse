@@ -1,10 +1,10 @@
 # Monitor persistence and API
 
-Milestone 7 stores owned monitor configurations in PostgreSQL. It does not make
-outbound requests, schedule jobs, or generate checks. Every new monitor has
+Milestone 7 introduced owned monitor configurations in PostgreSQL. API requests
+only read/write stored state; milestone 11 schedules probes in separate workers. Every new monitor has
 `current_state: "unknown"` and `last_completed_check_at: null`. An enabled
-configuration is eligible for future scheduling; it does not mean monitoring is
-running in this milestone. Milestone 8 adds the [monitor management UI](monitor-ui.md).
+configuration is eligible for scheduling while Beat and workers are running.
+See [scheduling](scheduling.md) and the [monitor management UI](monitor-ui.md).
 
 ## Startup and contracts
 
@@ -17,7 +17,7 @@ python -m alembic current --check-heads
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-The current head revision is `277e61607ff2` (milestone 9 adds run/check tables).
+The current head revision is `c82e7a1d904b` (milestone 11).
 Manual execution is documented in the [probe guide](probes.md).
 Development OpenAPI documentation is at
 `http://127.0.0.1:8000/docs`. Next.js forwards `/api/v1` through the frontend
@@ -172,3 +172,18 @@ Starlette/AnyIO deprecation warnings remain visible.
 
 WSL2 Linux execution remains pending until a working
 user-provided distribution is available. No new dependencies are required.
+
+
+## Observation freshness (milestone 11)
+
+Monitor responses include `last_scheduled_check_at` for the current configuration
+and a read-only `observation_status`: `paused`, `awaiting_check`, `current`, or
+`stale`. Freshness is evaluated at request time. An enabled monitor becomes stale
+when two configured intervals have elapsed since its latest accepted scheduled
+observation, or since its last configuration change if none exists. Manual
+checks and infrastructure failures do not refresh this timestamp. Configuration
+changes reset it; historical runs/checks and `last_completed_check_at` remain.
+
+This is distinct from `current_state`, which remains unevaluated until the
+milestone 12 retry/incident policy. API reads never dispatch jobs or perform HTTP
+probes. See [scheduling semantics](scheduling.md#freshness-and-health) for details.

@@ -4,6 +4,7 @@ const statuses = {
   failing: { label: "Failing", color: "text-danger" },
   paused: { label: "Paused", color: "text-muted" },
   unknown: { label: "No data", color: "text-muted" },
+  stale: { label: "Stale observations", color: "text-warning" },
   pending: { label: "Health not evaluated", color: "text-muted" },
 } as const;
 

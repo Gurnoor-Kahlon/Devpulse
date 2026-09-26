@@ -14,6 +14,8 @@ _EVENTS = {
     "request_failed",
     "auth_email_failed",
     "probe_completed",
+    "scheduler_dispatched",
+    "scheduler_deferred",
     "worker_ready",
     "job_rejected",
     "job_ignored",
@@ -35,6 +37,8 @@ _FIELDS = {
     "outcome",
     "job_id",
     "worker_pid",
+    "reserved_count",
+    "published_count",
 }
 
 

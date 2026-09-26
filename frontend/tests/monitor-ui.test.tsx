@@ -332,3 +332,13 @@ it("removes archived monitors only after API success", async () => {
   expect(await screen.findByText("No monitors yet")).toBeVisible();
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 });
+
+it("shows stale observations without claiming target downtime", async () => {
+  vi.mocked(listMonitors).mockResolvedValue([
+    { ...monitor, observation_status: "stale", current_state: "operational" },
+  ]);
+  mount(<MonitorList />);
+  expect(await screen.findByText("Stale observations")).toBeVisible();
+  expect(screen.queryByText("Operational")).not.toBeInTheDocument();
+  expect(screen.queryByText("Failing")).not.toBeInTheDocument();
+});

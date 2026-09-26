@@ -373,6 +373,8 @@ export interface components {
       current_state: "unknown" | "operational" | "down" | "confirming_failure";
       /** Last Completed Check At */
       last_completed_check_at: string | null;
+      /** Last Scheduled Check At */
+      last_scheduled_check_at: string | null;
       /**
        * Created At
        * Format: date-time
@@ -383,6 +385,12 @@ export interface components {
        * Format: date-time
        */
       updated_at: string;
+      /**
+       * Observation Status
+       * @enum {string}
+       */
+      readonly observation_status:
+        "paused" | "awaiting_check" | "current" | "stale";
     };
     /** MonitorUpdate */
     MonitorUpdate: {

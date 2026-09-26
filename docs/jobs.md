@@ -1,9 +1,9 @@
 # Redis and Celery job execution
 
 Milestone 10 moves saved-monitor probes outside the API into Linux Celery prefork
-workers. Operators create manual runs; no Beat process, periodic schedule,
-automatic reconciliation, failure retries, or incidents are implemented here.
-The UI correctly continues to say automatic checks are not running.
+workers. Operators can create manual runs. Milestone 11 adds [Beat scheduling
+and automatic reconciliation](scheduling.md); failure retries and incidents remain
+deferred. The milestone 10 validation record below is historical.
 
 ## Local configuration and startup
 
@@ -29,7 +29,8 @@ strings and fragments are rejected; `rediss` requires certificate verification.
 Keep the broker private and use distinct prefixes for separate environments.
 
 Stop old direct probe executors and workers before upgrading. Revision
-`b31d8e0c6a10` converts unfinished legacy running rows into pending work. Existing
+`b31d8e0c6a10` converts unfinished legacy running rows into pending work. The
+current head, `c82e7a1d904b`, also supports scheduled publication recovery. Existing
 completed evidence is retained. Run from the activated backend directory:
 
 ```bash
@@ -128,8 +129,10 @@ python -m app.jobs.cli publish REPORTED_RUN_UUID
 Pending work can be republished immediately when due. For `running` work, wait
 until its lease expires before republishing. A duplicate delivered while the
 lease is active is safely ignored and acknowledged; it does not arrange a later
-retry. In particular, a killed child may cause immediate broker redelivery while
-its lease is still active, so a later manual republish is still needed. Do not
+retry. A killed child may cause immediate broker redelivery while its lease is
+still active. Milestone 11 reconciliation recovers it after expiry, or cancels
+an obsolete scheduled run and schedules current work; manual republication
+remains available if the scheduler is stopped. Do not
 edit lease fields or create a replacement run as a normal recovery procedure.
 Completed/cancelled runs cannot be republished through the command.
 
@@ -142,8 +145,8 @@ WHERE state IN ('pending', 'running')
 ORDER BY scheduled_at;
 ```
 
-Milestone 11 will add automatic pending reconciliation and scheduled dispatch.
-No Beat or scheduler command should be started for milestone 10.
+Milestone 11 adds automatic pending reconciliation and scheduled dispatch. Use
+the [scheduler startup instructions](scheduling.md#startup) for the current system.
 
 ## Validation
 
@@ -205,6 +208,6 @@ drift. Mailpit tests require their separate opt-in and local service.
   10 changes no frontend code or API contracts. Earlier Windows results are not
   claimed as new Linux results.
 
-Test workers were stopped by their harness. Normal operation still requires an
-operator to start a worker and enqueue or republish runs. Scheduling and automatic
-reconciliation remain milestone 11; this validation does not claim those features.
+At milestone 10, test workers were stopped by their harness and normal operation
+required manual enqueue/republication. The separate milestone 11
+[validation record](scheduling.md#validation) covers automatic execution.

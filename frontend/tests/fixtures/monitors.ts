@@ -12,6 +12,8 @@ export const monitor: Monitor = {
   next_due_at: "2026-01-01T00:00:00Z",
   current_state: "unknown",
   last_completed_check_at: null,
+  last_scheduled_check_at: null,
+  observation_status: "awaiting_check",
   created_at: "2026-01-01T00:00:00Z",
   updated_at: "2026-01-01T00:00:00Z",
 };

@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from pathlib import Path
 from unittest.mock import Mock
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import pytest
 from alembic import command
@@ -154,7 +154,25 @@ def test_lease_migration_preserves_history_and_recovers_old_active_runs(
         config.attributes["connection"] = connection
         command.upgrade(config, "277e61607ff2")
     # Use SQL for the old schema: current ORM includes the new lease columns.
-    monitor_id = saved_monitor(database_engine, "https://example.com")
+    monitor_id, user_id = uuid4(), uuid4()
+    with database_engine.begin() as connection:
+        connection.execute(
+            text(
+                "INSERT INTO users (id, email, password_hash, email_verified_at) "
+                "VALUES (:id, 'migration@example.com', 'unused', CURRENT_TIMESTAMP)"
+            ),
+            {"id": user_id},
+        )
+        connection.execute(
+            text(
+                "INSERT INTO monitors (id, user_id, name, url, method, expected_status, "
+                "interval_seconds, timeout_seconds, enabled, configuration_version, next_due_at, "
+                "current_state) "
+                "VALUES (:id, :user, 'Legacy', 'https://example.com', 'GET', 200, 60, 5, true, 1, "
+                "CURRENT_TIMESTAMP, 'unknown')"
+            ),
+            {"id": monitor_id, "user": user_id},
+        )
     with database_engine.begin() as connection:
         connection.execute(
             text(

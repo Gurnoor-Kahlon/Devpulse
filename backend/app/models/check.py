@@ -43,6 +43,11 @@ class CheckRun(Base):
             "lease_expires_at",
             postgresql_where=text("state = 'running'"),
         ),
+        Index(
+            "ix_check_runs_publication",
+            "next_publish_at",
+            postgresql_where=text("state IN ('pending', 'running')"),
+        ),
         Index("ix_check_runs_monitor_id_scheduled_at", "monitor_id", text("scheduled_at DESC")),
         Index(
             "uq_check_runs_active_monitor",
@@ -62,6 +67,9 @@ class CheckRun(Base):
     )
     lease_token: Mapped[UUID | None]
     lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    next_publish_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=text("CURRENT_TIMESTAMP")
+    )
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     final_outcome: Mapped[str | None] = mapped_column(String(24))
 
