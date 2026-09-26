@@ -230,6 +230,40 @@ export interface paths {
     patch: operations["update_api_v1_monitors__monitor_id__patch"];
     trace?: never;
   };
+  "/api/v1/incidents": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Owned */
+    get: operations["list_owned_api_v1_incidents_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/incidents/{incident_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get */
+    get: operations["get_api_v1_incidents__incident_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -279,6 +313,127 @@ export interface components {
        * @constant
        */
       status: "ok";
+    };
+    /** IncidentDetail */
+    IncidentDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Monitor Id
+       * Format: uuid
+       */
+      monitor_id: string;
+      /** Monitor Name */
+      monitor_name: string;
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string;
+      /**
+       * Confirmed At
+       * Format: date-time
+       */
+      confirmed_at: string;
+      /** Resolved At */
+      resolved_at: string | null;
+      /** Opening Run Id */
+      opening_run_id: string | null;
+      /** Opening Check Id */
+      opening_check_id: string | null;
+      /** Confirmation Check Id */
+      confirmation_check_id: string | null;
+      /** Recovery Run Id */
+      recovery_run_id: string | null;
+      /** Recovery Check Id */
+      recovery_check_id: string | null;
+      opening_evidence: components["schemas"]["IncidentEvidence"];
+      confirmation_evidence: components["schemas"]["IncidentEvidence"];
+      recovery_evidence: components["schemas"]["IncidentEvidence"] | null;
+      /**
+       * Status
+       * @enum {string}
+       */
+      readonly status: "open" | "resolved";
+    };
+    /** IncidentEvidence */
+    IncidentEvidence: {
+      /** Attempt Number */
+      attempt_number: number;
+      /** Configuration Version */
+      configuration_version: number;
+      /**
+       * Method
+       * @enum {string}
+       */
+      method: "GET" | "HEAD";
+      /** Expected Status */
+      expected_status: number;
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string;
+      /**
+       * Finished At
+       * Format: date-time
+       */
+      finished_at: string;
+      /**
+       * Outcome
+       * @enum {string}
+       */
+      outcome: "success" | "failure";
+      /** Http Status */
+      http_status: number | null;
+      /** Duration Ms */
+      duration_ms: number;
+      /** Error Code */
+      error_code: string | null;
+      /** Error Message */
+      error_message: string | null;
+    };
+    /** IncidentPage */
+    IncidentPage: {
+      /** Items */
+      items: components["schemas"]["IncidentResponse"][];
+      /** Next Cursor */
+      next_cursor: string | null;
+    };
+    /** IncidentResponse */
+    IncidentResponse: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Monitor Id
+       * Format: uuid
+       */
+      monitor_id: string;
+      /** Monitor Name */
+      monitor_name: string;
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string;
+      /**
+       * Confirmed At
+       * Format: date-time
+       */
+      confirmed_at: string;
+      /** Resolved At */
+      resolved_at: string | null;
+      /**
+       * Status
+       * @enum {string}
+       */
+      readonly status: "open" | "resolved";
     };
     /** LoginRequest */
     LoginRequest: {
@@ -1718,6 +1873,143 @@ export interface operations {
       };
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Invalid request values. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unexpected internal error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Service Unavailable */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  list_owned_api_v1_incidents_get: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string | null;
+        status?: ("open" | "resolved") | null;
+        monitor_id?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["IncidentPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Invalid request values. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unexpected internal error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Service Unavailable */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  get_api_v1_incidents__incident_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        incident_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["IncidentDetail"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Not Found */
+      404: {
         headers: {
           [name: string]: unknown;
         };

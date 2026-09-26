@@ -3,8 +3,8 @@
 Milestone 9 executes one real GET or HEAD for an enabled, saved monitor owned by
 a verified account. There is no browser action or API endpoint for immediate
 probing. Milestone 10 adds [Celery execution and lease recovery](jobs.md).
-Milestone 11 adds [scheduling](scheduling.md); retries, incidents, assertions, and
-history views remain deferred.
+Milestone 11 adds [scheduling](scheduling.md); milestone 12 adds [scheduled retries
+and incident views](incidents.md). Assertions and raw check history views remain deferred.
 
 ## Run a saved monitor
 
@@ -50,8 +50,8 @@ Otherwise a successful or failed HTTP evaluation updates the latest-check time.
 Blocked destinations and infrastructure failures do not update target health.
 An infrastructure failure has a separate run state and outcome.
 
-Manual probes do not decide operational/down status or open incidents. Those
-decisions require the retry policy in milestone 12. A monitor with an observation
+Manual probes remain single-attempt diagnostics and do not change health or
+open/resolve incidents. Scheduled probes use the [milestone 12 retry policy](incidents.md). A monitor with an observation
 and unknown health displays **Health not evaluated**. The command reports the
 attempt's outcome; inspect the run state to distinguish a subsequently cancelled
 run. Manual runs are explicitly tagged `trigger = 'manual'` so future scheduled
@@ -137,7 +137,7 @@ A process crash or database failure after run creation can leave a run active.
 Inspect its evidence before retrying. Milestone 10 permits republishing the same
 durable run ID after lease expiry; see [manual recovery](jobs.md#manual-recovery).
 Milestone 11 automatically reconciles eligible pending/expired work. This is
-infrastructure recovery, not the later target-failure retry policy. A request may have
+infrastructure recovery; milestone 12 separately handles ten-second target-failure retries. A request may have
 reached its target even if persistence failed, so do not assume exactly-once
 network execution. DNS resolver/service and local-resource failures are separated
 from ordinary target failures where identifiable; the total deadline can also

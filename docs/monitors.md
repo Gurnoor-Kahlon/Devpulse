@@ -17,7 +17,7 @@ python -m alembic current --check-heads
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-The current head revision is `c82e7a1d904b` (milestone 11).
+The current head revision is `d93f8b2e015c` (milestone 12).
 Manual execution is documented in the [probe guide](probes.md).
 Development OpenAPI documentation is at
 `http://127.0.0.1:8000/docs`. Next.js forwards `/api/v1` through the frontend
@@ -102,7 +102,8 @@ Archive is permanent through this API. It hides the monitor from ordinary reads
 and writes while retaining its row for later historical evidence. A repeated
 DELETE returns `404`. No hard-delete API exists. The user foreign key uses
 `RESTRICT`; deleting an account row cannot silently cascade through monitors.
-Runs and incident evidence are not introduced in this milestone.
+Runs and retained incident evidence were added in milestones 9 and 12. Archiving
+preserves that history and does not resolve an open incident.
 
 ## Quotas and transactions
 
@@ -184,6 +185,7 @@ observation, or since its last configuration change if none exists. Manual
 checks and infrastructure failures do not refresh this timestamp. Configuration
 changes reset it; historical runs/checks and `last_completed_check_at` remain.
 
-This is distinct from `current_state`, which remains unevaluated until the
-milestone 12 retry/incident policy. API reads never dispatch jobs or perform HTTP
+This is distinct from `current_state`: milestone 12 sets `confirming_failure`
+during scheduled retries, `down` after confirmation, and `operational` after
+success. Manual observations do not change health. See [incident semantics](incidents.md). API reads never dispatch jobs or perform HTTP
 probes. See [scheduling semantics](scheduling.md#freshness-and-health) for details.

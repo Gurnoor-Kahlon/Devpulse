@@ -19,7 +19,9 @@ const env = {
   ...Object.fromEntries(
     Object.entries(process.env).filter(([key]) => !key.startsWith("DEVPULSE_")),
   ),
-  PLAYWRIGHT_BROWSERS_PATH: path.resolve(frontend, "../.cache/playwright"),
+  PLAYWRIGHT_BROWSERS_PATH:
+    process.env.PLAYWRIGHT_BROWSERS_PATH ??
+    path.resolve(frontend, "../.cache/playwright"),
 };
 if (!env.TEST_DATABASE_URL)
   throw new Error(

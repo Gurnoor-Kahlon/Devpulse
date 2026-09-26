@@ -15,7 +15,7 @@ described in the [account guide](account-ui.md).
 | `/monitors/new`       | Configuration form using the API defaults and validation bounds.                    |
 | `/monitors/[id]/edit` | Edit an owned configuration with its last-read version.                             |
 
-The desktop sidebar and mobile drawer link to Overview and Monitors. Monitor
+The desktop sidebar and mobile drawer link to Overview, Monitors, and Incidents. Monitor
 names link directly to their settings; analytics/detail routes are deferred.
 The account layout checks authentication on the server. FastAPI independently
 enforces authentication, ownership, verification, CSRF, and quotas on every API
@@ -34,8 +34,10 @@ polling or browser-triggered probing.
 
 Enabled is a configuration setting. New monitors display **No data** and
 **Never checked**, and paused monitors display **Paused**. Accepted manual or
-scheduled observations update the latest-check timestamp while health remains
-unevaluated. Milestone 11 displays **Stale observations** ahead of any saved
+scheduled observations update the latest-check timestamp. Manual probes leave
+health unchanged; scheduled attempts now evaluate health using the [milestone 12
+incident policy](incidents.md). Each monitor links to its filtered incident history.
+Milestone 11 displays **Stale observations** ahead of any saved
 health label when scheduled evidence is overdue. This does not claim the target
 is down. Freshness reflects the last API response; use Refresh list for an
 updated reading. Visibility-aware polling remains deferred to milestone 13.

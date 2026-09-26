@@ -2,8 +2,9 @@
 
 Milestone 11 adds one Beat process, a maintenance-queue dispatcher, and automatic
 recovery of unpublished or expired work. PostgreSQL remains the authority;
-Redis transports task messages only. No target-failure retries, incident
-transitions, analytics, polling, or notification delivery are added.
+Redis transports task messages only. Milestone 12 adds [durable target retries
+and incidents](incidents.md) through the same dispatcher. Analytics, polling,
+and notification delivery remain deferred.
 
 ## Startup
 
@@ -18,7 +19,8 @@ python -m alembic current --check-heads
 python -m alembic check
 ```
 
-The head revision is `c82e7a1d904b`. It adds `check_runs.next_publish_at`, a partial
+The current head is `d93f8b2e015c` (milestone 12). The preceding milestone 11
+revision, `c82e7a1d904b`, adds `check_runs.next_publish_at`, a partial
 publication index for active runs, and `monitors.last_scheduled_check_at`.
 Existing pending work becomes eligible for reconciliation. It preserves old
 run/check evidence and does not invent past scheduled observations. Downgrades
@@ -85,9 +87,12 @@ concurrent ticks do not repeatedly publish the same row. Queued duplicates can
 still occur; the existing token fencing and uniqueness constraints deduplicate
 stored effects. Network GET/HEAD execution can repeat after crashes.
 
-An expired manual run is recovered under the same ID. A scheduled run older than
-one configured interval is cancelled instead of replayed; if its monitor is
-still due, the dispatcher creates a current scheduled run. The worker performs
+An expired manual run is recovered under the same ID. A scheduled run with no
+stored attempt is cancelled after one configured interval. Once a target failure
+has been stored, the continuation window is the greater of one interval or 180
+seconds from the original scheduled time. This allows ten-second retries and
+lease recovery without replaying obsolete failures indefinitely. If its monitor
+is still due after cancellation, the dispatcher creates a current run. The worker performs
 the same age/configuration check before HTTP and again on completion. An obsolete
 in-flight attempt may be retained under a cancelled run, but it cannot refresh
 current monitor evidence. Pausing, archiving, and unverified ownership prevent
@@ -135,8 +140,8 @@ still preserves the existing next due time.
 Successful and failed target evaluations refresh scheduled freshness. Manual
 observations, blocked destinations, cancelled work, and infrastructure failures
 do not. The existing latest-check timestamp can still show accepted manual work.
-Freshness does not decide aggregate health or incidents: those remain milestone
-12. The UI shows **Stale observations** ahead of saved health labels and **Paused**
+Freshness is independent of the [milestone 12 health and incident policy](incidents.md).
+The UI shows **Stale observations** ahead of saved health labels and **Paused**
 for disabled monitors. Read time determines freshness; the current list requires
 Refresh list for a new reading. Visibility-aware polling remains milestone 13.
 
@@ -201,5 +206,5 @@ Frontend types are generated from FastAPI rather than maintained separately.
 
 The test harness stopped its Beat and worker processes. Start the documented
 three processes for ongoing development monitoring; validation did not leave a
-background scheduler running against development monitors. No milestone 12
-retry or incident behavior is included.
+background scheduler running against development monitors. This historical record
+predates milestone 12; see its [separate validation record](incidents.md#validation).

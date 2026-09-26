@@ -20,8 +20,9 @@ export function AboutDialog({ trigger }: { trigger: ReactElement }) {
       >
         <p className="text-sm leading-6 text-muted">
           Enabled monitors are eligible for scheduled checks. Observations can
-          become stale when checks are delayed. Health evaluation and incident
-          history are not available yet.
+          become stale when checks are delayed. Three failed attempts confirm an
+          incident; one successful scheduled check records recovery. Incident
+          history is available in the workspace.
         </p>
         <DialogClose asChild>
           <Button className="mt-6">Got it</Button>

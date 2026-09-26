@@ -13,6 +13,7 @@ from app.models.auth import User
 from app.models.check import Check, CheckRun
 from app.models.monitor import Monitor
 from app.monitoring.executor import ERROR_MESSAGES, ProbeResult, execute_probe
+from app.monitoring.incidents import apply_observation
 
 
 class RunError(Exception):
@@ -29,9 +30,13 @@ class ProbeSpec:
     expected_status: int
     timeout_seconds: int
     lease_token: UUID
+    attempt_number: int
 
 
 LEASE_SECONDS = 60
+RETRY_SECONDS = 10
+# Continuations need room for three probes, dispatch lag, and expired-lease recovery.
+RETRY_WINDOW_SECONDS = 180
 
 
 def create_pending_run(engine: Engine, monitor_id: UUID) -> UUID:
@@ -61,14 +66,24 @@ def create_pending_run(engine: Engine, monitor_id: UUID) -> UUID:
 def run_is_outdated(run: CheckRun, monitor: Monitor, now: datetime) -> bool:
     return monitor.configuration_version != run.configuration_version or (
         run.trigger == "scheduled"
-        and now >= run.scheduled_at + timedelta(seconds=monitor.interval_seconds)
+        and now
+        >= run.scheduled_at
+        + timedelta(
+            seconds=(
+                max(monitor.interval_seconds, RETRY_WINDOW_SECONDS)
+                if run.attempt_count
+                else monitor.interval_seconds
+            )
+        )
     )
 
 
-def cancel_run(run: CheckRun, now: datetime) -> None:
+def cancel_run(run: CheckRun, now: datetime, monitor: Monitor | None = None) -> None:
     run.state, run.completed_at = "cancelled", now
     run.next_attempt_at = run.lease_expires_at = None
     run.lease_token = None
+    if monitor is not None and monitor.current_state == "confirming_failure":
+        monitor.current_state = "unknown"
 
 
 def claim_run(engine: Engine, run_id: UUID) -> ProbeSpec | None:
@@ -96,7 +111,7 @@ def claim_run(engine: Engine, run_id: UUID) -> ProbeSpec | None:
             or user is None
             or user.email_verified_at is None
         ):
-            cancel_run(run, now)
+            cancel_run(run, now, monitor)
             return None
         run.state, run.next_attempt_at = "running", None
         run.lease_token = uuid4()
@@ -110,6 +125,7 @@ def claim_run(engine: Engine, run_id: UUID) -> ProbeSpec | None:
             monitor.expected_status,
             monitor.timeout_seconds,
             run.lease_token,
+            run.attempt_count + 1,
         )
 
 
@@ -134,7 +150,7 @@ def finish_run(engine: Engine, spec: ProbeSpec, result: ProbeResult) -> UUID | N
             or run.lease_expires_at <= now
         ):
             return None
-        check = Check(run_id=run.id, attempt_number=1, **asdict(result))
+        check = Check(run_id=run.id, attempt_number=spec.attempt_number, **asdict(result))
         db.add(check)
         run.completed_at = result.finished_at
         run.final_outcome = result.outcome
@@ -146,6 +162,7 @@ def finish_run(engine: Engine, spec: ProbeSpec, result: ProbeResult) -> UUID | N
             or monitor.deleted_at is not None
             or run_is_outdated(run, monitor, now)
         )
+        run.attempt_count = spec.attempt_number
         run.state = (
             "cancelled"
             if stale
@@ -153,12 +170,23 @@ def finish_run(engine: Engine, spec: ProbeSpec, result: ProbeResult) -> UUID | N
             if result.outcome == "infrastructure_failure"
             else "completed"
         )
-        if not stale and result.outcome in {"success", "failure"}:
+        if stale:
+            if monitor is not None and monitor.current_state == "confirming_failure":
+                monitor.current_state = "unknown"
+        else:
             assert monitor is not None
-            monitor.last_completed_check_at = result.finished_at
-            if run.trigger == "scheduled":
-                monitor.last_scheduled_check_at = result.finished_at
-            # Aggregate health and three-failure incident decisions arrive with the retry policy.
+            if run.trigger == "scheduled" and result.outcome == "failure" and run.attempt_count < 3:
+                run.state, run.completed_at, run.final_outcome = "pending", None, None
+                run.next_attempt_at = now + timedelta(seconds=RETRY_SECONDS)
+                run.next_publish_at = run.next_attempt_at
+            if result.outcome in {"success", "failure"}:
+                monitor.last_completed_check_at = result.finished_at
+                if run.trigger == "scheduled":
+                    monitor.last_scheduled_check_at = result.finished_at
+        db.flush()  # Assign the check ID before storing incident references.
+        if not stale and run.trigger == "scheduled":
+            assert monitor is not None
+            apply_observation(db, monitor, run, check)
         db.flush()
         check_id = check.id
     logger.info(

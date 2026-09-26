@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { AboutDialog } from "@/components/shell/about-dialog";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { StatusIndicator } from "@/components/ui/status-indicator";
 
 export const metadata: Metadata = { title: "Overview · DevPulse" };
 
@@ -25,11 +24,10 @@ export default function OverviewPage() {
       >
         <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
           <p className="text-sm font-medium">Monitoring activity</p>
-          <StatusIndicator status="unknown" />
         </div>
         <EmptyState
-          title="No monitoring data yet"
-          description="Checks and incident history will appear here once monitoring is available."
+          title="Overview analytics are not available yet"
+          description="Use Monitors for the latest health states and Incidents for confirmed failures and observed recoveries."
           action={
             <AboutDialog
               trigger={<Button variant="secondary">About this preview</Button>}

@@ -33,6 +33,7 @@ const messages: Record<string, string> = {
     "The service has reached its limit of 100 enabled monitors. Save this monitor paused or try again later.",
   configuration_conflict:
     "This monitor changed elsewhere. Reload the latest settings before trying again.",
+  incident_not_found: "This incident could not be found in your account.",
   monitor_not_found: "This monitor is unavailable. It may have been archived.",
 };
 

@@ -32,6 +32,14 @@ export function WorkspaceNavigation({
       >
         <Icon name="pulse" /> Monitors
       </Link>
+      <Link
+        href="/incidents"
+        aria-current={pathname.startsWith("/incidents") ? "page" : undefined}
+        onClick={onNavigate}
+        className="nav-link mt-2"
+      >
+        <Icon name="alert" /> Incidents
+      </Link>
     </nav>
   );
 }

@@ -333,6 +333,13 @@ export function MonitorList() {
                       >
                         {monitor.enabled ? "Pause" : "Resume"}
                       </Button>
+                      <Link
+                        href={`/incidents?monitor=${encodeURIComponent(monitor.id)}`}
+                        className="button button--secondary"
+                      >
+                        Incidents
+                        <span className="sr-only"> for {monitor.name}</span>
+                      </Link>
                       <ArchiveButton
                         monitor={monitor}
                         disabled={toggle.isPending}

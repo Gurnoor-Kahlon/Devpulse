@@ -13,6 +13,7 @@ class CheckRun(Base):
     __table_args__ = (
         UniqueConstraint("monitor_id", "scheduled_at"),
         CheckConstraint("configuration_version > 0", name="configuration_version"),
+        CheckConstraint("attempt_count BETWEEN 0 AND 3", name="attempt_count"),
         CheckConstraint("trigger IN ('manual', 'scheduled')", name="trigger"),
         CheckConstraint(
             "state IN ('pending', 'running', 'completed', 'cancelled', 'infrastructure_failed')",
@@ -60,6 +61,7 @@ class CheckRun(Base):
     monitor_id: Mapped[UUID] = mapped_column(ForeignKey("monitors.id", ondelete="RESTRICT"))
     scheduled_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     configuration_version: Mapped[int]
+    attempt_count: Mapped[int] = mapped_column(server_default=text("0"), default=0)
     trigger: Mapped[str] = mapped_column(String(10), default="manual")
     state: Mapped[str] = mapped_column(String(24), default="pending")
     next_attempt_at: Mapped[datetime | None] = mapped_column(

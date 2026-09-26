@@ -2,8 +2,8 @@
 
 Milestone 10 moves saved-monitor probes outside the API into Linux Celery prefork
 workers. Operators can create manual runs. Milestone 11 adds [Beat scheduling
-and automatic reconciliation](scheduling.md); failure retries and incidents remain
-deferred. The milestone 10 validation record below is historical.
+and automatic reconciliation](scheduling.md); milestone 12 adds [failure retries
+and incidents](incidents.md). The milestone 10 validation record below is historical.
 
 ## Local configuration and startup
 
@@ -30,8 +30,8 @@ Keep the broker private and use distinct prefixes for separate environments.
 
 Stop old direct probe executors and workers before upgrading. Revision
 `b31d8e0c6a10` converts unfinished legacy running rows into pending work. The
-current head, `c82e7a1d904b`, also supports scheduled publication recovery. Existing
-completed evidence is retained. Run from the activated backend directory:
+current head, `d93f8b2e015c`, also supports scheduled publication recovery,
+durable attempt counts, and retained incidents. Existing completed evidence is retained. Run from the activated backend directory:
 
 ```bash
 python -m alembic upgrade head

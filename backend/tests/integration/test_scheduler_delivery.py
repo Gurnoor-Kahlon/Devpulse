@@ -93,7 +93,7 @@ def test_real_beat_dispatches_through_maintenance_and_probe_queues(
             run = db.scalar(select(CheckRun))
             assert run.trigger == "scheduled" and run.state == "completed"
             assert db.get(Monitor, monitor_id).last_scheduled_check_at is not None
-            assert db.get(Monitor, monitor_id).current_state == "unknown"
+            assert db.get(Monitor, monitor_id).current_state == "operational"
         assert len(server.hits) == 1
 
 

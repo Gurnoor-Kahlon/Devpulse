@@ -18,6 +18,8 @@ class FixtureServer(ThreadingHTTPServer):
     def __init__(self) -> None:
         super().__init__(("127.0.0.1", 0), Handler)
         self.hits: list[tuple[str, str, str]] = []
+        self.hit_times: list[float] = []
+        self.response_status = 503
         self.sni: list[str | None] = []
         self.authorization: list[str | None] = []
 
@@ -32,6 +34,7 @@ class Handler(BaseHTTPRequestHandler):
         self.do_GET()
 
     def do_GET(self) -> None:
+        self.server.hit_times.append(time.monotonic())
         self.server.hits.append((self.command, self.path, self.headers.get("Host", "")))
         self.server.authorization.append(self.headers.get("Authorization"))
         route = self.path.split("?", 1)[0]
@@ -43,6 +46,8 @@ class Handler(BaseHTTPRequestHandler):
             time.sleep(1.4)
         body = b'{"ok":true}'
         status = 503 if route == "/fail" else 302 if route == "/redirect" else 200
+        if route == "/controlled":
+            status = self.server.response_status
         encoding = None
         if route == "/json":
             body = b"{invalid json and response-secret-canary"

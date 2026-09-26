@@ -30,14 +30,19 @@ describe("Application shell", () => {
       "page",
     );
     for (const link of screen.getAllByRole("link")) {
-      expect(["/dashboard", "/monitors", "#main-content"]).toContain(
-        link.getAttribute("href"),
-      );
+      expect([
+        "/dashboard",
+        "/monitors",
+        "/incidents",
+        "#main-content",
+      ]).toContain(link.getAttribute("href"));
     }
     expect(
       screen.getByRole("heading", { level: 1, name: "Overview" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("No monitoring data yet")).toBeInTheDocument();
+    expect(
+      screen.getByText("Overview analytics are not available yet"),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/\d+%|\d+\s*ms/)).not.toBeInTheDocument();
   });
 

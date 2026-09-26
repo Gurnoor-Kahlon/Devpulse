@@ -58,7 +58,7 @@ def reserve_work(engine: Engine) -> list[UUID]:
                 or user.email_verified_at is None
                 or run_is_outdated(run, monitor, now)
             ):
-                cancel_run(run, now)
+                cancel_run(run, now, monitor)
                 continue
             run.next_publish_at = now + timedelta(seconds=REPUBLISH_SECONDS)
             ids.append(run.id)

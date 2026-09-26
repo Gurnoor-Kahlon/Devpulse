@@ -11,7 +11,12 @@ fenced worker leases, lifecycle constraints, and pending/expired-lease indexes.
 Stop existing probe executors and workers before this migration; unfinished
 running rows become pending and can be republished. Milestone 11 adds revision
 `c82e7a1d904b`, with a publication reservation timestamp/index and the latest
-accepted scheduled-observation timestamp. Incidents remain deferred. See [probes](probes.md) for result
+accepted scheduled-observation timestamp. Milestone 12 adds `d93f8b2e015c`:
+durable attempt counts and incidents with one unresolved incident per monitor.
+Existing attempt counts are backfilled; historical incidents are not invented.
+Optional run/check references use `ON DELETE SET NULL`, preserving compact
+opening, confirmation, and recovery evidence after raw history is pruned.
+See [incidents](incidents.md) for retention semantics and [probes](probes.md) for result
 transactions and [monitor persistence](monitors.md) for write transactions,
 quotas, and archive semantics. Run `python -m alembic upgrade head` before using
 the monitor API.

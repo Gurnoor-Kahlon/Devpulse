@@ -6,12 +6,12 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 11 schedules saved-monitor checks through one Celery Beat process and
-separate maintenance/probe workers. PostgreSQL owns due times, pending runs,
-publication recovery, and fenced leases. Missed intervals produce one current
-observation rather than a replay burst. The monitor list identifies stale
-observations separately from target health. Retries, incidents, and analytics
-remain deferred.
+Milestone 12 adds durable ten-second retries, incident confirmation after three
+failed scheduled attempts, and recovery on the first successful observation.
+PostgreSQL atomically stores attempts, health changes, and retained incident
+evidence. Authenticated incident lists and details show real observations,
+including archived monitors. Beat and separate maintenance/probe workers handle
+execution and recovery. Analytics, polling, and notifications remain deferred.
 
 ## Local development
 
@@ -30,7 +30,8 @@ The [probe guide](docs/probes.md) covers manual execution, security boundaries,
 controlled tests, and current limitations.
 Redis is required for worker execution. See the [job execution guide](docs/jobs.md)
 for worker behavior and the [scheduler guide](docs/scheduling.md) for Beat startup,
-automatic recovery, freshness, and validation. Docker and
+automatic recovery, freshness, and validation. The [incident guide](docs/incidents.md)
+covers retries, retained evidence, APIs, and browser views. Docker and
 cloud services remain deferred.
 
 ## Project layout
