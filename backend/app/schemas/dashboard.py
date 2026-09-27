@@ -37,13 +37,16 @@ class MonitorCounts(BaseModel):
     awaiting_check: int = 0
 
 
-class DashboardResponse(BaseModel):
+class RunHistory(BaseModel):
     window: DashboardWindow
     start: datetime
     end: datetime
     bucket_seconds: int
     metrics: RunMetrics
     buckets: list[TrendBucket]
+
+
+class DashboardResponse(RunHistory):
     monitors: MonitorCounts
     open_incidents: int
     recent_incidents: list[IncidentResponse]

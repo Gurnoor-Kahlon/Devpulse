@@ -66,3 +66,29 @@ export const archiveMonitor = (monitor: Monitor) =>
     `${base}/${encodeURIComponent(monitor.id)}?configuration_version=${monitor.configuration_version}`,
     { method: "DELETE" },
   );
+
+export type MonitorAnalytics = components["schemas"]["MonitorAnalytics"];
+export type CheckPage = components["schemas"]["CheckPage"];
+export type HistoryWindow = MonitorAnalytics["window"];
+export const getMonitorAnalytics = (
+  id: string,
+  window: HistoryWindow,
+  signal?: AbortSignal,
+) =>
+  monitorRequest<MonitorAnalytics>(
+    `${base}/${encodeURIComponent(id)}/analytics?${new URLSearchParams({ window })}`,
+    { signal },
+  );
+export const getMonitorChecks = (
+  id: string,
+  window: HistoryWindow,
+  cursor?: string,
+  signal?: AbortSignal,
+) => {
+  const params = new URLSearchParams({ window, limit: "25" });
+  if (cursor) params.set("cursor", cursor);
+  return monitorRequest<CheckPage>(
+    `${base}/${encodeURIComponent(id)}/checks?${params}`,
+    { signal },
+  );
+};

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.models.check import Check, CheckRun
 from app.models.incident import Incident
-from app.services import dashboard
+from app.services import analytics as dashboard
 from tests.integration import test_monitors as fixtures
 
 monitor_app = fixtures.monitor_app

@@ -88,12 +88,13 @@ it("allows only implemented monitor return destinations", () => {
     "/monitors",
     "/monitors/new",
     `/monitors/${monitor.id}/edit`,
+    `/monitors/${monitor.id}`,
   ])
     expect(safeReturnPath(path)).toBe(path);
   for (const path of [
     "/monitors//evil.com/edit",
     "/monitors/new?next=https://evil.com",
-    `/monitors/${monitor.id}`,
+    `/monitors/${monitor.id}?next=https://evil.com`,
   ])
     expect(safeReturnPath(path)).toBe("/dashboard");
 });

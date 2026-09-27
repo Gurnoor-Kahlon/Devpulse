@@ -14,10 +14,12 @@ described in the [account guide](account-ui.md).
 | --------------------- | ----------------------------------------------------------------------------------- |
 | `/monitors`           | Owned monitor list, name/URL search, enabled/paused filters, pause/resume, archive. |
 | `/monitors/new`       | Configuration form using the API defaults and validation bounds.                    |
+| `/monitors/[id]` | Monitor analytics, check attempts, and retained incidents (milestone 14). |
 | `/monitors/[id]/edit` | Edit an owned configuration with its last-read version.                             |
 
 The desktop sidebar and mobile drawer link to Overview, Monitors, and Incidents. Monitor
-names link directly to their settings; per-monitor analytics/detail routes remain deferred.
+names now link to [monitor detail history](monitor-history.md); the separate Edit
+action continues to open settings.
 The account layout checks authentication on the server. FastAPI independently
 enforces authentication, ownership, verification, CSRF, and quotas on every API
 request. Unverified accounts get a verification link instead of the list's create

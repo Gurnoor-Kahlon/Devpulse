@@ -4,7 +4,8 @@ Milestone 9 executes one real GET or HEAD for an enabled, saved monitor owned by
 a verified account. There is no browser action or API endpoint for immediate
 probing. Milestone 10 adds [Celery execution and lease recovery](jobs.md).
 Milestone 11 adds [scheduling](scheduling.md); milestone 12 adds [scheduled retries
-and incident views](incidents.md). Assertions and raw check history views remain deferred.
+and incident views](incidents.md). Milestone 14 adds [safe raw check history](monitor-history.md);
+response assertions remain deferred.
 
 ## Run a saved monitor
 

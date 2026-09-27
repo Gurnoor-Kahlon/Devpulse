@@ -230,6 +230,40 @@ export interface paths {
     patch: operations["update_api_v1_monitors__monitor_id__patch"];
     trace?: never;
   };
+  "/api/v1/monitors/{monitor_id}/analytics": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Analytics */
+    get: operations["analytics_api_v1_monitors__monitor_id__analytics_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/monitors/{monitor_id}/checks": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Checks */
+    get: operations["checks_api_v1_monitors__monitor_id__checks_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/incidents": {
     parameters: {
       query?: never;
@@ -285,6 +319,87 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** CheckEvidence */
+    CheckEvidence: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Run Id
+       * Format: uuid
+       */
+      run_id: string;
+      /**
+       * Scheduled At
+       * Format: date-time
+       */
+      scheduled_at: string;
+      /** Configuration Version */
+      configuration_version: number;
+      /**
+       * Trigger
+       * @enum {string}
+       */
+      trigger: "manual" | "scheduled";
+      /**
+       * Run State
+       * @enum {string}
+       */
+      run_state:
+        | "pending"
+        | "running"
+        | "completed"
+        | "cancelled"
+        | "infrastructure_failed";
+      /** Final Outcome */
+      final_outcome: string | null;
+      /** Attempt Number */
+      attempt_number: number;
+      /** Is Final Attempt */
+      is_final_attempt: boolean;
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string;
+      /**
+       * Finished At
+       * Format: date-time
+       */
+      finished_at: string;
+      /**
+       * Outcome
+       * @enum {string}
+       */
+      outcome: "success" | "failure" | "blocked" | "infrastructure_failure";
+      /** Http Status */
+      http_status: number | null;
+      /** Duration Ms */
+      duration_ms: number;
+      /** Error Code */
+      error_code: string | null;
+      /** Error Message */
+      error_message: string | null;
+    };
+    /** CheckPage */
+    CheckPage: {
+      /**
+       * Start
+       * Format: date-time
+       */
+      start: string;
+      /**
+       * End
+       * Format: date-time
+       */
+      end: string;
+      /** Items */
+      items: components["schemas"]["CheckEvidence"][];
+      /** Next Cursor */
+      next_cursor: string | null;
+    };
     /** CsrfResponse */
     CsrfResponse: {
       /** Csrf Token */
@@ -498,6 +613,34 @@ export interface components {
       /** Message */
       message: string;
     };
+    /** MonitorAnalytics */
+    MonitorAnalytics: {
+      /**
+       * Window
+       * @enum {string}
+       */
+      window: "24h" | "7d" | "30d";
+      /**
+       * Start
+       * Format: date-time
+       */
+      start: string;
+      /**
+       * End
+       * Format: date-time
+       */
+      end: string;
+      /** Bucket Seconds */
+      bucket_seconds: number;
+      metrics: components["schemas"]["RunMetrics"];
+      /** Buckets */
+      buckets: components["schemas"]["TrendBucket"][];
+      monitor: components["schemas"]["MonitorResponse"];
+      /** Archived At */
+      archived_at: string | null;
+      /** Status Distribution */
+      status_distribution: components["schemas"]["StatusCount"][];
+    };
     /** MonitorCounts */
     MonitorCounts: {
       /**
@@ -700,6 +843,15 @@ export interface components {
       first_observation_at: string | null;
       /** Last Observation At */
       last_observation_at: string | null;
+    };
+    /** StatusCount */
+    StatusCount: {
+      /** Http Status */
+      http_status: number;
+      /** Count */
+      count: number;
+      /** Percentage */
+      percentage: number;
     };
     /** TokenRequest */
     TokenRequest: {
@@ -1984,6 +2136,182 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["MonitorResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Invalid request values. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unexpected internal error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Service Unavailable */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  analytics_api_v1_monitors__monitor_id__analytics_get: {
+    parameters: {
+      query?: {
+        window?: "24h" | "7d" | "30d";
+      };
+      header?: never;
+      path: {
+        monitor_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MonitorAnalytics"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Invalid request values. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unexpected internal error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Service Unavailable */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  checks_api_v1_monitors__monitor_id__checks_get: {
+    parameters: {
+      query?: {
+        window?: "24h" | "7d" | "30d";
+        limit?: number;
+        cursor?: string | null;
+      };
+      header?: never;
+      path: {
+        monitor_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CheckPage"];
         };
       };
       /** @description Unauthorized */

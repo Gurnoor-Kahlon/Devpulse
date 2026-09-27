@@ -5,8 +5,10 @@ from fastapi import APIRouter, Query, Response
 
 from app.api.auth_dependencies import CurrentUser, Database
 from app.core.errors import ErrorResponse
+from app.schemas.dashboard import DashboardWindow
+from app.schemas.monitor_history import CheckPage, MonitorAnalytics
 from app.schemas.monitors import MonitorCreate, MonitorPage, MonitorResponse, MonitorUpdate
-from app.services import monitors
+from app.services import monitor_history, monitors
 
 router = APIRouter(
     prefix="/api/v1/monitors",
@@ -55,3 +57,22 @@ def archive(
 ) -> Response:
     monitors.archive_monitor(db, user_id, monitor_id, configuration_version)
     return Response(status_code=204)
+
+
+@router.get("/{monitor_id}/analytics", response_model=MonitorAnalytics)
+def analytics(
+    monitor_id: UUID, db: Database, user_id: CurrentUser, window: DashboardWindow = "24h"
+) -> MonitorAnalytics:
+    return monitor_history.get_analytics(db, user_id, monitor_id, window)
+
+
+@router.get("/{monitor_id}/checks", response_model=CheckPage)
+def checks(
+    monitor_id: UUID,
+    db: Database,
+    user_id: CurrentUser,
+    window: DashboardWindow = "24h",
+    limit: Annotated[int, Query(ge=1, le=100)] = 25,
+    cursor: Annotated[str | None, Query(min_length=1, max_length=600)] = None,
+) -> CheckPage:
+    return monitor_history.list_checks(db, user_id, monitor_id, window, limit, cursor)

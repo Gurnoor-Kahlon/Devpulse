@@ -3,8 +3,9 @@
 Milestone 13 replaces the Overview placeholder with owned PostgreSQL aggregates,
 current monitor states, recent incidents, and Recharts trends. It uses the
 existing scheduler/worker pipeline and does not dispatch probes from reads.
-Per-monitor analytics, check-history pagination, assertions, notifications,
-retention jobs, public demo data, and benchmarks remain separate milestones.
+Milestone 14 adds [per-monitor analytics and check-history pagination](monitor-history.md)
+using the same metric rules. Assertions, notifications, retention jobs, public
+demo data, and benchmarks remain separate milestones.
 
 ## Metric definitions
 
@@ -86,7 +87,7 @@ worker commit than the chart aggregate; every polling response refreshes them.
 
 ## Polling
 
-Dashboard, monitor lists, incident lists, and incident details use the shared
+Dashboard, monitor lists/details, incident lists, and incident details use the shared
 `usePollingQuery` hook with TanStack Query:
 
 - Fetch stored results on visible mount and every 15 seconds after completion.
@@ -186,5 +187,5 @@ and [TanStack Query v5 query API](https://tanstack.com/query/latest/docs/framewo
   `PLAYWRIGHT_BROWSERS_PATH` and test-only `LD_LIBRARY_PATH`.
 
 All test servers and worker/Beat processes were stopped by their harnesses.
-No development observation data was created. Milestone 14 was not started.
+No development observation data was created. This record predates milestone 14.
 Suggested commit: `feat: add monitoring dashboard analytics and polling`.

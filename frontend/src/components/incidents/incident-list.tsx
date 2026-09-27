@@ -9,7 +9,14 @@ import { ErrorState } from "@/components/ui/error-state";
 import { LoadingState } from "@/components/ui/loading-state";
 import { listIncidents } from "@/lib/api/incidents";
 
-export function IncidentList({ monitorId }: { monitorId?: string }) {
+export function IncidentList({
+  monitorId,
+  embedded = false,
+}: {
+  monitorId?: string;
+  embedded?: boolean;
+}) {
+  const Heading = embedded ? "h2" : "h1";
   const [status, setStatus] = useState<"all" | "open" | "resolved">("all");
   const [cursor, setCursor] = useState<string>();
   const query = usePollingQuery(
@@ -23,7 +30,9 @@ export function IncidentList({ monitorId }: { monitorId?: string }) {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">Incidents</h1>
+        <Heading className="text-3xl font-semibold tracking-tight">
+          Incidents
+        </Heading>
         <p className="mt-2 max-w-xl text-sm text-muted">
           Three failed attempts confirm an incident. One successful scheduled
           check resolves it. Pausing a monitor leaves its incident open.

@@ -135,6 +135,12 @@ export function IncidentDetailView({ id }: { id: string }) {
               </dd>
             </div>
           </dl>
+          <Link
+            href={`/monitors/${query.data.monitor_id}`}
+            className="mb-4 inline-block text-sm underline"
+          >
+            Monitor history
+          </Link>
           <p className="mb-6 max-w-xl text-sm text-muted">
             Evidence records the first failure, third failed attempt, and any
             observed recovery. It remains available after raw check history is

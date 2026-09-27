@@ -273,7 +273,7 @@ export function MonitorList() {
                         <h2 className="min-w-0 break-words font-semibold">
                           <Link
                             className="hover:underline"
-                            href={`/monitors/${monitor.id}/edit`}
+                            href={`/monitors/${monitor.id}`}
                           >
                             {monitor.name}
                           </Link>
