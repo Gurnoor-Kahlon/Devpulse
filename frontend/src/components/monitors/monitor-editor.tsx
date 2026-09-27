@@ -24,6 +24,12 @@ export function MonitorEditor({ id }: { id: string }) {
           Back to monitors
         </Link>
       </MonitorHeading>
+      <Link
+        href={`/monitors/${id}/assertions`}
+        className="mb-5 inline-block text-sm underline"
+      >
+        Edit response assertions
+      </Link>
       {query.isPending ? (
         <LoadingState label="Loading monitor settings" />
       ) : query.error instanceof ApiError && query.error.status === 404 ? (

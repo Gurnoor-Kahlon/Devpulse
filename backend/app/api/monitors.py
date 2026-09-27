@@ -5,10 +5,11 @@ from fastapi import APIRouter, Query, Response
 
 from app.api.auth_dependencies import CurrentUser, Database
 from app.core.errors import ErrorResponse
+from app.schemas.assertions import AssertionPage, AssertionUpdate
 from app.schemas.dashboard import DashboardWindow
 from app.schemas.monitor_history import CheckPage, MonitorAnalytics
 from app.schemas.monitors import MonitorCreate, MonitorPage, MonitorResponse, MonitorUpdate
-from app.services import monitor_history, monitors
+from app.services import assertions, monitor_history, monitors
 
 router = APIRouter(
     prefix="/api/v1/monitors",
@@ -76,3 +77,15 @@ def checks(
     cursor: Annotated[str | None, Query(min_length=1, max_length=600)] = None,
 ) -> CheckPage:
     return monitor_history.list_checks(db, user_id, monitor_id, window, limit, cursor)
+
+
+@router.get("/{monitor_id}/assertions", response_model=AssertionPage)
+def get_assertions(monitor_id: UUID, db: Database, user_id: CurrentUser) -> AssertionPage:
+    return assertions.get_assertions(db, user_id, monitor_id)
+
+
+@router.put("/{monitor_id}/assertions", response_model=AssertionPage)
+def put_assertions(
+    monitor_id: UUID, body: AssertionUpdate, db: Database, user_id: CurrentUser
+) -> AssertionPage:
+    return assertions.replace_assertions(db, user_id, monitor_id, body)

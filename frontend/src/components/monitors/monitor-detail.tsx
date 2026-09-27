@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AssertionEvidence } from "./assertion-evidence";
 import { Trend } from "@/components/analytics/trend";
 import { IncidentList } from "@/components/incidents/incident-list";
 import { Button } from "@/components/ui/button";
@@ -125,6 +126,9 @@ function Checks({ id, window }: { id: string; window: HistoryWindow }) {
                         <span className="font-mono">({check.error_code})</span>
                       </p>
                     )}
+                    <AssertionEvidence
+                      results={check.assertion_results ?? []}
+                    />
                   </details>
                 </li>
               ))}
@@ -327,12 +331,20 @@ export function MonitorDetail({ id }: { id: string }) {
             {data.monitor.name}
           </h1>
           {!data.archived_at && (
-            <Link
-              href={`/monitors/${id}/edit`}
-              className="button button--secondary"
-            >
-              Edit settings
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={`/monitors/${id}/assertions`}
+                className="button button--secondary"
+              >
+                Edit assertions
+              </Link>
+              <Link
+                href={`/monitors/${id}/edit`}
+                className="button button--secondary"
+              >
+                Edit settings
+              </Link>
+            </div>
           )}
         </div>
         <p className="mt-3 break-all font-mono text-xs text-muted">

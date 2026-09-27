@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import UUID, uuid4
 
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, UniqueConstraint, text
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.security import now_utc
@@ -98,3 +99,7 @@ class Check(Base):
     duration_ms: Mapped[float]
     error_code: Mapped[str | None] = mapped_column(String(40))
     error_message: Mapped[str | None] = mapped_column(String(160))
+
+    assertion_results: Mapped[list[dict[str, object]]] = mapped_column(
+        JSONB, default=list, server_default=text("'[]'::jsonb")
+    )

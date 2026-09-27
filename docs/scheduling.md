@@ -20,7 +20,7 @@ python -m alembic current --check-heads
 python -m alembic check
 ```
 
-The current head is `d93f8b2e015c` (milestone 12). The preceding milestone 11
+The current head is `e15a9c7d204f` (milestone 15). The preceding milestone 11
 revision, `c82e7a1d904b`, adds `check_runs.next_publish_at`, a partial
 publication index for active runs, and `monitors.last_scheduled_check_at`.
 Existing pending work becomes eligible for reconciliation. It preserves old

@@ -12,8 +12,11 @@ from app.core.security import now_utc
 from app.models.auth import User
 from app.models.check import Check, CheckRun
 from app.models.monitor import Monitor
+from app.monitoring.assertions import unavailable
 from app.monitoring.executor import ERROR_MESSAGES, ProbeResult, execute_probe
 from app.monitoring.incidents import apply_observation
+from app.schemas.assertions import AssertionSnapshot
+from app.services.assertions import snapshots
 
 
 class RunError(Exception):
@@ -31,6 +34,7 @@ class ProbeSpec:
     timeout_seconds: int
     lease_token: UUID
     attempt_number: int
+    assertions: tuple[AssertionSnapshot, ...] = ()
 
 
 LEASE_SECONDS = 60
@@ -126,6 +130,7 @@ def claim_run(engine: Engine, run_id: UUID) -> ProbeSpec | None:
             monitor.timeout_seconds,
             run.lease_token,
             run.attempt_count + 1,
+            snapshots(db, monitor.id),
         )
 
 
@@ -217,7 +222,12 @@ def execute_spec(spec: ProbeSpec, settings: Settings) -> ProbeResult:
     try:
         result = asyncio.run(
             execute_probe(
-                spec.url, spec.method, spec.expected_status, spec.timeout_seconds, settings
+                spec.url,
+                spec.method,
+                spec.expected_status,
+                spec.timeout_seconds,
+                settings,
+                assertions=spec.assertions,
             )
         )
     except Exception:
@@ -230,5 +240,6 @@ def execute_spec(spec: ProbeSpec, settings: Settings) -> ProbeResult:
             None,
             "infrastructure_error",
             ERROR_MESSAGES["infrastructure_error"],
+            unavailable(spec.assertions),
         )
     return result

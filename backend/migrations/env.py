@@ -7,6 +7,7 @@ from app.core.logging import configure_logging
 from app.db.base import Base
 from app.db.session import create_database_engine
 from app.models import (
+    assertion,  # noqa: F401 -- assertion definitions
     auth,  # noqa: F401 -- register model metadata for autogeneration
     check,  # noqa: F401 -- register probe metadata
     incident,  # noqa: F401 -- register retained incident metadata

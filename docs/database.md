@@ -16,6 +16,9 @@ durable attempt counts and incidents with one unresolved incident per monitor.
 Existing attempt counts are backfilled; historical incidents are not invented.
 Optional run/check references use `ON DELETE SET NULL`, preserving compact
 opening, confirmation, and recovery evidence after raw history is pruned.
+Milestone 15 adds `e15a9c7d204f`: ordered response assertions and per-check
+JSONB definition/result snapshots. Old checks receive empty snapshots; see
+[assertions](assertions.md) for upgrade and evidence semantics.
 See [incidents](incidents.md) for retention semantics and [probes](probes.md) for result
 transactions and [monitor persistence](monitors.md) for write transactions,
 quotas, and archive semantics. Run `python -m alembic upgrade head` before using

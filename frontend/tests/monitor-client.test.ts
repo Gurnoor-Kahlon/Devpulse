@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { clearCsrf } from "@/lib/api/client";
 import {
+  getAssertions,
+  replaceAssertions,
   archiveMonitor,
   createMonitor,
   listMonitors,
@@ -88,6 +90,7 @@ it("allows only implemented monitor return destinations", () => {
     "/monitors",
     "/monitors/new",
     `/monitors/${monitor.id}/edit`,
+    `/monitors/${monitor.id}/assertions`,
     `/monitors/${monitor.id}`,
   ])
     expect(safeReturnPath(path)).toBe(path);
@@ -97,4 +100,30 @@ it("allows only implemented monitor return destinations", () => {
     `/monitors/${monitor.id}?next=https://evil.com`,
   ])
     expect(safeReturnPath(path)).toBe("/dashboard");
+});
+
+it("sends owned assertion reads and CSRF-protected versioned replacements", async () => {
+  const page = {
+    monitor_id: monitor.id,
+    configuration_version: 2,
+    method: "GET",
+    items: [],
+  };
+  const fetcher = vi
+    .fn()
+    .mockResolvedValueOnce(json(page))
+    .mockResolvedValueOnce(json({ csrf_token: "token" }))
+    .mockResolvedValueOnce(json(page));
+  vi.stubGlobal("fetch", fetcher);
+  await getAssertions(monitor.id);
+  await replaceAssertions(monitor.id, { configuration_version: 2, items: [] });
+  expect(fetcher.mock.calls[0][0]).toBe(
+    `/api/v1/monitors/${monitor.id}/assertions`,
+  );
+  expect(fetcher.mock.calls[2][1]).toMatchObject({
+    method: "PUT",
+    credentials: "same-origin",
+    headers: { "X-CSRF-Token": "token" },
+    body: JSON.stringify({ configuration_version: 2, items: [] }),
+  });
 });

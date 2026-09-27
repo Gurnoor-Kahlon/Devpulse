@@ -110,7 +110,8 @@ behavior. Polling never triggers checks, retries, or incident transitions.
 Use the existing [development environment](development.md) and
 [scheduler processes](scheduling.md#startup). Run `npm ci` from `frontend/` to
 install the updated lockfile with Recharts 3.10.1. Python dependencies and the
-migration head remain unchanged at `d93f8b2e015c`. Apply existing migrations to a
+migration head were unchanged in milestone 13. The current migration head is
+`e15a9c7d204f` (milestone 15). Apply existing migrations to a
 fresh database as usual; no development monitoring data is seeded.
 
 From the activated backend environment, load the private test configuration and

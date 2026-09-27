@@ -95,13 +95,14 @@ def test_each_task_has_a_separate_engine_and_explicit_async_boundary(
 ) -> None:
     engines = [Mock(), Mock()]
     monkeypatch.setattr(tasks, "create_database_engine", Mock(side_effect=engines))
-    monkeypatch.setattr(tasks, "claim_run", Mock(return_value=Mock()))
+    monkeypatch.setattr(tasks, "claim_run", Mock(return_value=Mock(assertions=())))
     monkeypatch.setattr(tasks, "finish_run", Mock(return_value=uuid4()))
     probe = Mock()
     from app.monitoring import runs
 
-    async def execute(*args: object) -> object:
+    async def execute(*args: object, **kwargs: object) -> object:
         assert asyncio.get_running_loop().is_running()
+        assert kwargs["assertions"] == ()
         return probe
 
     monkeypatch.setattr(runs, "execute_probe", execute)

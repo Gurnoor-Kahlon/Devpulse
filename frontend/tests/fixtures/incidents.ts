@@ -9,6 +9,7 @@ const failure: IncidentEvidence = {
   outcome: "failure",
   http_status: 503,
   duration_ms: 1000,
+  assertion_results: [],
   error_code: "unexpected_status",
   error_message: "The HTTP status did not match the expected status.",
 };

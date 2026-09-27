@@ -20,6 +20,7 @@ class FixtureServer(ThreadingHTTPServer):
         self.hits: list[tuple[str, str, str]] = []
         self.hit_times: list[float] = []
         self.response_status = 503
+        self.response_body = b'{"ok":false,"private":"assertion-body-canary"}'
         self.sni: list[str | None] = []
         self.authorization: list[str | None] = []
 
@@ -48,6 +49,8 @@ class Handler(BaseHTTPRequestHandler):
         status = 503 if route == "/fail" else 302 if route == "/redirect" else 200
         if route == "/controlled":
             status = self.server.response_status
+        if route == "/assertion-controlled":
+            body = self.server.response_body
         encoding = None
         if route == "/json":
             body = b"{invalid json and response-secret-canary"

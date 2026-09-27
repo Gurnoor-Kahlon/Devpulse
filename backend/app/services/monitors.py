@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.core.errors import ApiError
 from app.core.security import now_utc
+from app.models.assertion import Assertion
 from app.models.auth import User
 from app.models.monitor import Monitor
 from app.schemas.monitors import MonitorCreate, MonitorPage, MonitorResponse, MonitorUpdate
@@ -110,6 +111,12 @@ def update_monitor(db: Session, user_id: UUID, monitor_id: UUID, body: MonitorUp
     monitor = owned_monitor(db, user_id, monitor_id, lock=True)
     check_version(monitor, body.configuration_version)
     changes = body.model_dump(exclude_unset=True, exclude={"configuration_version"})
+    if changes.get("method") == "HEAD" and db.scalar(
+        select(Assertion.id).where(Assertion.monitor_id == monitor.id).limit(1)
+    ):
+        raise ApiError(
+            422, "assertions_require_get", "Remove body assertions before choosing HEAD."
+        )
     if changes.get("enabled") is True:
         require_verified(user)
         if not monitor.enabled:

@@ -92,3 +92,23 @@ export const getMonitorChecks = (
     { signal },
   );
 };
+
+export type AssertionPage = components["schemas"]["AssertionPage"];
+export type AssertionDefinition = components["schemas"]["AssertionDefinition"];
+export type AssertionResult = components["schemas"]["AssertionResult"];
+export const getAssertions = (id: string, signal?: AbortSignal) =>
+  monitorRequest<AssertionPage>(
+    `${base}/${encodeURIComponent(id)}/assertions`,
+    { signal },
+  );
+export const replaceAssertions = (
+  id: string,
+  body: components["schemas"]["AssertionUpdate"],
+) =>
+  monitorRequest<AssertionPage>(
+    `${base}/${encodeURIComponent(id)}/assertions`,
+    {
+      method: "PUT",
+      body: JSON.stringify(body),
+    },
+  );

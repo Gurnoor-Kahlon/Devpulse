@@ -6,6 +6,7 @@ from sqlalchemy import Engine, delete
 from sqlalchemy.orm import Session
 
 from app.core.security import now_utc, password_hasher
+from app.models.assertion import Assertion
 from app.models.auth import User
 from app.models.check import CheckRun
 from app.models.monitor import Monitor
@@ -14,9 +15,14 @@ from tests.probe_fixtures import fixture_server, fixture_settings
 
 
 def seed_incident_browser_fixture(
-    engine: Engine, *, retain_monitor_history: bool = False, extra_manual_runs: int = 0
+    engine: Engine,
+    *,
+    retain_monitor_history: bool = False,
+    extra_manual_runs: int = 0,
+    with_assertions: bool = False,
 ) -> None:
     with fixture_server() as (server, _):
+        route = "assertion-controlled" if with_assertions else "controlled"
         with Session(engine) as db, db.begin():
             user = User(
                 email="incident-browser@example.com",
@@ -28,16 +34,25 @@ def seed_incident_browser_fixture(
             monitor = Monitor(
                 user_id=user.id,
                 name="Controlled incident fixture",
-                url=f"http://127.0.0.1:{server.server_port}/controlled",
+                url=f"http://127.0.0.1:{server.server_port}/{route}",
                 next_due_at=now_utc(),
             )
             db.add(monitor)
             db.flush()
             mid = monitor.id
+            if with_assertions:
+                db.add(
+                    Assertion(
+                        monitor_id=mid, position=0, kind="json_equals", pointer="/ok", expected=True
+                    )
+                )
         settings = fixture_settings(server)
         # Open, resolve, then open a second incident. Only test retry clocks are accelerated.
         for status, attempts in ((503, 3), (200, 1), (503, 3)):
             server.response_status = status
+            server.response_body = (
+                b'{"ok":true}' if status == 200 else b'{"ok":false,"private":"browser-body-canary"}'
+            )
             identifier = create_pending_run(engine, mid)
             with Session(engine) as db, db.begin():
                 db.get(CheckRun, identifier).trigger = "scheduled"

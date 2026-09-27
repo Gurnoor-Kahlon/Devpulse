@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.config import Settings
 from app.core.security import now_utc
 from app.jobs.dispatcher import dispatch_runs
+from app.models.assertion import Assertion
 from app.models.check import Check, CheckRun
 from app.models.incident import Incident
 from app.models.monitor import Monitor
@@ -22,7 +23,9 @@ worker_settings = worker_fixtures.worker_settings
 pytestmark = [pytest.mark.integration, pytest.mark.worker]
 
 
+@pytest.mark.parametrize("assertion_failure", [False, True])
 def test_real_ten_second_retries_survive_restart_confirm_and_recover(
+    assertion_failure: bool,
     worker_engine: Engine,
     worker_settings: Settings,
     tmp_path: Path,
@@ -33,10 +36,19 @@ def test_real_ten_second_retries_survive_restart_confirm_and_recover(
                 "probe_fixture_destinations": fixture_settings(server).probe_fixture_destinations
             }
         )
+        route = "assertion-controlled" if assertion_failure else "controlled"
         mid = saved_monitor(
             worker_engine,
-            f"http://127.0.0.1:{server.server_port}/controlled?token=retry-query-canary",
+            f"http://127.0.0.1:{server.server_port}/{route}?token=retry-query-canary",
         )
+
+        if assertion_failure:
+            with Session(worker_engine) as db, db.begin():
+                db.add(
+                    Assertion(
+                        monitor_id=mid, position=0, kind="json_equals", pointer="/ok", expected=True
+                    )
+                )
 
         def attempts():
             with Session(worker_engine) as db:
@@ -73,16 +85,22 @@ def test_real_ten_second_retries_survive_restart_confirm_and_recover(
             assert server.hit_times[1] - server.hit_times[0] >= 9.5
             assert server.hit_times[2] - server.hit_times[1] >= 9.5
             server.response_status = 200
+            server.response_body = b'{"ok":true,"private":"assertion-body-canary"}'
             with Session(worker_engine) as db, db.begin():
                 db.get(Monitor, mid).next_due_at = now_utc() - timedelta(seconds=1)
             tick_until(lambda: attempts() == 4)
         with Session(worker_engine) as db:
             incident = db.get(Incident, iid)
             assert incident.resolved_at is not None
-            assert incident.opening_evidence["http_status"] == 503
+            assert incident.opening_evidence["http_status"] == (200 if assertion_failure else 503)
+            if assertion_failure:
+                assert incident.opening_evidence["error_code"] == "assertion_failed"
+                assert incident.confirmation_evidence["assertion_results"][0]["status"] == "failed"
+                assert incident.recovery_evidence["assertion_results"][0]["status"] == "passed"
             assert incident.confirmation_evidence["attempt_number"] == 3
             assert incident.recovery_evidence["http_status"] == 200
             assert db.get(Monitor, mid).current_state == "operational"
             assert db.scalar(select(func.count()).select_from(CheckRun)) == 2
         for log in tmp_path.glob("*.log"):
             assert "retry-query-canary" not in log.read_text()
+            assert "assertion-body-canary" not in log.read_text()

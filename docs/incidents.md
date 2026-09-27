@@ -115,7 +115,9 @@ These views use the generated FastAPI TypeScript contract and the existing
 TanStack Query/session handling. Milestone 13 adds [dashboard analytics](dashboard.md)
 and visible-tab polling to incident lists/details. Milestone 14 links incident
 details to [monitor history](monitor-history.md), including archived monitors.
-Notification delivery and response assertions remain deferred.
+Milestone 15 adds [assertion definition/result snapshots](assertions.md) to evidence
+and treats assertion failures through the same retry lifecycle. Notification delivery
+remains deferred.
 
 ## Validation
 

@@ -4,6 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, computed_field
 
+from app.schemas.assertions import AssertionResult
+
 
 class IncidentEvidence(BaseModel):
     attempt_number: int
@@ -17,6 +19,7 @@ class IncidentEvidence(BaseModel):
     duration_ms: float
     error_code: str | None
     error_message: str | None
+    assertion_results: list[AssertionResult] = []
 
 
 class IncidentResponse(BaseModel):

@@ -5,7 +5,7 @@ a verified account. There is no browser action or API endpoint for immediate
 probing. Milestone 10 adds [Celery execution and lease recovery](jobs.md).
 Milestone 11 adds [scheduling](scheduling.md); milestone 12 adds [scheduled retries
 and incident views](incidents.md). Milestone 14 adds [safe raw check history](monitor-history.md);
-response assertions remain deferred.
+[response assertions](assertions.md) are implemented in milestone 15.
 
 ## Run a saved monitor
 
@@ -84,16 +84,17 @@ WHERE r.id = 'REPORTED_RUN_UUID';
 - TLS verification stays enabled. Caller-supplied Host, authorization headers,
   TLS-name overrides, and tracing extensions are discarded. Automatic redirects,
   HTTP retries, and ambient proxy configuration are disabled.
-- One total deadline covers DNS through body consumption. Wire body and decoded
+- One total deadline covers DNS through body consumption and assertion evaluation. Wire body and decoded
   body limits are independently 1 MiB. Content-Length can reject early; streaming
   counters also handle missing lengths and compressed responses. Small bounded
-  reads detect overflow without buffering the full response. HTTP framing plus
-  headers have a separate 1 MiB + 64 KiB transport budget; excessive framing may
+  reads detect overflow; assertions retain at most the bounded decoded body in memory.
+  HTTP framing plus headers have a separate 1 MiB + 64 KiB transport budget; excessive framing may
   therefore reject an otherwise small payload.
 - Identity, gzip, and zlib-wrapped deflate are supported. Other encodings,
   concatenated gzip members, and truncated/invalid compression fail safely.
-  HEAD does not consume a body. JSON content is not parsed until assertions are
-  implemented; malformed JSON alone does not fail a matching HTTP status.
+  HEAD does not consume a body. JSON is parsed only for JSON assertions; malformed
+  JSON alone does not fail status-only checks. See [assertions](assertions.md) for
+  parsing limits, typed equality, and historical result snapshots.
 
 The adapter uses the public [HTTPX transport interface](https://www.python-httpx.org/advanced/transports/)
 and [HTTPCore network backend interface](https://www.encode.io/httpcore/network-backends/).

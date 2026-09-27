@@ -88,6 +88,7 @@ def test_metadata_has_conventions_and_only_authorized_tables() -> None:
         "check_runs",
         "checks",
         "incidents",
+        "assertions",
     }
     table = Table(
         "example",

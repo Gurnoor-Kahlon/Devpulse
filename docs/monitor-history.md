@@ -9,7 +9,8 @@ paginated individual attempts, and the existing owned incident list.
 The same [visibility-aware polling](dashboard.md#polling) refreshes stored
 analytics, checks, and incidents. Reads never create runs, send network probes,
 retry failures, or transition incidents. No new dependencies, database tables,
-migrations, retention jobs, or response assertions are introduced.
+migrations, retention jobs, or response assertions were introduced by milestone 14.
+Milestone 15 adds [assertion snapshots](assertions.md) to expanded check and incident evidence.
 
 ## Owned read-only API
 
@@ -113,7 +114,7 @@ available independently, including when the check list becomes empty. Automatic
 ## Validation commands
 
 Use the existing root `.venv`, Node.js 24, PostgreSQL 18, and Redis. The migration
-head remains `d93f8b2e015c`. From the activated backend directory:
+head is now `e15a9c7d204f` (milestone 15). From the activated backend directory:
 
 ```bash
 python -m ruff check . --no-cache

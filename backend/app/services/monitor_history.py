@@ -164,6 +164,7 @@ def list_checks(
                 outcome=check.outcome,
                 http_status=check.http_status,
                 duration_ms=check.duration_ms,
+                assertion_results=check.assertion_results,
                 error_code=code,
                 error_message=ERROR_MESSAGES[code] if code else None,
             )

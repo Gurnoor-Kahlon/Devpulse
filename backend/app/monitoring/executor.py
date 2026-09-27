@@ -4,7 +4,7 @@ import socket
 import ssl
 import time
 import zlib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 import httpcore
@@ -12,8 +12,10 @@ import httpx
 
 from app.core.config import Settings
 from app.core.security import now_utc
+from app.monitoring.assertions import evaluate, unavailable
 from app.monitoring.policy import DestinationPolicy, ProbeError, Resolver, resolve_addresses
 from app.monitoring.transport import ProbeTransport
+from app.schemas.assertions import AssertionSnapshot
 
 BODY_LIMIT = 1024 * 1024
 ERROR_MESSAGES = {
@@ -25,6 +27,7 @@ ERROR_MESSAGES = {
     "invalid_response": "The destination returned an invalid HTTP response.",
     "invalid_body": "The response encoding is unsupported or malformed.",
     "response_too_large": "The response exceeded its size limit.",
+    "assertion_failed": "One or more response assertions failed.",
     "unexpected_status": "The HTTP status did not match the expected status.",
     "infrastructure_error": "Local probe resources are temporarily unavailable.",
 }
@@ -39,11 +42,12 @@ class ProbeResult:
     http_status: int | None
     error_code: str | None
     error_message: str | None
+    assertion_results: list[dict[str, object]] = field(default_factory=list)
 
 
-async def consume_body(response: httpx.Response, method: str) -> None:
+async def consume_body(response: httpx.Response, method: str, *, collect: bool = False) -> bytes:
     if method == "HEAD":
-        return
+        return b""
     length = response.headers.get("content-length")
     if length and length.isdecimal() and int(length) > BODY_LIMIT:
         raise ProbeError("response_too_large")
@@ -53,6 +57,7 @@ async def consume_body(response: httpx.Response, method: str) -> None:
     decoder = (
         zlib.decompressobj(31 if encoding == "gzip" else 15) if encoding != "identity" else None
     )
+    chunks = bytearray()
     wire = decoded = 0
     async for chunk in response.aiter_raw():
         wire += len(chunk)
@@ -62,10 +67,13 @@ async def consume_body(response: httpx.Response, method: str) -> None:
         decoded += len(output)
         if decoded > BODY_LIMIT or (decoder and decoder.unconsumed_tail):
             raise ProbeError("response_too_large")
+        if collect:
+            chunks.extend(output)
         if decoder and decoder.unused_data:
             raise ProbeError("invalid_body")
     if decoder and not decoder.eof:
         raise ProbeError("invalid_body")
+    return bytes(chunks)
 
 
 async def execute_probe(
@@ -75,6 +83,7 @@ async def execute_probe(
     timeout_seconds: int,
     settings: Settings,
     *,
+    assertions: tuple[AssertionSnapshot, ...] = (),
     resolver: Resolver = resolve_addresses,
     ssl_context: ssl.SSLContext | None = None,
 ) -> ProbeResult:
@@ -83,6 +92,7 @@ async def execute_probe(
     status: int | None = None
     code: str | None = None
     outcome = "failure"
+    results = unavailable(assertions)
     try:
         async with asyncio.timeout(timeout_seconds):
             policy = DestinationPolicy(settings)
@@ -96,8 +106,14 @@ async def execute_probe(
             ) as client:
                 async with client.stream(method, destination) as response:
                     status = response.status_code
-                    await consume_body(response, method)
+                    body = await consume_body(response, method, collect=bool(assertions))
+                    if assertions:
+                        results = evaluate(body, assertions)
+                    if time.perf_counter() - clock >= timeout_seconds:
+                        raise TimeoutError
                     code = None if status == expected_status else "unexpected_status"
+                    if code is None and any(item["status"] == "failed" for item in results):
+                        code = "assertion_failed"
                     outcome = "success" if code is None else "failure"
     except ProbeError as exc:
         code = exc.code
@@ -135,4 +151,5 @@ async def execute_probe(
         status,
         code,
         ERROR_MESSAGES[code] if code else None,
+        results,
     )

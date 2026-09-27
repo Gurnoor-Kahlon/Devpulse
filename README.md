@@ -6,13 +6,12 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 14 adds monitor detail analytics with 24-hour, 7-day, and 30-day windows,
-response latency trends, final HTTP status distributions, paginated check attempts,
-and retained incident history. Archived monitors keep read-only history. Dashboard
-and monitor metrics share run-weighted calculations, preserve gaps, and refresh
-stored results while visible with error backoff. PostgreSQL remains the source of
-monitoring history; Beat and separate workers execute checks. Response assertions
-and notifications remain deferred.
+Milestone 15 adds response assertions: a versioned editor, UTF-8 text containment,
+JSON Pointer equality against typed scalars, and bounded worker evaluation.
+Checks and incidents retain the definitions and results they evaluated without
+saving response bodies or actual extracted values. Assertion failures use the
+existing retry, incident, and analytics rules. PostgreSQL remains the source of
+monitoring history; Redis and Celery execute jobs. Notifications remain deferred.
 
 ## Local development
 
@@ -34,7 +33,8 @@ for worker behavior and the [scheduler guide](docs/scheduling.md) for Beat start
 automatic recovery, freshness, and validation. The [incident guide](docs/incidents.md)
 covers retries, retained evidence, APIs, and browser views. The [dashboard guide](docs/dashboard.md)
 explains metric definitions, coverage, polling, and validation. The [monitor history guide](docs/monitor-history.md)
-covers detail views and safe check evidence. Docker and
+covers detail views and safe check evidence. The [assertion guide](docs/assertions.md)
+covers definitions, limits, retained snapshots, and migration `e15a9c7d204f`. Docker and
 cloud services remain deferred.
 
 ## Project layout

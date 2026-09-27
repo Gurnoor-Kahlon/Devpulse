@@ -59,6 +59,7 @@ def main() -> None:
             os.environ.get("TEST_INCIDENT_FIXTURES") == "1"
             or os.environ.get("TEST_DASHBOARD_FIXTURES") == "1"
             or os.environ.get("TEST_MONITOR_HISTORY_FIXTURES") == "1"
+            or os.environ.get("TEST_ASSERTION_FIXTURES") == "1"
         ):
             from tests.incident_browser_fixture import seed_incident_browser_fixture
 
@@ -67,7 +68,9 @@ def main() -> None:
                 retain_monitor_history=(
                     os.environ.get("TEST_DASHBOARD_FIXTURES") == "1"
                     or os.environ.get("TEST_MONITOR_HISTORY_FIXTURES") == "1"
+                    or os.environ.get("TEST_ASSERTION_FIXTURES") == "1"
                 ),
+                with_assertions=os.environ.get("TEST_ASSERTION_FIXTURES") == "1",
                 extra_manual_runs=20
                 if os.environ.get("TEST_MONITOR_HISTORY_FIXTURES") == "1"
                 else 0,

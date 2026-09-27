@@ -35,6 +35,7 @@ export const checks: CheckPage = {
       outcome: "failure",
       http_status: 503,
       duration_ms: 20,
+      assertion_results: [],
       error_code: "unexpected_status",
       error_message: "The HTTP status did not match the expected status.",
     },

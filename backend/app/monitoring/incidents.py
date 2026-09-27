@@ -9,7 +9,7 @@ from app.models.monitor import Monitor
 
 
 def evidence(check: Check, run: CheckRun, monitor: Monitor) -> dict[str, object]:
-    # A fixed allowlist: never retain response bodies, headers, URLs, or credentials.
+    # Fixed fields plus configured expectations; never retain actual response data.
     return {
         "attempt_number": check.attempt_number,
         "configuration_version": run.configuration_version,
@@ -22,6 +22,7 @@ def evidence(check: Check, run: CheckRun, monitor: Monitor) -> dict[str, object]
         "duration_ms": check.duration_ms,
         "error_code": check.error_code,
         "error_message": check.error_message,
+        "assertion_results": check.assertion_results,
     }
 
 

@@ -34,6 +34,8 @@ const messages: Record<string, string> = {
   configuration_conflict:
     "This monitor changed elsewhere. Reload the latest settings before trying again.",
   incident_not_found: "This incident could not be found in your account.",
+  assertions_require_get:
+    "Remove response assertions before choosing HEAD. Body assertions require GET.",
   monitor_not_found: "This monitor is unavailable. It may have been archived.",
 };
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { AssertionEvidence } from "@/components/monitors/assertion-evidence";
 import Link from "next/link";
 import { usePollingQuery } from "@/lib/use-polling-query";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,7 @@ function Evidence({
           <dd>{value.configuration_version}</dd>
         </div>
       </dl>
+      <AssertionEvidence results={value.assertion_results ?? []} />
       {value.error_message && (
         <p className="mt-4 text-sm text-muted">{value.error_message}</p>
       )}

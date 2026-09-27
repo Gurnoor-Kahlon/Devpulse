@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from app.schemas.assertions import AssertionResult
 from app.schemas.dashboard import RunHistory
 from app.schemas.monitors import MonitorResponse
 
@@ -37,6 +38,7 @@ class CheckEvidence(BaseModel):
     duration_ms: float
     error_code: str | None
     error_message: str | None
+    assertion_results: list[AssertionResult] = []
 
 
 class CheckPage(BaseModel):
