@@ -9,6 +9,9 @@ import { getIncident, listIncidents } from "@/lib/api/incidents";
 import { ApiError } from "@/lib/api/client";
 import { incident } from "./fixtures/incidents";
 
+vi.mock("@/lib/api/notifications", () => ({
+  getDeliveries: vi.fn(async () => ({ items: [], next_cursor: null })),
+}));
 vi.mock("@/lib/api/incidents", () => ({
   getIncident: vi.fn(),
   listIncidents: vi.fn(),

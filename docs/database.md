@@ -19,6 +19,9 @@ opening, confirmation, and recovery evidence after raw history is pruned.
 Milestone 15 adds `e15a9c7d204f`: ordered response assertions and per-check
 JSONB definition/result snapshots. Old checks receive empty snapshots; see
 [assertions](assertions.md) for upgrade and evidence semantics.
+Milestone 16 adds `f16b4d8e302a`: notification preferences, unique transactional
+deliveries with retry/lease state, and a terminal-run retention index. See
+[notifications](notifications.md) for migration and cleanup behavior.
 See [incidents](incidents.md) for retention semantics and [probes](probes.md) for result
 transactions and [monitor persistence](monitors.md) for write transactions,
 quotas, and archive semantics. Run `python -m alembic upgrade head` before using

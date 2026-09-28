@@ -5,6 +5,7 @@ export function safeReturnPath(value: unknown): string {
     "/monitors",
     "/monitors/new",
     "/incidents",
+    "/notifications",
   ]);
   if (
     typeof value === "string" &&

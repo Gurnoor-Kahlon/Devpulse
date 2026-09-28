@@ -93,6 +93,12 @@ def worker_environment(engine: Engine, settings: Settings) -> dict[str, str]:
                 [entry.model_dump() for entry in settings.probe_fixture_destinations]
             ),
             "TEST_WORKER_SCHEMA": schema,
+            "DEVPULSE_SMTP_HOST": settings.smtp_host,
+            "DEVPULSE_SMTP_PORT": str(settings.smtp_port),
+            "DEVPULSE_SMTP_MODE": settings.smtp_mode,
+            "DEVPULSE_SMTP_USERNAME": "",
+            "DEVPULSE_SMTP_PASSWORD": "",
+            "DEVPULSE_MAIL_FROM": str(settings.mail_from),
         }
     )
     return env

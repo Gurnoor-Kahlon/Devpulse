@@ -1,6 +1,12 @@
 import type { ReactNode, SVGProps } from "react";
 
 const paths = {
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 6 9 7 9-7" />
+    </>
+  ),
   pulse: <path d="M3 12h4l3-7 4 14 3-7h4" />,
   overview: (
     <>

@@ -6,12 +6,11 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 15 adds response assertions: a versioned editor, UTF-8 text containment,
-JSON Pointer equality against typed scalars, and bounded worker evaluation.
-Checks and incidents retain the definitions and results they evaluated without
-saving response bodies or actual extracted values. Assertion failures use the
-existing retry, incident, and analytics rules. PostgreSQL remains the source of
-monitoring history; Redis and Celery execute jobs. Notifications remain deferred.
+Milestone 16 adds opt-in incident and recovery email to verified account addresses,
+transactional delivery records, Celery sending with bounded retries, and visible
+delivery status. Retention jobs prune raw history older than 30 days while preserving
+incident and assertion evidence. PostgreSQL remains the source of truth; Redis
+transports jobs. Public demo work and deployment remain deferred.
 
 ## Local development
 
@@ -34,7 +33,9 @@ automatic recovery, freshness, and validation. The [incident guide](docs/inciden
 covers retries, retained evidence, APIs, and browser views. The [dashboard guide](docs/dashboard.md)
 explains metric definitions, coverage, polling, and validation. The [monitor history guide](docs/monitor-history.md)
 covers detail views and safe check evidence. The [assertion guide](docs/assertions.md)
-covers definitions, limits, retained snapshots, and migration `e15a9c7d204f`. Docker and
+covers definitions, limits, and retained snapshots. The [notification guide](docs/notifications.md)
+covers email preferences, delivery/retry semantics, retention, and migration
+`f16b4d8e302a`. Docker and
 cloud services remain deferred.
 
 ## Project layout

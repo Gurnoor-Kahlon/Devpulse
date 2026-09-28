@@ -4,8 +4,8 @@ Milestone 13 replaces the Overview placeholder with owned PostgreSQL aggregates,
 current monitor states, recent incidents, and Recharts trends. It uses the
 existing scheduler/worker pipeline and does not dispatch probes from reads.
 Milestone 14 adds [per-monitor analytics and check-history pagination](monitor-history.md)
-using the same metric rules. Assertions, notifications, retention jobs, public
-demo data, and benchmarks remain separate milestones.
+using the same metric rules. [Assertions](assertions.md) and [notifications/retention](notifications.md)
+are implemented in milestones 15 and 16. Public demo data and benchmarks remain deferred.
 
 ## Metric definitions
 
@@ -111,7 +111,7 @@ Use the existing [development environment](development.md) and
 [scheduler processes](scheduling.md#startup). Run `npm ci` from `frontend/` to
 install the updated lockfile with Recharts 3.10.1. Python dependencies and the
 migration head were unchanged in milestone 13. The current migration head is
-`e15a9c7d204f` (milestone 15). Apply existing migrations to a
+`f16b4d8e302a` (milestone 16). Apply existing migrations to a
 fresh database as usual; no development monitoring data is seeded.
 
 From the activated backend environment, load the private test configuration and

@@ -4,8 +4,8 @@ Milestone 11 adds one Beat process, a maintenance-queue dispatcher, and automati
 recovery of unpublished or expired work. PostgreSQL remains the authority;
 Redis transports task messages only. Milestone 12 adds [durable target retries
 and incidents](incidents.md) through the same dispatcher. Milestone 13 adds
-[stored dashboard analytics and polling](dashboard.md). Notification delivery
-remains deferred.
+[stored dashboard analytics and polling](dashboard.md). Milestone 16 adds
+[notification dispatch and retention](notifications.md) to Beat.
 
 ## Startup
 
@@ -20,7 +20,7 @@ python -m alembic current --check-heads
 python -m alembic check
 ```
 
-The current head is `e15a9c7d204f` (milestone 15). The preceding milestone 11
+The current head is `f16b4d8e302a` (milestone 16). The preceding milestone 11
 revision, `c82e7a1d904b`, adds `check_runs.next_publish_at`, a partial
 publication index for active runs, and `monitors.last_scheduled_check_at`.
 Existing pending work becomes eligible for reconciliation. It preserves old
@@ -36,8 +36,8 @@ python -m celery -A app.jobs.celery_app:celery_app --quiet worker --pool=prefork
 ```
 
 ```bash
-# Maintenance worker: only the maintenance queue.
-python -m celery -A app.jobs.celery_app:celery_app --quiet worker --pool=prefork --queues=maintenance --concurrency=1 --without-gossip --without-mingle --without-heartbeat --loglevel=INFO
+# Maintenance/notification worker: consume both queues.
+python -m celery -A app.jobs.celery_app:celery_app --quiet worker --pool=prefork --queues=maintenance,notifications --concurrency=2 --without-gossip --without-mingle --without-heartbeat --loglevel=INFO
 ```
 
 ```bash

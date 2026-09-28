@@ -33,6 +33,7 @@ describe("Application shell", () => {
         "/dashboard",
         "/monitors",
         "/incidents",
+        "/notifications",
         "#main-content",
       ]).toContain(link.getAttribute("href"));
     }

@@ -38,6 +38,11 @@ class CheckRun(Base):
             name="lease",
         ),
         Index(
+            "ix_check_runs_retention",
+            "completed_at",
+            postgresql_where=text("state IN ('completed', 'cancelled', 'infrastructure_failed')"),
+        ),
+        Index(
             "ix_check_runs_pending", "next_attempt_at", postgresql_where=text("state = 'pending'")
         ),
         Index(

@@ -84,9 +84,9 @@ on the monitor's later settings.
 Run/check references are optional and use `ON DELETE SET NULL`. Deleting raw
 checks or runs preserves the incident and its snapshots. Monitor deletion stays
 an archive operation; its incident foreign key restricts hard deletion. The
-planned retention policy remains 30 days for raw runs/checks and indefinite
-incident evidence. Automated pruning jobs belong to milestone 16 and are not
-introduced here.
+retention policy is 30 days for terminal raw runs/checks and indefinite incident
+evidence. Milestone 16 implements [bounded pruning jobs](notifications.md#retention)
+that preserve these snapshots.
 
 ## Read-only API and views
 
@@ -116,8 +116,8 @@ TanStack Query/session handling. Milestone 13 adds [dashboard analytics](dashboa
 and visible-tab polling to incident lists/details. Milestone 14 links incident
 details to [monitor history](monitor-history.md), including archived monitors.
 Milestone 15 adds [assertion definition/result snapshots](assertions.md) to evidence
-and treats assertion failures through the same retry lifecycle. Notification delivery
-remains deferred.
+and treats assertion failures through the same retry lifecycle. Milestone 16 adds
+[opt-in incident email and delivery status](notifications.md).
 
 ## Validation
 

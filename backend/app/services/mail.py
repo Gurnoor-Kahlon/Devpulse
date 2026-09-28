@@ -27,6 +27,10 @@ def send_auth_email(settings: Settings, destination: str, purpose: Purpose, toke
         f"Use this single-use code to {action}:\n\n{token}\n\n"
         f"It expires in {lifetime}. If you did not request this, ignore this email.\n"
     )
+    send_message(settings, message)
+
+
+def send_message(settings: Settings, message: EmailMessage) -> None:
     connection: smtplib.SMTP
     if settings.smtp_mode == "tls":
         connection = smtplib.SMTP_SSL(
@@ -34,7 +38,8 @@ def send_auth_email(settings: Settings, destination: str, purpose: Purpose, toke
         )
     else:
         connection = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=5)
-    with connection as smtp:
+    smtp = connection
+    try:
         if settings.smtp_mode == "starttls":
             smtp.starttls(context=ssl.create_default_context())
         if settings.smtp_username and settings.smtp_password:
@@ -42,6 +47,14 @@ def send_auth_email(settings: Settings, destination: str, purpose: Purpose, toke
                 settings.smtp_username.get_secret_value(), settings.smtp_password.get_secret_value()
             )
         smtp.send_message(message)
+    finally:
+        # A failed QUIT cannot undo an acknowledged DATA response or mask its original error.
+        try:
+            smtp.quit()
+        except (OSError, smtplib.SMTPException):
+            pass
+        finally:
+            smtp.close()
 
 
 def deliver_token(

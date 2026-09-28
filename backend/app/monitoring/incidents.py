@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.models.check import Check, CheckRun
 from app.models.incident import Incident
 from app.models.monitor import Monitor
+from app.notifications.outbox import enqueue_transition
 
 
 def evidence(check: Check, run: CheckRun, monitor: Monitor) -> dict[str, object]:
@@ -37,6 +38,7 @@ def apply_observation(db: Session, monitor: Monitor, run: CheckRun, check: Check
             incident.resolved_at = max(incident.confirmed_at, check.finished_at)
             incident.recovery_run_id, incident.recovery_check_id = run.id, check.id
             incident.recovery_evidence = evidence(check, run, monitor)
+            enqueue_transition(db, monitor, incident, "resolved")
     elif check.outcome == "failure":
         if run.attempt_count < 3:
             monitor.current_state = "down" if incident else "confirming_failure"
@@ -47,18 +49,18 @@ def apply_observation(db: Session, monitor: Monitor, run: CheckRun, check: Check
                     select(Check).where(Check.run_id == run.id, Check.attempt_number == 1)
                 )
                 assert first is not None
-                db.add(
-                    Incident(
-                        monitor_id=monitor.id,
-                        monitor_name=monitor.name,
-                        started_at=first.started_at,
-                        confirmed_at=max(first.started_at, check.finished_at),
-                        opening_run_id=run.id,
-                        opening_check_id=first.id,
-                        confirmation_check_id=check.id,
-                        opening_evidence=evidence(first, run, monitor),
-                        confirmation_evidence=evidence(check, run, monitor),
-                    )
+                incident = Incident(
+                    monitor_id=monitor.id,
+                    monitor_name=monitor.name,
+                    started_at=first.started_at,
+                    confirmed_at=max(first.started_at, check.finished_at),
+                    opening_run_id=run.id,
+                    opening_check_id=first.id,
+                    confirmation_check_id=check.id,
+                    opening_evidence=evidence(first, run, monitor),
+                    confirmation_evidence=evidence(check, run, monitor),
                 )
+                db.add(incident)
+                enqueue_transition(db, monitor, incident, "opened")
     elif monitor.current_state == "confirming_failure":
         monitor.current_state = "down" if incident else "unknown"

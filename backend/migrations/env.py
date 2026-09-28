@@ -12,6 +12,7 @@ from app.models import (
     check,  # noqa: F401 -- register probe metadata
     incident,  # noqa: F401 -- register retained incident metadata
     monitor,  # noqa: F401 -- register model metadata for autogeneration
+    notification,  # noqa: F401 -- notification delivery state
 )
 
 

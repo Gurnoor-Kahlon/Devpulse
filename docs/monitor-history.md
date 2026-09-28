@@ -109,12 +109,12 @@ as in the existing monitor management UI.
 
 Removing raw checks/runs shrinks history and metrics. Incident snapshots remain
 available independently, including when the check list becomes empty. Automatic
-30-day raw-history pruning remains milestone 16; this milestone adds no pruning job.
+30-day raw-history pruning is implemented by [milestone 16](notifications.md#retention).
 
 ## Validation commands
 
 Use the existing root `.venv`, Node.js 24, PostgreSQL 18, and Redis. The migration
-head is now `e15a9c7d204f` (milestone 15). From the activated backend directory:
+head is now `f16b4d8e302a` (milestone 16). From the activated backend directory:
 
 ```bash
 python -m ruff check . --no-cache

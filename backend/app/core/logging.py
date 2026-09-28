@@ -8,6 +8,11 @@ request_id_context: ContextVar[str | None] = ContextVar("request_id", default=No
 logger = logging.getLogger("devpulse")
 
 _EVENTS = {
+    "notification_started",
+    "notification_attempt",
+    "notification_deferred",
+    "retention_completed",
+    "retention_deferred",
     "application_started",
     "application_stopped",
     "request_completed",
@@ -36,6 +41,7 @@ _FIELDS = {
     "monitor_id",
     "outcome",
     "job_id",
+    "delivery_id",
     "worker_pid",
     "reserved_count",
     "published_count",

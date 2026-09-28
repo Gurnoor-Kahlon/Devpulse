@@ -30,8 +30,9 @@ Keep the broker private and use distinct prefixes for separate environments.
 
 Stop old direct probe executors and workers before upgrading. Revision
 `b31d8e0c6a10` converts unfinished legacy running rows into pending work. The
-current head, `e15a9c7d204f`, also supports scheduled publication recovery,
-durable attempt counts, retained incidents, and [response assertions](assertions.md).
+current head, `f16b4d8e302a`, also supports scheduled publication recovery,
+durable attempt counts, retained incidents, [response assertions](assertions.md),
+and [notification delivery/retention](notifications.md).
 Existing completed evidence is retained. Run from the activated backend directory:
 
 ```bash

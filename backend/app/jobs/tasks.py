@@ -8,9 +8,18 @@ from app.core.config import load_settings
 from app.core.logging import logger
 from app.db.session import create_database_engine
 from app.jobs.celery_app import celery_app
-from app.jobs.configuration import DISPATCH_TASK, PROBE_TASK
+from app.jobs.configuration import (
+    DISPATCH_TASK,
+    NOTIFICATION_DISPATCH_TASK,
+    NOTIFICATION_TASK,
+    PROBE_TASK,
+    RETENTION_TASK,
+)
 from app.jobs.dispatcher import dispatch_runs
+from app.jobs.retention import prune_history
 from app.monitoring.runs import claim_run, execute_spec, finish_run
+from app.notifications.delivery import deliver
+from app.notifications.dispatcher import dispatch_deliveries
 
 
 def execute_job(run_id: str) -> None:
@@ -73,3 +82,59 @@ def dispatch_job() -> None:
 
 
 celery_app.task(name=DISPATCH_TASK, ignore_result=True)(dispatch_job)
+
+
+def notification_job(delivery_id: str) -> None:
+    try:
+        identifier = UUID(delivery_id)
+    except (ValueError, TypeError, AttributeError):
+        logger.warning("job_rejected", extra={"event": "job_rejected"})
+        return
+    settings = load_settings()
+    engine = create_database_engine(settings)
+    try:
+        deliver(engine, settings, identifier)
+    except SQLAlchemyError:
+        logger.error(
+            "notification_deferred",
+            extra={
+                "event": "notification_deferred",
+                "delivery_id": str(identifier),
+                "error_code": "persistence_unavailable",
+            },
+        )
+    finally:
+        engine.dispose()
+
+
+def notification_dispatch_job() -> None:
+    settings = load_settings()
+    engine = create_database_engine(settings)
+    try:
+        dispatch_deliveries(engine, settings)
+    except SQLAlchemyError:
+        logger.error(
+            "notification_deferred",
+            extra={"event": "notification_deferred", "error_code": "persistence_unavailable"},
+        )
+    finally:
+        engine.dispose()
+
+
+def retention_job() -> None:
+    settings = load_settings()
+    engine = create_database_engine(settings)
+    try:
+        prune_history(engine)
+    except SQLAlchemyError:
+        logger.error(
+            "retention_deferred",
+            extra={"event": "retention_deferred", "error_code": "persistence_unavailable"},
+        )
+    finally:
+        engine.dispose()
+
+
+celery_app.task(name=NOTIFICATION_TASK, ignore_result=True)(notification_job)
+celery_app.task(name=NOTIFICATION_DISPATCH_TASK, ignore_result=True)(notification_dispatch_job)
+celery_app.task(name=RETENTION_TASK, ignore_result=True)(retention_job)

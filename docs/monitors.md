@@ -17,7 +17,7 @@ python -m alembic current --check-heads
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-The current head revision is `e15a9c7d204f` (milestone 15);
+The current head revision is `f16b4d8e302a` (milestone 16);
 [response assertions](assertions.md) share monitor ownership and versioning.
 Manual execution is documented in the [probe guide](probes.md).
 Development OpenAPI documentation is at

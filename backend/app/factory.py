@@ -12,6 +12,7 @@ from app.api.dashboard import router as dashboard_router
 from app.api.health import router as health_router
 from app.api.incidents import router as incidents_router
 from app.api.monitors import router as monitors_router
+from app.api.notifications import router as notifications_router
 from app.core.config import Settings, load_settings
 from app.core.errors import (
     ApiError,
@@ -80,4 +81,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(monitors_router)
     application.include_router(incidents_router)
     application.include_router(dashboard_router)
+    application.include_router(notifications_router)
     return application

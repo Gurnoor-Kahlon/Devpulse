@@ -17,7 +17,9 @@ user-provided PostgreSQL 18 server and client. Milestone 5 also uses local Mailp
 for verification/reset emails; see the [authentication guide](authentication.md).
 Milestone 10 requires user-provided Redis for Celery workers; see the
 [job execution guide](jobs.md). Milestone 11 adds one Beat process and a
-maintenance worker; see [scheduling](scheduling.md). Docker and AWS remain deferred.
+maintenance worker; see [scheduling](scheduling.md). Milestone 16 adds
+[incident email and retention](notifications.md); the maintenance worker now
+consumes both `maintenance` and `notifications`. Docker and AWS remain deferred.
 
 The examples use the existing project location:
 

@@ -40,6 +40,14 @@ export function WorkspaceNavigation({
       >
         <Icon name="alert" /> Incidents
       </Link>
+      <Link
+        href="/notifications"
+        aria-current={pathname === "/notifications" ? "page" : undefined}
+        onClick={onNavigate}
+        className="nav-link mt-2"
+      >
+        <Icon name="mail" /> Notifications
+      </Link>
     </nav>
   );
 }

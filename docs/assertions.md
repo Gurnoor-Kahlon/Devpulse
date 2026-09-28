@@ -3,8 +3,8 @@
 Milestone 15 adds owned assertion definitions, an editor at
 `/monitors/[id]/assertions`, and bounded evaluation in the existing probe worker.
 Check history and opening, confirmation, and recovery incident evidence display
-captured definitions and results. Milestone 16 notification delivery and retention
-jobs remain deferred.
+captured definitions and results. Milestone 16 adds [notification delivery and
+retention jobs](notifications.md), preserving these snapshots.
 
 ## Definitions and API
 
@@ -109,7 +109,7 @@ Bodies, headers, and actual extracted response values are never saved or logged.
 API validation errors, worker logs, and operator output do not echo definitions or
 responses. Historical evidence uses its captured definitions, even after a later
 edit, removal, archive, or raw-run deletion. Incident snapshots survive raw history
-pruning; automatic pruning is still milestone 16.
+pruning; [milestone 16](notifications.md#retention) implements automatic pruning.
 
 Migration `e15a9c7d204f` follows `d93f8b2e015c`. It adds the ordered `assertions`
 table and `checks.assertion_results` JSONB column. Existing checks receive `[]`;

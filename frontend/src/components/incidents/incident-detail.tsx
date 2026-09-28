@@ -1,6 +1,7 @@
 "use client";
 
 import { AssertionEvidence } from "@/components/monitors/assertion-evidence";
+import { DeliveryList } from "@/components/notifications/delivery-list";
 import Link from "next/link";
 import { usePollingQuery } from "@/lib/use-polling-query";
 import { Button } from "@/components/ui/button";
@@ -163,6 +164,9 @@ export function IncidentDetailView({ id }: { id: string }) {
                 value={query.data.recovery_evidence}
               />
             )}
+          </div>
+          <div className="mt-7">
+            <DeliveryList incidentId={id} />
           </div>
         </>
       )}

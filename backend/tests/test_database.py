@@ -89,6 +89,8 @@ def test_metadata_has_conventions_and_only_authorized_tables() -> None:
         "checks",
         "incidents",
         "assertions",
+        "notification_channels",
+        "notification_deliveries",
     }
     table = Table(
         "example",
