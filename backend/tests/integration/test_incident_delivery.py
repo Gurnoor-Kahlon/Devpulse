@@ -82,8 +82,16 @@ def test_real_ten_second_retries_survive_restart_confirm_and_recover(
                 iid = incident.id
                 assert db.get(CheckRun, run_id).final_outcome == "failure"
                 assert db.get(Monitor, mid).current_state == "down"
-            assert server.hit_times[1] - server.hit_times[0] >= 9.5
-            assert server.hit_times[2] - server.hit_times[1] >= 9.5
+                checks = list(
+                    db.scalars(
+                        select(Check).where(Check.run_id == run_id).order_by(Check.attempt_number)
+                    )
+                )
+                # Durable due times use UTC. WSL suspension can make the fixture's
+                # monotonic clock diverge from PostgreSQL and probe wall clocks.
+                for previous, current in zip(checks, checks[1:], strict=False):
+                    assert current.started_at - previous.finished_at >= timedelta(seconds=9.5)
+            assert len(server.hits) == 3
             server.response_status = 200
             server.response_body = b'{"ok":true,"private":"assertion-body-canary"}'
             with Session(worker_engine) as db, db.begin():

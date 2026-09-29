@@ -15,7 +15,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import make_url
 from sqlalchemy.schema import CreateSchema, DropSchema
 
-from app.core.config import Settings
+from app.core.config import DemoPublication, Settings
 from app.db.session import create_database_engine
 from app.factory import create_app
 
@@ -61,6 +61,7 @@ def main() -> None:
             or os.environ.get("TEST_MONITOR_HISTORY_FIXTURES") == "1"
             or os.environ.get("TEST_ASSERTION_FIXTURES") == "1"
             or os.environ.get("TEST_NOTIFICATION_FIXTURES") == "1"
+            or os.environ.get("TEST_DEMO_FIXTURES") == "1"
         ):
             from tests.incident_browser_fixture import seed_incident_browser_fixture
 
@@ -71,6 +72,7 @@ def main() -> None:
                     or os.environ.get("TEST_MONITOR_HISTORY_FIXTURES") == "1"
                     or os.environ.get("TEST_ASSERTION_FIXTURES") == "1"
                     or os.environ.get("TEST_NOTIFICATION_FIXTURES") == "1"
+                    or os.environ.get("TEST_DEMO_FIXTURES") == "1"
                 ),
                 with_assertions=os.environ.get("TEST_ASSERTION_FIXTURES") == "1",
                 with_notifications=os.environ.get("TEST_NOTIFICATION_FIXTURES") == "1",
@@ -78,6 +80,28 @@ def main() -> None:
                 if os.environ.get("TEST_MONITOR_HISTORY_FIXTURES") == "1"
                 else 0,
             )
+        if os.environ.get("TEST_DEMO_FIXTURES") == "1":
+            from sqlalchemy import select
+            from sqlalchemy.orm import Session
+
+            from app.models.monitor import Monitor
+
+            with Session(engine) as db:
+                monitor = db.scalars(select(Monitor)).one()
+                settings = settings.model_copy(
+                    update={
+                        "demo_publications": (
+                            DemoPublication(
+                                owner_id=monitor.user_id,
+                                monitor_id=monitor.id,
+                                configuration_version=monitor.configuration_version,
+                                slug="controlled-http",
+                                label="Controlled HTTP endpoint",
+                                controlled_failure=True,
+                            ),
+                        )
+                    }
+                )
         with patch("app.factory.create_database_engine", return_value=engine):
             server = uvicorn.Server(
                 uvicorn.Config(

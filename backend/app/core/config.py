@@ -2,6 +2,7 @@ from ipaddress import ip_address
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit
+from uuid import UUID
 
 from pydantic import (
     BaseModel,
@@ -16,6 +17,18 @@ from pydantic import (
 from pydantic_settings import BaseSettings, SettingsConfigDict, SettingsError
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import ArgumentError
+
+
+class DemoPublication(BaseModel):
+    """Operator-approved public projection; never inferred from account membership."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    owner_id: UUID
+    monitor_id: UUID
+    configuration_version: int = Field(ge=1)
+    slug: str = Field(min_length=1, max_length=48, pattern=r"^[a-z][a-z0-9-]*$")
+    label: str = Field(min_length=1, max_length=80, pattern=r"^[^\x00-\x1f\x7f]+$")
+    controlled_failure: bool
 
 
 class ProbeFixtureDestination(BaseModel):
@@ -54,6 +67,17 @@ class Settings(BaseSettings):
     smtp_username: SecretStr | None = None
     smtp_password: SecretStr | None = None
     mail_from: EmailStr = "devpulse@localhost.localdomain"
+    demo_publications: tuple[DemoPublication, ...] = Field(default=(), max_length=10)
+
+    @field_validator("demo_publications")
+    @classmethod
+    def unique_publications(cls, value: tuple[DemoPublication, ...]) -> tuple[DemoPublication, ...]:
+        if len({item.slug for item in value}) != len(value) or len(
+            {item.monitor_id for item in value}
+        ) != len(value):
+            raise ValueError("Demo publications require unique slugs and monitors.")
+        return value
+
     probe_fixture_destinations: tuple[ProbeFixtureDestination, ...] = ()
     broker_url: SecretStr = SecretStr("redis://127.0.0.1:6379/0")
     broker_key_prefix: str = Field(default="devpulse:", pattern=r"^[a-zA-Z0-9_-]{1,64}:$")

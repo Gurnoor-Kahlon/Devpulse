@@ -333,6 +333,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/demo": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get */
+    get: operations["get_api_v1_demo_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/notifications/preferences": {
     parameters: {
       query?: never;
@@ -624,6 +641,53 @@ export interface components {
             | "email_unverified"
           )
         | null;
+    };
+    /** DemoIncident */
+    DemoIncident: {
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string;
+      /**
+       * Confirmed At
+       * Format: date-time
+       */
+      confirmed_at: string;
+      /** Resolved At */
+      resolved_at: string | null;
+    };
+    /** DemoMonitor */
+    DemoMonitor: {
+      /** Slug */
+      slug: string;
+      /** Label */
+      label: string;
+      /** Controlled Failure */
+      controlled_failure: boolean;
+      /**
+       * State
+       * @enum {string}
+       */
+      state:
+        "operational" | "down" | "confirming_failure" | "unknown" | "paused";
+      /** Stale */
+      stale: boolean;
+      /** Last Checked At */
+      last_checked_at: string | null;
+      history: components["schemas"]["RunHistory"];
+      /** Recent Incidents */
+      recent_incidents: components["schemas"]["DemoIncident"][];
+    };
+    /** DemoResponse */
+    DemoResponse: {
+      /**
+       * Generated At
+       * Format: date-time
+       */
+      generated_at: string;
+      /** Monitors */
+      monitors: components["schemas"]["DemoMonitor"][];
     };
     /** EmailRequest */
     EmailRequest: {
@@ -1045,6 +1109,29 @@ export interface components {
        * Format: password
        */
       password: string;
+    };
+    /** RunHistory */
+    RunHistory: {
+      /**
+       * Window
+       * @enum {string}
+       */
+      window: "24h" | "7d" | "30d";
+      /**
+       * Start
+       * Format: date-time
+       */
+      start: string;
+      /**
+       * End
+       * Format: date-time
+       */
+      end: string;
+      /** Bucket Seconds */
+      bucket_seconds: number;
+      metrics: components["schemas"]["RunMetrics"];
+      /** Buckets */
+      buckets: components["schemas"]["TrendBucket"][];
     };
     /** RunMetrics */
     RunMetrics: {
@@ -2940,6 +3027,55 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Invalid request values. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unexpected internal error. */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Service Unavailable */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  get_api_v1_demo_get: {
+    parameters: {
+      query?: {
+        window?: "24h" | "7d" | "30d";
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DemoResponse"];
         };
       };
       /** @description Invalid request values. */

@@ -6,11 +6,13 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 16 adds opt-in incident and recovery email to verified account addresses,
-transactional delivery records, Celery sending with bounded retries, and visible
-delivery status. Retention jobs prune raw history older than 30 days while preserving
-incident and assertion evidence. PostgreSQL remains the source of truth; Redis
-transports jobs. Public demo work and deployment remain deferred.
+Milestone 17 adds the public landing page and a read-only demo backed by explicitly
+published monitoring observations. The demo exposes restricted summaries, honest
+empty/stale states, and labeled controlled failures. The landing page includes actual
+local browser screenshots and working signup with email verification. Publication is
+empty by default; existing account data stays private. See the
+[public demo guide](docs/public-demo.md) for publication, screenshot provenance, and
+validation. Docker and deployment remain deferred.
 
 ## Local development
 
