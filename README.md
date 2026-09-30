@@ -6,13 +6,12 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 17 adds the public landing page and a read-only demo backed by explicitly
-published monitoring observations. The demo exposes restricted summaries, honest
-empty/stale states, and labeled controlled failures. The landing page includes actual
-local browser screenshots and working signup with email verification. Publication is
-empty by default; existing account data stays private. See the
-[public demo guide](docs/public-demo.md) for publication, screenshot provenance, and
-validation. Docker and deployment remain deferred.
+Milestone 18 adds a reproducible Dockerized local stack: pinned application images,
+PostgreSQL, Redis, Mailpit, separate workers, one Beat, and explicit migrations.
+Readiness, real monitoring/email jobs, restart persistence, and isolated backup/restore
+are covered by the [container guide](docs/containers.md) and smoke runner.
+The [public demo](docs/public-demo.md) remains opt-in and existing account data stays
+private. Cloud deployment and milestone 19 work remain deferred.
 
 ## Local development
 
@@ -37,8 +36,8 @@ explains metric definitions, coverage, polling, and validation. The [monitor his
 covers detail views and safe check evidence. The [assertion guide](docs/assertions.md)
 covers definitions, limits, and retained snapshots. The [notification guide](docs/notifications.md)
 covers email preferences, delivery/retry semantics, retention, and migration
-`f16b4d8e302a`. Docker and
-cloud services remain deferred.
+`f16b4d8e302a`. The [container guide](docs/containers.md) covers the optional local
+Compose workflow; cloud services remain deferred.
 
 ## Project layout
 

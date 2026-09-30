@@ -1,0 +1,233 @@
+name: devpulse
+
+x-backend: &backend
+  image: devpulse-backend:local
+  build:
+    context: ./backend
+    target: runtime
+  init: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp
+  security_opt:
+    - no-new-privileges:true
+  cap_drop: [ALL]
+  networks: [private]
+  environment: &backend-env
+    DEVPULSE_ENVIRONMENT: development
+    DEVPULSE_DATABASE_URL: postgresql+psycopg://devpulse:${DEVPULSE_LOCAL_DB_PASSWORD:?Run python3 scripts/local_stack.py init first}@postgres:5432/devpulse
+    DEVPULSE_BROKER_URL: redis://redis:6379/0
+    DEVPULSE_BROKER_KEY_PREFIX: "devpulse:"
+    DEVPULSE_APP_ORIGIN: http://localhost:${DEVPULSE_WEB_PORT:-3000}
+    DEVPULSE_SMTP_HOST: mailpit
+    DEVPULSE_SMTP_PORT: "1025"
+    DEVPULSE_SMTP_MODE: plain
+    DEVPULSE_MAIL_FROM: devpulse@localhost.localdomain
+    DEVPULSE_LOG_LEVEL: INFO
+    DEVPULSE_API_DOCS_ENABLED: "false"
+    DEVPULSE_PROBE_FIXTURE_DESTINATIONS: "[]"
+    DEVPULSE_DEMO_PUBLICATIONS: "[]"
+  depends_on: &runtime-dependencies
+    migrate:
+      condition: service_completed_successfully
+    redis:
+      condition: service_healthy
+    mailpit:
+      condition: service_healthy
+  stop_grace_period: 60s
+  logging: &logging
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  postgres:
+    image: postgres:18-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650
+    restart: unless-stopped
+    # Database errors must not log query text, bound values, or failing row details.
+    command:
+      [
+        postgres,
+        -c,
+        log_statement=none,
+        -c,
+        log_min_error_statement=panic,
+        -c,
+        log_error_verbosity=terse,
+        -c,
+        log_parameter_max_length_on_error=0,
+      ]
+    environment:
+      POSTGRES_USER: devpulse
+      POSTGRES_PASSWORD: ${DEVPULSE_LOCAL_DB_PASSWORD:?Run python3 scripts/local_stack.py init first}
+      POSTGRES_DB: devpulse
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - ./containers/postgres/init.sql:/docker-entrypoint-initdb.d/10-test-database.sql:ro
+    networks: [private]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U devpulse -d devpulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging: *logging
+
+  redis:
+    image: redis:7.4-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499
+    command: [redis-server, --appendonly, "yes", --appendfsync, everysec]
+    restart: unless-stopped
+    volumes: [redis-data:/data]
+    networks: [private]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    logging: *logging
+
+  mailpit:
+    image: axllent/mailpit:v1.31.2@sha256:74d609a42ec279aa63c6b4622a6fa9b5408d1ad5b1d76a1c4be40a265ce0863d
+    user: "10001:10001"
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    environment:
+      MP_DATABASE: /tmp/mailpit.db
+      MP_DISABLE_VERSION_CHECK: "true"
+      MP_QUIET: "true"
+    ports: ["127.0.0.1:${DEVPULSE_MAIL_PORT:-8025}:8025"]
+    networks: [private, egress]
+    healthcheck:
+      test: [CMD, /mailpit, readyz]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    logging: *logging
+
+  migrate:
+    <<: *backend
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: [python, -m, alembic, upgrade, head]
+
+  api:
+    <<: *backend
+    healthcheck:
+      test: [CMD, python, -m, container.healthcheck, api]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+
+  probe-worker:
+    <<: *backend
+    networks: [private, egress]
+    command:
+      [
+        python,
+        -m,
+        celery,
+        -A,
+        "app.jobs.celery_app:celery_app",
+        --quiet,
+        worker,
+        --pool=prefork,
+        --queues=probes,
+        --concurrency=2,
+        --without-gossip,
+        --without-mingle,
+        --without-heartbeat,
+        --loglevel=INFO,
+        --pidfile=/tmp/worker.pid,
+      ]
+    healthcheck: &worker-health
+      test: [CMD, python, -m, container.healthcheck, worker]
+      interval: 15s
+      timeout: 10s
+      retries: 4
+      start_period: 20s
+
+  maintenance-worker:
+    <<: *backend
+    command:
+      [
+        python,
+        -m,
+        celery,
+        -A,
+        "app.jobs.celery_app:celery_app",
+        --quiet,
+        worker,
+        --pool=prefork,
+        "--queues=maintenance,notifications",
+        --concurrency=2,
+        --without-gossip,
+        --without-mingle,
+        --without-heartbeat,
+        --loglevel=INFO,
+        --pidfile=/tmp/worker.pid,
+      ]
+    healthcheck: *worker-health
+
+  beat:
+    <<: *backend
+    # A fixed per-project name prevents Compose from scaling this singleton.
+    container_name: ${COMPOSE_PROJECT_NAME:-devpulse}-beat
+    command:
+      [
+        python,
+        -m,
+        celery,
+        -A,
+        "app.jobs.celery_app:celery_app",
+        --quiet,
+        beat,
+        --loglevel=INFO,
+        --schedule=/tmp/beat-schedule,
+        --pidfile=/tmp/beat.pid,
+      ]
+    healthcheck:
+      <<: *worker-health
+      test: [CMD, python, -m, container.healthcheck, beat]
+
+  frontend:
+    image: devpulse-frontend:local
+    build:
+      context: ./frontend
+    init: true
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp, /app/.next/cache]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    ports: ["127.0.0.1:${DEVPULSE_WEB_PORT:-3000}:3000"]
+    networks: [private, egress]
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    logging: *logging
+
+networks:
+  private:
+    internal: true
+  egress:
+
+volumes:
+  postgres-data:
+  redis-data:

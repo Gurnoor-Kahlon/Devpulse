@@ -1,0 +1,68 @@
+# Opt-in disposable test stack. Never use this overlay for production or personal data.
+x-test-env: &test-env
+  DEVPULSE_ENVIRONMENT: test
+  DEVPULSE_DATABASE_URL: postgresql+psycopg://devpulse:${DEVPULSE_LOCAL_DB_PASSWORD}@postgres:5432/devpulse_test
+
+services:
+  migrate:
+    environment: *test-env
+  api:
+    environment: *test-env
+    volumes: [./containers/fixtures:/fixtures:ro]
+  maintenance-worker:
+    environment: *test-env
+  beat:
+    environment: *test-env
+  probe-worker:
+    environment:
+      <<: *test-env
+      DEVPULSE_PROBE_FIXTURE_DESTINATIONS: '[{"host":"127.0.0.1","port":8081,"address":"127.0.0.1"}]'
+  fixtures:
+    image: devpulse-backend:local
+    user: "10001:10001"
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    # Preserve the exact-loopback policy without allowing private Docker subnets.
+    network_mode: service:probe-worker
+    depends_on:
+      probe-worker:
+        condition: service_started
+    volumes: [./containers/fixtures:/fixtures:ro]
+    command: [python, /fixtures/server.py]
+    healthcheck:
+      test:
+        [
+          CMD,
+          python,
+          -c,
+          "from urllib.request import urlopen; urlopen('http://127.0.0.1:8081/health', timeout=2)",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend-tests:
+    profiles: [tests]
+    image: devpulse-backend-tests:local
+    build:
+      context: ./backend
+      target: tests
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    # Existing real-SMTP tests intentionally target loopback Mailpit.
+    network_mode: service:mailpit
+    environment:
+      DEVPULSE_ENVIRONMENT: test
+      TEST_DATABASE_URL: postgresql+psycopg://devpulse:${DEVPULSE_LOCAL_DB_PASSWORD}@postgres:5432/devpulse_test
+      TEST_REDIS_URL: redis://redis:6379/1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy

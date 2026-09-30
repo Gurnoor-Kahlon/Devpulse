@@ -19,7 +19,9 @@ Milestone 10 requires user-provided Redis for Celery workers; see the
 [job execution guide](jobs.md). Milestone 11 adds one Beat process and a
 maintenance worker; see [scheduling](scheduling.md). Milestone 16 adds
 [incident email and retention](notifications.md); the maintenance worker now
-consumes both `maintenance` and `notifications`. Docker and AWS remain deferred.
+consumes both `maintenance` and `notifications`. Milestone 18 adds an optional
+[Dockerized local stack](containers.md); the native workflow below remains supported.
+AWS and deployment remain deferred.
 
 The examples use the existing project location:
 
@@ -43,10 +45,9 @@ npm ci --cache ../.cache/npm
 npm run dev
 ```
 
-Open <http://localhost:3000>. The root redirects to `/dashboard`; anonymous
-visitors continue to login. Start the backend and Mailpit for account flows.
-The workspace shows account status and an honest monitoring empty state. Only
-Overview and Monitors are available in navigation. The development server listens on loopback.
+Open <http://localhost:3000> for the public landing page and restricted demo.
+The private workspace starts at `/dashboard`; anonymous visitors continue to login.
+Start the backend and Mailpit for account flows. The development server listens on loopback.
 See the [account UI guide](account-ui.md) for the browser walkthrough, generated
 API types, and production-build Playwright tests.
 
