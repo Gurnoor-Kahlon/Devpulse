@@ -1,0 +1,7 @@
+# Only consumed by the isolated milestone 19 runner, after compose.test.yaml.
+services:
+  probe-worker:
+    volumes: [./containers/benchmark:/benchmark:ro]
+  fixtures:
+    volumes: [./containers/benchmark:/benchmark:ro]
+    command: [python, /benchmark/server.py]

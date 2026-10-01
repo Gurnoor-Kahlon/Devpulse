@@ -1,0 +1,82 @@
+{
+  "milestone": 19,
+  "completed_at": "2026-09-30T20:44:55.551264+00:00",
+  "status": "passed",
+  "backend": {
+    "passed": 317,
+    "skipped": 0,
+    "warnings": 2,
+    "duration_seconds": 359.67,
+    "mode": "Fresh Docker test image; real PostgreSQL, Redis, prefork workers and Mailpit"
+  },
+  "operation_safeguards": {
+    "passed": 20
+  },
+  "frontend": {
+    "passed": 107,
+    "files": 19,
+    "max_workers": 2,
+    "checks": [
+      "locked npm ci",
+      "Prettier",
+      "ESLint",
+      "strict TypeScript",
+      "FastAPI/OpenAPI contract drift",
+      "native production build"
+    ]
+  },
+  "container_browser": {
+    "passed": 1,
+    "duration_seconds": 3.8,
+    "viewport_widths": [
+      1280,
+      360
+    ]
+  },
+  "python_static": {
+    "ruff": "passed",
+    "format": "passed",
+    "mypy_app_files": 67,
+    "project_pip_check": "passed",
+    "runtime_image_pip_check": "passed"
+  },
+  "builds": {
+    "runtime_backend": "passed",
+    "runtime_frontend": "passed",
+    "backend_tests": "passed",
+    "used_build_cache": false,
+    "dependency_updates": false
+  },
+  "workflow": {
+    "validator": "actionlint 1.7.12",
+    "syntax_and_expressions": "passed",
+    "optional_shellcheck_and_pyflakes": false,
+    "github_hosted_execution": "not run"
+  },
+  "stack_smoke": {
+    "passed": 10,
+    "checks": [
+      "fresh volume startup, readiness, migration head and schema drift",
+      "non-root application services, single Beat and loopback-only host ports",
+      "same-origin proxy, private API denial, signup and real SMTP verification",
+      "Beat to real Redis/prefork probes, durable retries, incident recovery and email delivery",
+      "pending run persists while probe worker is stopped and completes after restart",
+      "Redis outage and reconnect reconcile PostgreSQL pending work",
+      "database outage reports not-ready without losing API liveness and reconnects",
+      "Backup restores all row fingerprints and migration; existing restore target is rejected",
+      "Full container recreation preserves PostgreSQL rows and Redis AOF",
+      "complete stack restarts against retained data with idempotent migrations"
+    ]
+  },
+  "performance_report": "m19-performance-2026-09-30.json",
+  "runtime_metadata": "m19-runtime-2026-09-30.json",
+  "final_harness_smoke_report": "m19-harness-smoke-2026-09-30.json",
+  "disposable_projects_removed": true,
+  "limitations": [
+    "Controlled loopback burst benchmark; not production capacity or an SLA.",
+    "GitHub-hosted workflow was not triggered or published.",
+    "Full benchmark predates a wrapper-only failed-child status fix; workload unchanged.",
+    "Three frontend timeouts during concurrent cold builds were resolved by limiting Vitest to two workers.",
+    "Existing Starlette/AnyIO deprecation warnings remain."
+  ]
+}
