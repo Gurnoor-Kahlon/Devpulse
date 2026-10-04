@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-10-02T04:03:55.235248+00:00",
+  "python": [
+    {
+      "path": "backend/requirements.lock",
+      "sha256": "a83d9f1d84580e715e04feb6167f82f99dfdaf73fe129a421153b8ad183cbbcd",
+      "packages": 47,
+      "advisory_count": 0
+    },
+    {
+      "path": "backend/requirements-dev.lock",
+      "sha256": "cc974902894c9bb894451411a940147e2cc198a12a2069e7645ea930745c750e",
+      "packages": 59,
+      "advisory_count": 0
+    }
+  ],
+  "npm": {
+    "path": "frontend/package-lock.json",
+    "sha256": "b654ee5fdfea80d3b55ebe27af56e62963b583b7098f9d3d38b226c8a56503f3",
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  "scope": "Public advisory databases at scan time; application locks only, not OS packages. No known advisories does not establish absence of vulnerabilities.",
+  "python_scanner": "pip-audit 2.10.1"
+}

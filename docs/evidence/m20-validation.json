@@ -1,0 +1,126 @@
+{
+  "recorded_at": "2026-10-02T04:14:11.699453+00:00",
+  "environment": {
+    "os": "Ubuntu 24.04 WSL2",
+    "python": "3.13.15",
+    "node": "24.21.0",
+    "database": "PostgreSQL 18",
+    "broker": "real Redis",
+    "workers": "real Celery prefork"
+  },
+  "backend": {
+    "passed": 317,
+    "skipped": 0,
+    "duration_seconds": 310.03,
+    "warnings": [
+      "Existing Starlette httpx test client deprecation",
+      "Existing AnyIO BlockingPortal alias deprecation"
+    ]
+  },
+  "operations": {
+    "passed": 20
+  },
+  "frontend": {
+    "passed": 107,
+    "format": "passed",
+    "eslint": "passed",
+    "typescript": "passed",
+    "generated_api_contract": "passed",
+    "native_build": "passed"
+  },
+  "native_browser": [
+    {
+      "suite": "accounts-monitors",
+      "passed": 6,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "incidents",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "dashboard",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "history",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "assertions",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "notifications",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "demo",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  ],
+  "container_browser": {
+    "passed": 2,
+    "skipped": 0,
+    "duration_seconds": 11.8,
+    "final_hardened_images": true
+  },
+  "final_stack": {
+    "started_at": "2026-10-02T04:00:24.740532+00:00",
+    "finished_at": "2026-10-02T04:03:56.616750+00:00",
+    "status": "passed",
+    "checks": [
+      "fresh volume startup, readiness, migration head and schema drift",
+      "non-root application services, single Beat and loopback-only host ports",
+      "same-origin proxy, private API denial, signup and real SMTP verification",
+      "Beat to real Redis/prefork probes, durable retries, incident recovery and email delivery",
+      "pending run persists while probe worker is stopped and completes after restart",
+      "Redis outage and reconnect reconcile PostgreSQL pending work",
+      "database outage reports not-ready without losing API liveness and reconnects",
+      "Backup restores all row fingerprints and migration; existing restore target is rejected",
+      "Full container recreation preserves PostgreSQL rows and Redis AOF",
+      "complete stack restarts against retained data with idempotent migrations"
+    ],
+    "controlled_observations": 3,
+    "controlled_failed_runs": 1
+  },
+  "migration_head": "f16b4d8e302a",
+  "ruff": {
+    "backend_files": 115,
+    "operational_files": 9,
+    "lint": "passed",
+    "format": "passed"
+  },
+  "mypy": {
+    "application_files": 67,
+    "status": "passed"
+  },
+  "actionlint": "1.7.12 passed",
+  "pip_check": "passed in project virtual environment",
+  "runtime_images_built_and_verified": true,
+  "historical_performance": "See m19-performance-2026-09-30.json; not rerun in milestone 20",
+  "limitations": [
+    "No remote CI run",
+    "No production or AWS deployment",
+    "No cloud load or restore validation",
+    "Chromium coverage only; no full accessibility certification",
+    "Residual image advisories block deployment"
+  ],
+  "initial_failures_resolved": [
+    "Container SSR loopback destination reproduced and fixed; regression passes",
+    "Native browser prerequisite Mailpit process lifetime corrected; all feature suites passed afterward"
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "retrieved_at_utc": "2026-10-02T04:03:55.240451+00:00",
+  "region": "us-east-1",
+  "selection": "Relevant public catalog rows, including alternatives and tiers. Only selected baseline rates enter the cost model.",
+  "catalogs": [
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-22T02:17:15Z",
+        "Version": "20260922021715",
+        "OfferCode": "AmazonCloudWatch"
+      },
+      "rows": []
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-22T02:17:15Z",
+        "Version": "20260922021715",
+        "OfferCode": "AmazonCloudWatch"
+      },
+      "rows": [
+        {
+          "SKU": "3ZJZSGX8K87XPW4R",
+          "RateCode": "3ZJZSGX8K87XPW4R.A429C66SYZ.DGNP37V5JW",
+          "PriceDescription": "Global",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Metrics",
+          "PricePerUnit": "0.0000000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "10"
+        },
+        {
+          "SKU": "466C636KV6VS3849",
+          "RateCode": "466C636KV6VS3849.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.005 per GB log data scanned by CloudWatch Logs Insights queries - US East (Northern Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB",
+          "PricePerUnit": "0.0050000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "9MCWSKQZYCT28HA8",
+          "RateCode": "9MCWSKQZYCT28HA8.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.005 per GB of log data scanned by CloudWatch Log Analytics and CloudWatch Logs Insights queries - US East (N. Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB",
+          "PricePerUnit": "0.0050000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "KG586CTNGQ4VRZKZ",
+          "RateCode": "KG586CTNGQ4VRZKZ.JRTCKXETXF.A6VD9GXV7W",
+          "PriceDescription": "$0.30 per metric-month for the first 10,000 metrics - US East (Northern Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Metrics",
+          "PricePerUnit": "0.3000000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "10000"
+        },
+        {
+          "SKU": "KG586CTNGQ4VRZKZ",
+          "RateCode": "KG586CTNGQ4VRZKZ.JRTCKXETXF.FG3KHZ79QN",
+          "PriceDescription": "$0.10 per metric-month for the next 240,000 metrics - US East (Northern Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Metrics",
+          "PricePerUnit": "0.1000000000",
+          "Currency": "USD",
+          "StartingRange": "10000",
+          "EndingRange": "250000"
+        },
+        {
+          "SKU": "KG586CTNGQ4VRZKZ",
+          "RateCode": "KG586CTNGQ4VRZKZ.JRTCKXETXF.95SDKRWVHH",
+          "PriceDescription": "$0.05 per metric-month for the next 750,000 metrics - US East (Northern Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Metrics",
+          "PricePerUnit": "0.0500000000",
+          "Currency": "USD",
+          "StartingRange": "250000",
+          "EndingRange": "1000000"
+        },
+        {
+          "SKU": "KG586CTNGQ4VRZKZ",
+          "RateCode": "KG586CTNGQ4VRZKZ.JRTCKXETXF.VNJQCFJPS4",
+          "PriceDescription": "$0.02 per metric-month  for over 1,000,000 metrics - US East (Northern Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Metrics",
+          "PricePerUnit": "0.0200000000",
+          "Currency": "USD",
+          "StartingRange": "1000000",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "UTXVGKBT732UDP5N",
+          "RateCode": "UTXVGKBT732UDP5N.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.01 per 1,000 requests",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000100000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "VE63M6QDRWUAS2VN",
+          "RateCode": "VE63M6QDRWUAS2VN.A429C66SYZ.SB2VSFF4TP",
+          "PriceDescription": "Global",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "1000000"
+        },
+        {
+          "SKU": "W5GFVRZDCZQHBBU2",
+          "RateCode": "W5GFVRZDCZQHBBU2.A429C66SYZ.V7GB4D473V",
+          "PriceDescription": "Global",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB",
+          "PricePerUnit": "0.0000000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "5"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-25T17:45:21Z",
+        "Version": "20260925174521",
+        "OfferCode": "AmazonEC2"
+      },
+      "rows": [
+        {
+          "SKU": "HDXWAGH5PKCWGFHZ",
+          "RateCode": "HDXWAGH5PKCWGFHZ.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.1008 per On Demand Linux m7i.large Instance Hour",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.1008000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "JG3KUJMBRGHV3N8G",
+          "RateCode": "JG3KUJMBRGHV3N8G.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.08 per GB-month of General Purpose (gp3) provisioned storage - US East (N. Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.0800000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonECS/current/us-east-1/index.csv",
+      "catalog_metadata": {},
+      "rows": [
+        {
+          "SKU": "7KPDPTDSCT4J3Z64",
+          "RateCode": "7KPDPTDSCT4J3Z64.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - Ephemeral Storage - US East (N. Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "GB-Hours",
+          "PricePerUnit": "0.0001110000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "8CESGAFWKAJ98PME",
+          "RateCode": "8CESGAFWKAJ98PME.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - vCPU - US East (N.Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0404800000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "8QDMJPGQCM368Z6X",
+          "RateCode": "8QDMJPGQCM368Z6X.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - Windows - Memory  - US East (N.Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0051117500",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "9D3ZWXRS2VXMZET6",
+          "RateCode": "9D3ZWXRS2VXMZET6.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - Windows - OS - US East (N.Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0460000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "PBZNQUSEXZUC34C9",
+          "RateCode": "PBZNQUSEXZUC34C9.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - Memory  - US East (N.Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0044450000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "RF2BUTAD289DREDC",
+          "RateCode": "RF2BUTAD289DREDC.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - Windows - vCPU - US East (N.Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0465520000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "UNH9KPQP7W7C66C9",
+          "RateCode": "UNH9KPQP7W7C66C9.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - ARM - Memory - US East (N. Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0035600000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "XSZATS4VYMDC9CYN",
+          "RateCode": "XSZATS4VYMDC9CYN.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "AWS Fargate - ARM - vCPU - US East (N. Virginia)",
+          "EffectiveDate": "2026-07-01",
+          "Unit": "hours",
+          "PricePerUnit": "0.0323800000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonElastiCache/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-14T06:37:14Z",
+        "Version": "20260914063714",
+        "OfferCode": "AmazonElastiCache"
+      },
+      "rows": [
+        {
+          "SKU": "638DBVAAJ7GFJZTX",
+          "RateCode": "638DBVAAJ7GFJZTX.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.051 per Hr for ExtendedSupportYr3-NodeUsage:cache.t4g.small in US East (N. Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.0510000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "BYFG57CPZSFUXSSY",
+          "RateCode": "BYFG57CPZSFUXSSY.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.032 per T4G Small Cache node-hour (or partial hour) running Redis",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.0320000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "R2WFPDK85HRU93BF",
+          "RateCode": "R2WFPDK85HRU93BF.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.026 per Hr for ExtendedSupportYr1_Yr2-NodeUsage:cache.t4g.small in US East (N. Virginia)",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.0260000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "SWRGTJTDUJ972J3G",
+          "RateCode": "SWRGTJTDUJ972J3G.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.0256 per T4G Small Cache node-hour (or partial hour) running Valkey",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.0256000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-10-01T06:02:30Z",
+        "Version": "20261001060230",
+        "OfferCode": "AmazonRDS"
+      },
+      "rows": [
+        {
+          "SKU": "6W8ECRFVDATCER7J",
+          "RateCode": "6W8ECRFVDATCER7J.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.095 per additional GB-month of backup storage exceeding free allocation running PostgreSQL",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.0950000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/us-east-1/index.csv",
+      "catalog_metadata": {},
+      "rows": [
+        {
+          "SKU": "BFM4DHJU8ZRAFXFZ",
+          "RateCode": "BFM4DHJU8ZRAFXFZ.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.345 per GB-month of provisioned GP3 storage Multi-AZ (readable standbys) deployments running PostgreSQL",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.3450000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "CQK5YMWVUJ45X4ED",
+          "RateCode": "CQK5YMWVUJ45X4ED.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.115 per GB-month of provisioned GP3 storage",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.1150000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "FZ83TYVHNQPRDWME",
+          "RateCode": "FZ83TYVHNQPRDWME.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.23 per GB-month of provisioned GP3 storage for Multi-AZ (SQL Server Mirror) deployments",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.2300000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "J7S7KD4WFDNQWKNX",
+          "RateCode": "J7S7KD4WFDNQWKNX.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.23 per GB-month of provisioned GP3 storage for Multi-AZ deployments running PostgreSQL",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.2300000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "KYVYY29G957PKY3B",
+          "RateCode": "KYVYY29G957PKY3B.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.115 per GB-month of provisioned GP3 storage running PostgreSQL",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.1150000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "VXAX7HFQ5JGD2RFS",
+          "RateCode": "VXAX7HFQ5JGD2RFS.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.23 per GB-month of provisioned GP3 storage for Multi-AZ deployments",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.2300000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-10-01T06:02:30Z",
+        "Version": "20261001060230",
+        "OfferCode": "AmazonRDS"
+      },
+      "rows": [
+        {
+          "SKU": "6T9XP2QUFF4B5P26",
+          "RateCode": "6T9XP2QUFF4B5P26.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$ 0.065 per RDS db.t4g.medium Single-AZ instance hour (or partial hour) running PostgreSQL",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.0650000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "SCBZU9XX357QUA4D",
+          "RateCode": "SCBZU9XX357QUA4D.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$ 0.129 per RDS db.t4g.medium Multi-AZ instance hour (or partial hour) running PostgreSQL",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Hrs",
+          "PricePerUnit": "0.1290000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonS3/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-28T23:04:16Z",
+        "Version": "20260928230416",
+        "OfferCode": "AmazonS3"
+      },
+      "rows": [
+        {
+          "SKU": "E9YHNFENF4XQBZR6",
+          "RateCode": "E9YHNFENF4XQBZR6.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.005 per 1,000 PUT, COPY, POST, or LIST requests",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000050000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "PNST5BXQFNPVQFW3",
+          "RateCode": "PNST5BXQFNPVQFW3.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.0004 per 1,000 Tier2 Annotation Requests",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000004000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "V7YYPPZU6NVVFB6Q",
+          "RateCode": "V7YYPPZU6NVVFB6Q.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.005 per 1,000 Tier1 Annotation Requests",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000050000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "ZWQ6Q48CRJXX4FXE",
+          "RateCode": "ZWQ6Q48CRJXX4FXE.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.004 per 10,000 GET and all other requests",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000004000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonS3/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-28T23:04:16Z",
+        "Version": "20260928230416",
+        "OfferCode": "AmazonS3"
+      },
+      "rows": [
+        {
+          "SKU": "KMKCKYYEKJBZ7B3F",
+          "RateCode": "KMKCKYYEKJBZ7B3F.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.023 per GB-Mo of Storage in Annotations ",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.0230000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "WP9ANXZGBYYSGJEA",
+          "RateCode": "WP9ANXZGBYYSGJEA.JRTCKXETXF.PGHJ3S3EYE",
+          "PriceDescription": "$0.023 per GB - first 50 TB / month of storage used",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.0230000000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "51200"
+        },
+        {
+          "SKU": "WP9ANXZGBYYSGJEA",
+          "RateCode": "WP9ANXZGBYYSGJEA.JRTCKXETXF.D42MF2PVJS",
+          "PriceDescription": "$0.022 per GB - next 450 TB / month of storage used",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.0220000000",
+          "Currency": "USD",
+          "StartingRange": "51200",
+          "EndingRange": "512000"
+        },
+        {
+          "SKU": "WP9ANXZGBYYSGJEA",
+          "RateCode": "WP9ANXZGBYYSGJEA.JRTCKXETXF.PXJDJ3YRG3",
+          "PriceDescription": "$0.021 per GB - storage used / month over 500 TB",
+          "EffectiveDate": "2026-09-01",
+          "Unit": "GB-Mo",
+          "PricePerUnit": "0.0210000000",
+          "Currency": "USD",
+          "StartingRange": "512000",
+          "EndingRange": "Inf"
+        }
+      ]
+    },
+    {
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonSNS/current/us-east-1/index.csv",
+      "catalog_metadata": {
+        "FormatVersion": "v1.0",
+        "Disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+        "Publication Date": "2026-09-15T15:19:44Z",
+        "Version": "20260915151944",
+        "OfferCode": "AmazonSNS"
+      },
+      "rows": [
+        {
+          "SKU": "BZ4UZ2ERDQACBPJ4",
+          "RateCode": "BZ4UZ2ERDQACBPJ4.JRTCKXETXF.MUBTP6UPGZ",
+          "PriceDescription": "$2.00 per 100,000 Amazon SNS Email/Email-JSON Notifications thereafter",
+          "EffectiveDate": "2026-02-01",
+          "Unit": "Notifications",
+          "PricePerUnit": "0.0000200000",
+          "Currency": "USD",
+          "StartingRange": "1000",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "GXS664ADCBPVT6BA",
+          "RateCode": "GXS664ADCBPVT6BA.JRTCKXETXF.6YS6EN2CT7",
+          "PriceDescription": "$0.3 per 1,000,000 SNS FIFO Publish API Requests in US East (N. Virginia)",
+          "EffectiveDate": "2026-02-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000003000",
+          "Currency": "USD",
+          "StartingRange": "0",
+          "EndingRange": "Inf"
+        },
+        {
+          "SKU": "QDX8G2WMY9NPXXPG",
+          "RateCode": "QDX8G2WMY9NPXXPG.JRTCKXETXF.VNJQCFJPS4",
+          "PriceDescription": "$0.50 per 1,000,000 Amazon SNS API Requests per month thereafter",
+          "EffectiveDate": "2026-02-01",
+          "Unit": "Requests",
+          "PricePerUnit": "0.0000005000",
+          "Currency": "USD",
+          "StartingRange": "1000000",
+          "EndingRange": "Inf"
+        }
+      ]
+    }
+  ]
+}

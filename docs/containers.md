@@ -262,3 +262,17 @@ Suggested commit: `feat: add reproducible local Docker stack and restore checks`
 
 Milestone 18 is complete. CI/performance infrastructure (milestone 19), release
 preparation and deployment (milestone 20) are not included.
+
+## Milestone 20 release audit follow-up
+
+The final runtime images omit unused pip/ensurepip and npm/Corepack/Yarn installers;
+build and backend test stages retain their development tools. Run dependency
+consistency checks in the project or test environment, not with pip inside the
+hardened runtime. Authenticated frontend server rendering now uses fixed
+`http://api:8000` in container mode; native development keeps loopback. The runtime
+sets `DEVPULSE_CONTAINER_BUILD=1` consistently with the build. Both public and
+authenticated-reload Chromium container tests pass.
+
+The final ten-check stack validation passed again after these changes. See the
+[release audit](release-audit.md) for current evidence, remaining image advisories
+and deployment blockers. This Compose file remains a development configuration.

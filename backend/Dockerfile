@@ -13,6 +13,10 @@ ENV PATH="/opt/venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 RUN groupadd --gid 10001 devpulse && useradd --uid 10001 --gid devpulse --no-create-home --home-dir /tmp --shell /usr/sbin/nologin devpulse
 WORKDIR /app
 COPY --from=dependencies /opt/venv /opt/venv
+# Runtime images execute locked application code; installers belong only in build/test stages.
+RUN rm -rf /usr/local/lib/python3.13/ensurepip \
+    /usr/local/lib/python3.13/site-packages/pip* /usr/local/bin/pip* \
+    /opt/venv/lib/python3.13/site-packages/pip* /opt/venv/bin/pip*
 COPY app ./app
 COPY migrations ./migrations
 COPY alembic.ini ./alembic.ini

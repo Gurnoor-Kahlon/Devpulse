@@ -1,0 +1,35 @@
+{
+  "source": "Real local Chromium public-demo suite, isolated PostgreSQL schema and controlled HTTP fixture. Intentionally induced failures, no production or customer data. Landing embeds previously captured real local demo observations.",
+  "files": [
+    {
+      "path": "docs/screenshots/m20/demo-1280.png",
+      "width": 1280,
+      "height": 1758,
+      "bytes": 170177,
+      "sha256": "89910823e581bd8a5a491aecac52747409db5e4d0b9cab0c04da2cc87d32b30f"
+    },
+    {
+      "path": "docs/screenshots/m20/demo-360.png",
+      "width": 360,
+      "height": 2944,
+      "bytes": 175651,
+      "sha256": "e512e521ec9026ef91d6697dc15198ca47b18109de54cfb5d1ce4e820749dfac"
+    },
+    {
+      "path": "docs/screenshots/m20/landing-1280.png",
+      "width": 1280,
+      "height": 2973,
+      "bytes": 635947,
+      "sha256": "e0ea3407d8175c96749a2abab0ff2762c91fc8ad70fa57ecf4aab4b18f3efeff"
+    },
+    {
+      "path": "docs/screenshots/m20/landing-360.png",
+      "width": 360,
+      "height": 2766,
+      "bytes": 199783,
+      "sha256": "674836368e1b09f8255822b66068557a05dea73d46f8bc6f422eadcde2d9b64f"
+    }
+  ],
+  "captured_on_utc": "2026-10-02",
+  "demo_data_retrieved_at_utc": "2026-10-02T03:54:44Z"
+}

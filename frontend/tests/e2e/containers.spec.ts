@@ -60,3 +60,35 @@ test("standalone container serves the public UI, images and same-origin API on d
   );
   expect(errors).toEqual([]);
 });
+
+test("container sign-in renders protected pages and survives a full reload", async ({
+  page,
+}) => {
+  test.skip(!origin, "Requires an already running local Compose stack.");
+  const email = `container-account-${crypto.randomUUID()}@example.com`;
+  const password = "container-release-test-password";
+  const csrf = (await (await page.request.get("/api/v1/auth/csrf")).json())
+    .csrf_token;
+  const registration = await page.request.post("/api/v1/auth/register", {
+    headers: { Origin: origin!, "X-CSRF-Token": csrf },
+    data: { email, password },
+  });
+  expect(registration.status()).toBe(202);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill(email);
+  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(
+    page.getByRole("heading", { name: "Overview", exact: true }),
+  ).toBeVisible();
+  const response = await page.reload();
+  expect(response?.status()).toBe(200);
+  await expect(
+    page.getByRole("heading", { name: "Overview", exact: true }),
+  ).toBeVisible();
+  await page.goto("/monitors");
+  await expect(
+    page.getByRole("heading", { name: "Monitors", exact: true }),
+  ).toBeVisible();
+});

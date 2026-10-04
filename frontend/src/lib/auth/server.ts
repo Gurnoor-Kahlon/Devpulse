@@ -11,7 +11,11 @@ export async function requireUser(): Promise<User> {
     redirect("/login?next=%2Fdashboard");
   let response: Response;
   try {
-    response = await fetch("http://127.0.0.1:8000/api/v1/auth/me", {
+    const origin =
+      process.env.DEVPULSE_CONTAINER_BUILD === "1"
+        ? "http://api:8000"
+        : "http://127.0.0.1:8000";
+    response = await fetch(`${origin}/api/v1/auth/me`, {
       headers: { Cookie: `${cookie.name}=${cookie.value}` },
       cache: "no-store",
       redirect: "error",

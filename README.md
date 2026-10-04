@@ -6,13 +6,18 @@ DevPulse is an API monitoring and reliability platform in development.
 
 ## Current status
 
-Milestone 19 adds pinned GitHub Actions validation and a controlled 100-monitor,
-10,000-real-probe benchmark with saved, sanitized evidence. The
-[performance guide](docs/performance.md) covers reproduction, measurements, CI
-coverage, and limitations. The [Docker stack](docs/containers.md) supplies
-PostgreSQL, Redis, real workers, one Beat, Mailpit, and explicit migrations.
-The [public demo](docs/public-demo.md) remains opt-in and existing account data stays
-private. Milestone 20 and cloud deployment remain deferred.
+Milestone 20 completes the [local release audit](docs/release-audit.md),
+[deployment proposal and cost comparison](docs/deployment-proposal.md),
+[operations runbook](docs/release-runbook.md), and
+[actual screenshot gallery](docs/release-screenshots.md). The audit fixes container
+sign-in rendering and removes unused runtime installers. Local validation passes;
+**deployment remains blocked by image advisories and unverified production gates**.
+No cloud resources, publishing or deployment have been authorized or performed.
+
+The [performance guide](docs/performance.md) retains the milestone 19 controlled
+100-monitor, 10,000-real-probe evidence. The [Docker stack](docs/containers.md)
+supplies local PostgreSQL, Redis, workers, one Beat, Mailpit and migrations.
+The [public demo](docs/public-demo.md) stays opt-in; account data remains private.
 
 ## Local development
 

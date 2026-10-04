@@ -1,0 +1,364 @@
+{
+  "recorded_date_utc": "2026-10-02",
+  "currency": "USD",
+  "region": "us-east-1",
+  "hours_per_month": 730,
+  "no_free_tier_or_credits": true,
+  "status": "PROPOSAL ONLY; no deployment approved",
+  "common": [
+    {
+      "name": "ECR image storage",
+      "quantity": "10",
+      "usd_per_unit": ".10",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/ecr/pricing/",
+      "monthly_usd": "1.00"
+    },
+    {
+      "name": "S3 backup storage including versions",
+      "quantity": "100",
+      "usd_per_unit": ".023",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/s3/pricing/",
+      "monthly_usd": "2.300"
+    },
+    {
+      "name": "S3 PUT/LIST",
+      "quantity": "1000",
+      "usd_per_unit": ".000005",
+      "unit": "request",
+      "source": "https://aws.amazon.com/s3/pricing/",
+      "monthly_usd": "0.005000"
+    },
+    {
+      "name": "S3 GET",
+      "quantity": "1000",
+      "usd_per_unit": ".0000004",
+      "unit": "request",
+      "source": "https://aws.amazon.com/s3/pricing/",
+      "monthly_usd": "0.0004000"
+    },
+    {
+      "name": "CloudWatch log ingestion",
+      "quantity": "5",
+      "usd_per_unit": ".50",
+      "unit": "GB",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "2.50"
+    },
+    {
+      "name": "CloudWatch log storage",
+      "quantity": "5",
+      "usd_per_unit": ".03",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "0.15"
+    },
+    {
+      "name": "CloudWatch custom metrics",
+      "quantity": "10",
+      "usd_per_unit": ".30",
+      "unit": "metric-month",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "3.00"
+    },
+    {
+      "name": "CloudWatch standard alarm metrics",
+      "quantity": "15",
+      "usd_per_unit": ".10",
+      "unit": "alarm-metric-month",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "1.50"
+    },
+    {
+      "name": "CloudWatch dashboard",
+      "quantity": "1",
+      "usd_per_unit": "3",
+      "unit": "dashboard-month",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "3"
+    },
+    {
+      "name": "CloudWatch Logs Insights",
+      "quantity": "10",
+      "usd_per_unit": ".005",
+      "unit": "GB scanned",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "0.050"
+    },
+    {
+      "name": "CloudWatch batched metric API calls",
+      "quantity": "44000",
+      "usd_per_unit": ".00001",
+      "unit": "request",
+      "source": "https://aws.amazon.com/cloudwatch/pricing/",
+      "monthly_usd": "0.44000"
+    },
+    {
+      "name": "Route 53 public zone",
+      "quantity": "1",
+      "usd_per_unit": ".50",
+      "unit": "zone-month",
+      "source": "https://aws.amazon.com/route53/pricing/",
+      "monthly_usd": "0.50"
+    },
+    {
+      "name": "Route 53 standard DNS queries",
+      "quantity": "100000",
+      "usd_per_unit": ".0000005",
+      "unit": "query",
+      "source": "https://aws.amazon.com/route53/pricing/",
+      "monthly_usd": "0.0500000"
+    },
+    {
+      "name": "Route 53 AWS endpoint HTTPS health check",
+      "quantity": "1",
+      "usd_per_unit": "1.50",
+      "unit": "check-month",
+      "source": "https://aws.amazon.com/route53/pricing/",
+      "monthly_usd": "1.50"
+    },
+    {
+      "name": "SES outbound mail",
+      "quantity": "2000",
+      "usd_per_unit": ".0001",
+      "unit": "email",
+      "source": "https://aws.amazon.com/ses/pricing/",
+      "monthly_usd": "0.2000"
+    },
+    {
+      "name": "Secrets Manager bundles",
+      "quantity": "4",
+      "usd_per_unit": ".40",
+      "unit": "secret-month",
+      "source": "https://aws.amazon.com/secrets-manager/pricing/",
+      "monthly_usd": "1.60"
+    },
+    {
+      "name": "Secrets Manager API",
+      "quantity": "10000",
+      "usd_per_unit": ".000005",
+      "unit": "request",
+      "source": "https://aws.amazon.com/secrets-manager/pricing/",
+      "monthly_usd": "0.050000"
+    },
+    {
+      "name": "SNS email alerts",
+      "quantity": "500",
+      "usd_per_unit": ".00002",
+      "unit": "notification",
+      "source": "https://aws.amazon.com/sns/pricing/",
+      "monthly_usd": "0.01000"
+    },
+    {
+      "name": "SNS API requests",
+      "quantity": "500",
+      "usd_per_unit": ".0000005",
+      "unit": "request",
+      "source": "https://aws.amazon.com/sns/pricing/",
+      "monthly_usd": "0.0002500"
+    },
+    {
+      "name": "Internet egress without free allocation",
+      "quantity": "50",
+      "usd_per_unit": ".09",
+      "unit": "GB",
+      "source": "https://aws.amazon.com/vpc/pricing/",
+      "monthly_usd": "4.50"
+    },
+    {
+      "name": "Domain registration reserve (estimate; domain not selected)",
+      "quantity": "1",
+      "usd_per_unit": "1.67",
+      "unit": "month",
+      "source": "Planning allowance, USD20.04/year; obtain actual registrar quote before approval",
+      "monthly_usd": "1.67"
+    }
+  ],
+  "single_ec2": [
+    {
+      "name": "EC2 m7i.large Linux shared on-demand",
+      "quantity": "730",
+      "usd_per_unit": ".1008",
+      "unit": "instance-hour",
+      "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/us-east-1/index.csv",
+      "monthly_usd": "73.5840"
+    },
+    {
+      "name": "EBS gp3 root20 + data80",
+      "quantity": "100",
+      "usd_per_unit": ".08",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/ebs/pricing/",
+      "monthly_usd": "8.00"
+    },
+    {
+      "name": "Elastic public IPv4",
+      "quantity": "730",
+      "usd_per_unit": ".005",
+      "unit": "address-hour",
+      "source": "https://aws.amazon.com/vpc/pricing/",
+      "monthly_usd": "3.650"
+    },
+    {
+      "name": "EBS incremental standard snapshots",
+      "quantity": "50",
+      "usd_per_unit": ".05",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/ebs/pricing/",
+      "monthly_usd": "2.50"
+    },
+    {
+      "name": "Monthly restore drill m7i.large",
+      "quantity": "4",
+      "usd_per_unit": ".1008",
+      "unit": "instance-hour",
+      "source": "https://aws.amazon.com/ec2/pricing/on-demand/",
+      "monthly_usd": "0.4032"
+    },
+    {
+      "name": "Restore drill 100GB gp3 for four hours",
+      "quantity": "0.5479452054794520547945205479",
+      "usd_per_unit": ".08",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/ebs/pricing/",
+      "monthly_usd": "0.04383561643835616438356164383"
+    },
+    {
+      "name": "Restore drill public IPv4",
+      "quantity": "4",
+      "usd_per_unit": ".005",
+      "unit": "address-hour",
+      "source": "https://aws.amazon.com/vpc/pricing/",
+      "monthly_usd": "0.020"
+    }
+  ],
+  "managed_ecs": [
+    {
+      "name": "Fargate Linux x86 vCPU",
+      "quantity": "2737.50",
+      "usd_per_unit": ".04048",
+      "unit": "vCPU-hour",
+      "source": "https://aws.amazon.com/fargate/pricing/",
+      "monthly_usd": "110.8140000"
+    },
+    {
+      "name": "Fargate memory",
+      "quantity": "5475.0",
+      "usd_per_unit": ".004445",
+      "unit": "GB-hour",
+      "source": "https://aws.amazon.com/fargate/pricing/",
+      "monthly_usd": "24.3363750"
+    },
+    {
+      "name": "ALB",
+      "quantity": "730",
+      "usd_per_unit": ".0225",
+      "unit": "hour",
+      "source": "https://aws.amazon.com/elasticloadbalancing/pricing/",
+      "monthly_usd": "16.4250"
+    },
+    {
+      "name": "ALB mean one LCU",
+      "quantity": "730",
+      "usd_per_unit": ".008",
+      "unit": "LCU-hour",
+      "source": "https://aws.amazon.com/elasticloadbalancing/pricing/",
+      "monthly_usd": "5.840"
+    },
+    {
+      "name": "ALB and NAT four IPv4 addresses",
+      "quantity": "2920",
+      "usd_per_unit": ".005",
+      "unit": "address-hour",
+      "source": "https://aws.amazon.com/vpc/pricing/",
+      "monthly_usd": "14.600"
+    },
+    {
+      "name": "Two zonal NAT gateways",
+      "quantity": "1460",
+      "usd_per_unit": ".045",
+      "unit": "gateway-hour",
+      "source": "https://aws.amazon.com/vpc/pricing/",
+      "monthly_usd": "65.700"
+    },
+    {
+      "name": "NAT bidirectional traffic",
+      "quantity": "100",
+      "usd_per_unit": ".045",
+      "unit": "GB",
+      "source": "https://aws.amazon.com/vpc/pricing/",
+      "monthly_usd": "4.500"
+    },
+    {
+      "name": "RDS PostgreSQL Multi-AZ db.t4g.medium",
+      "quantity": "730",
+      "usd_per_unit": ".129",
+      "unit": "instance-hour",
+      "source": "https://aws.amazon.com/rds/postgresql/pricing/",
+      "monthly_usd": "94.170"
+    },
+    {
+      "name": "RDS Multi-AZ gp3",
+      "quantity": "50",
+      "usd_per_unit": ".230",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/rds/postgresql/pricing/",
+      "monthly_usd": "11.500"
+    },
+    {
+      "name": "RDS additional backup beyond included allocation",
+      "quantity": "50",
+      "usd_per_unit": ".095",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/rds/postgresql/pricing/",
+      "monthly_usd": "4.750"
+    },
+    {
+      "name": "Monthly RDS restore drill same class",
+      "quantity": "4",
+      "usd_per_unit": ".129",
+      "unit": "instance-hour",
+      "source": "https://aws.amazon.com/rds/postgresql/pricing/",
+      "monthly_usd": "0.516"
+    },
+    {
+      "name": "Restore drill RDS storage four hours",
+      "quantity": "0.2739726027397260273972602740",
+      "usd_per_unit": ".230",
+      "unit": "GB-month",
+      "source": "https://aws.amazon.com/rds/postgresql/pricing/",
+      "monthly_usd": "0.06301369863013698630136986302"
+    },
+    {
+      "name": "Redis OSS cache.t4g.small primary + replica",
+      "quantity": "1460",
+      "usd_per_unit": ".032",
+      "unit": "node-hour",
+      "source": "https://aws.amazon.com/elasticache/pricing/",
+      "monthly_usd": "46.720"
+    },
+    {
+      "name": "Cross-AZ transfer charged-side GB allowance",
+      "quantity": "20",
+      "usd_per_unit": ".01",
+      "unit": "GB",
+      "source": "https://aws.amazon.com/ec2/pricing/on-demand/",
+      "monthly_usd": "0.20"
+    },
+    {
+      "name": "Cloud Map two API registrations (conservative allowance)",
+      "quantity": "2",
+      "usd_per_unit": ".10",
+      "unit": "resource-month",
+      "source": "https://aws.amazon.com/cloud-map/pricing/",
+      "monthly_usd": "0.20"
+    }
+  ],
+  "totals": {
+    "common": "24.03",
+    "single_ec2_including_common": "112.23",
+    "managed_ecs_including_common": "424.36"
+  },
+  "exclusions": "Tax, exchange rate, paid support, labor, unselected domain premium, sustained RDS CPU surplus, overages, duplicate environments and rollout surge. These are variable, not asserted zero. See proposal sensitivity table."
+}
