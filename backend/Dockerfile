@@ -1,16 +1,24 @@
-FROM python:3.13.15-slim-bookworm@sha256:2325bb286ec344af3e5898cc224b5844e2707ac6e26b1632516fd3edc84a5e26 AS dependencies
+FROM python:3.13.16-alpine3.24@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a AS dependencies
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
 WORKDIR /build
-COPY requirements.lock .
-RUN python -m venv /opt/venv && /opt/venv/bin/pip install --require-hashes -r requirements.lock
+COPY requirements.lock requirements-container.lock requirements-container-build.lock ./
+# Build psycopg against vendor-maintained libraries instead of bundled wheel libraries.
+RUN apk add --no-cache gcc musl-dev postgresql18-dev=18.6-r0 libssl3=3.5.9-r0 libcrypto3=3.5.9-r0 \
+    && python -m venv /opt/venv \
+    && /opt/venv/bin/pip install --require-hashes -r requirements.lock \
+    && /opt/venv/bin/pip install --require-hashes -r requirements-container-build.lock \
+    && /opt/venv/bin/pip install --require-hashes --no-deps --no-build-isolation -r requirements-container.lock \
+    && /opt/venv/bin/pip uninstall -y psycopg-binary setuptools wheel
 
 FROM dependencies AS test-dependencies
 COPY requirements-dev.lock .
-RUN /opt/venv/bin/pip install --require-hashes -r requirements-dev.lock
+RUN /opt/venv/bin/pip install --require-hashes -r requirements-dev.lock \
+    && /opt/venv/bin/pip uninstall -y psycopg-binary
 
-FROM python:3.13.15-slim-bookworm@sha256:2325bb286ec344af3e5898cc224b5844e2707ac6e26b1632516fd3edc84a5e26 AS runtime
-ENV PATH="/opt/venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
-RUN groupadd --gid 10001 devpulse && useradd --uid 10001 --gid devpulse --no-create-home --home-dir /tmp --shell /usr/sbin/nologin devpulse
+FROM python:3.13.16-alpine3.24@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a AS runtime
+ENV PATH="/opt/venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PSYCOPG_IMPL=c
+RUN apk add --no-cache libpq=18.6-r0 libssl3=3.5.9-r0 libcrypto3=3.5.9-r0
+RUN addgroup -g 10001 devpulse && adduser -u 10001 -G devpulse -D -H -h /tmp -s /sbin/nologin devpulse
 WORKDIR /app
 COPY --from=dependencies /opt/venv /opt/venv
 # Runtime images execute locked application code; installers belong only in build/test stages.

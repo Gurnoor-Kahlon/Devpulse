@@ -1,11 +1,11 @@
 # Database-driven scheduling
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 11 adds one Beat process, a maintenance-queue dispatcher, and automatic
-recovery of unpublished or expired work. PostgreSQL remains the authority;
-Redis transports task messages only. Milestone 12 adds [durable target retries
-and incidents](incidents.md) through the same dispatcher. Milestone 13 adds
-[stored dashboard analytics and polling](dashboard.md). Milestone 16 adds
-[notification dispatch and retention](notifications.md) to Beat.
+One Beat process triggers a maintenance-queue dispatcher and recovery of
+unpublished or expired work. PostgreSQL remains the authority; Redis transports
+task messages. [Retries and incidents](incidents.md),
+[stored analytics](dashboard.md), and [email dispatch/retention](notifications.md)
+use the same background execution system.
 
 ## Startup
 
@@ -154,7 +154,7 @@ From the activated backend directory:
 ```bash
 python -m ruff check . --no-cache
 python -m ruff format --check . --no-cache
-python -m mypy --cache-dir /tmp/devpulse-m11-mypy
+python -m mypy app
 python -m pip check
 python - <<'PYTEST'
 import os
@@ -194,7 +194,7 @@ Frontend types are generated from FastAPI rather than maintained separately.
 - Ruff lint/format checks passed (70 Python files), strict mypy passed (40
   application files), and `pip check` passed. No Python dependency pins changed.
 - A SHA-256-verified official Linux Node 24.21.0 toolchain under
-  `/tmp/devpulse-node24` enabled frontend validation without a machine install.
+  a project-local tool directory enabled frontend validation without a machine install.
   `npm ci` installed the existing lock locally. Frontend formatting, ESLint,
   strict TypeScript, all **58 component/transport tests**, generated FastAPI
   contract verification, and the production build passed. Contract/browser

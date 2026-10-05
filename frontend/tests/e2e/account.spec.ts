@@ -47,11 +47,20 @@ test("account lifecycle uses the API, database, and real email", async ({
   page,
   request,
   browser,
-}) => {
+}, testInfo) => {
   const email = `browser-${crypto.randomUUID()}@example.com`;
   const password = "browser-test-password-1";
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login\?/);
+  for (const width of [1280, 360]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({
+      path: testInfo.outputPath(`login-${width}.png`),
+      fullPage: true,
+    });
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.getByRole("link", { name: "Create an account" }).click();
   // Login and registration share field labels; wait for the destination form before typing.
   await expect(page).toHaveURL(/\/register$/);
@@ -193,8 +202,10 @@ test("mobile forms support keyboard validation and remain within the viewport", 
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBeTruthy();
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: "../.cache/auth-mobile.png", fullPage: true });
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/login?next=https%3A%2F%2Fevil.example");
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: "../.cache/auth-desktop.png", fullPage: true });
 });

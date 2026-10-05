@@ -1,10 +1,10 @@
 # Incident email and retention
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 16 adds opt-in incident email, durable delivery status, and bounded
-retention jobs. PostgreSQL owns delivery intent and retries; Redis transports UUIDs.
-The page at `/notifications` manages preferences and displays delivery history.
-Incident detail pages also show their scoped delivery status. Public demo work
-and deployment remain outside this milestone.
+Incident email is opt-in, with durable delivery status and bounded retention
+jobs. PostgreSQL owns delivery intent and retries; Redis transports UUIDs.
+`/notifications` manages preferences and delivery history. Incident details
+show the corresponding delivery status.
 
 ## Preferences and API
 
@@ -251,6 +251,3 @@ and retention on a real maintenance worker.
   after validation. No messages were sent through an external SMTP service.
 - No Git commands, machine installations, ownership/permission changes, deployment,
   or milestone 17 work were performed. Development monitoring history was not seeded.
-
-Suggested commit message: `feat: deliver incident emails reliably and prune expired history`.
-Milestone 16 is complete. Stop before milestone 17.

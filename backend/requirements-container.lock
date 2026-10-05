@@ -1,0 +1,2 @@
+psycopg-c==3.3.6 \
+    --hash=sha256:29c568426ad61c1b702c7d73505c43ca2c9fc5d97a8431d8d9049e731e319ff8

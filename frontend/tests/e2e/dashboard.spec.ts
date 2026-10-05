@@ -40,6 +40,7 @@ test("dashboard shows real weighted runs, responsive charts, polling and retaine
         page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       )
       .toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: testInfo.outputPath(`dashboard-${width}.png`),
       fullPage: true,

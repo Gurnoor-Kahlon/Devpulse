@@ -1,12 +1,11 @@
 # Monitor management UI
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 8 connects monitor settings to the PostgreSQL API from milestone 7.
-Milestone 11 adds observation freshness from the real scheduler. Milestone 13
-adds [dashboard analytics and visible-tab polling](dashboard.md); no observations
-are fabricated.
-Start the application using the [development guide](development.md), apply
-`python -m alembic upgrade head`, and use Mailpit to verify your account as
-described in the [account guide](account-ui.md).
+Monitor settings persist through the owned PostgreSQL API. The list shows saved
+health and observation freshness, refreshing while the tab is visible. No
+observations are fabricated. Start the [local stack](containers.md), verify your
+account through Mailpit, then create a monitor. See the
+[account guide](account-ui.md) for verification and recovery.
 
 ## Routes and behavior
 
@@ -116,8 +115,7 @@ and layouts at 360px and desktop widths.
 Browser review screenshots are written only to ignored `.cache/` files:
 `monitors-desktop.png`, `monitors-mobile.png`, `monitor-form-mobile.png`, and
 `monitor-archive-mobile.png`. These show synthetic test accounts and configurations,
-not monitoring results or public demo data. Public product screenshots remain a
-later milestone.
+not monitoring results or public demo data. Reviewed product captures are available in the [screenshot gallery](release-screenshots.md).
 
 Development uses WSL2 Ubuntu. The historical milestone 8 validation below used
 Windows; current Linux results are recorded in [scheduling](scheduling.md#validation).

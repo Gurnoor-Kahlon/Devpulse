@@ -1,5 +1,7 @@
 # Release audit — milestone 20
 
+This is the historical 2026-10-02 audit. See the [current portfolio release report](portfolio-release.md) for the latest results and blockers.
+
 **Milestone 20's local audit and deployment approval package are complete. Deployment recommendation: NO-GO.** No cloud resource, paid service, image publication, public DNS or deployment was created. No repository operations were performed. Audit evidence was gathered on 2026-10-01/02 in Ubuntu 24.04 WSL2 using Python 3.13.15, Node 24.21.0, PostgreSQL 18 and real Redis/Celery workers.
 
 The package consists of this audit, [AWS topology/cost proposal](deployment-proposal.md), [release/operations runbook](release-runbook.md), [actual screenshot gallery](release-screenshots.md), and sanitized [validation](evidence/m20-validation.json), [dependency](evidence/m20-dependency-audit.json), [image](evidence/m20-image-audit.json), [cost](evidence/m20-cost-model.json) and [source manifest](evidence/m20-source-manifest.json) evidence. This completes preparation; it does not certify production security, cloud capacity, accessibility compliance or availability.

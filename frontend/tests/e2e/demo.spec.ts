@@ -50,6 +50,7 @@ test("public demo uses real probes, supports mobile and keyboard access, and lin
       )
       .toBeTruthy();
     await expect(page.locator(".recharts-line")).toHaveCount(2);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: testInfo.outputPath(`demo-${width}.png`),
       fullPage: true,
@@ -87,6 +88,7 @@ test("public demo uses real probes, supports mobile and keyboard access, and lin
         page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       )
       .toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: testInfo.outputPath(`landing-${width}.png`),
       fullPage: true,

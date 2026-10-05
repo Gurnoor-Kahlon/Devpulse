@@ -1,11 +1,10 @@
 # DevPulse interface foundation
 
-The interface uses flat dark surfaces, restrained borders, compact controls,
-and a pale blue accent. Monitoring values are not displayed until real data
-exists. The current `/dashboard` route is explicitly labeled as an interface
-preview; the root redirects there until the public landing page is implemented.
-The workspace now requires a session. Account pages use a compact public layout
-with shared fields, buttons, validation, and feedback states; see [account UI](account-ui.md).
+The interface uses dark surfaces, restrained borders, compact controls and a
+pale blue accent. The public landing page at `/` links to signup and the opt-in
+read-only demo. `/dashboard` and the workspace require a session and show real
+stored observations, with explicit loading, empty, error and stale states.
+Account pages share the same fields, buttons and feedback patterns.
 
 ## Tokens
 
@@ -51,11 +50,10 @@ usually in 8px increments. Corner radii are 4px, 6px, and 8px.
 - `ErrorState`: safe visible copy, an alert announcement, and a supplied retry
   callback. It never displays exception details.
 
-The workspace shell is kept in the `(app)` route group so later public and
-authentication pages can use their own layouts. The implemented Overview and
-Monitors routes appear in navigation, with the current destination highlighted.
-The About dialog explains the preview's current
-limits and has working dismissal controls.
+The workspace shell is kept in the `(app)` route group so public and
+authentication pages use their own layouts. Overview, Monitors, Incidents and
+Notifications appear in navigation, with the current destination highlighted.
+The About dialog explains check freshness and incident behavior.
 
 ## Accessibility and responsive behavior
 

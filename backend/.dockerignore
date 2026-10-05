@@ -2,6 +2,8 @@
 !Dockerfile
 !requirements.lock
 !requirements-dev.lock
+!requirements-container.lock
+!requirements-container-build.lock
 !alembic.ini
 !pyproject.toml
 !app/

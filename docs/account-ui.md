@@ -1,11 +1,10 @@
 # Account interfaces
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 6 connects the account API to browser forms. It adds no monitor APIs,
-monitor forms, or monitoring data.
-
-Milestone 8 adds [monitor management](monitor-ui.md). Background session refresh
-now preserves the mounted workspace and unsaved forms. Refresh outages show a
-retry banner; a confirmed `401` still hides private content and redirects to login.
+Account forms use the session API through the same browser origin. The protected
+workspace preserves unsaved forms during background session refresh: outages show
+a retry banner, while a confirmed `401` hides private content and redirects to login.
+See [monitor management](monitor-ui.md) for authenticated configuration workflows.
 
 ## Start the local application
 
@@ -37,8 +36,8 @@ destination or browser-visible backend secret.
 
 Next.js and FastAPI still run as separate processes. The checked-in loopback
 topology supports direct development and local production-build validation.
-Production ingress and container networking remain later milestones; the
-eventual ingress must keep the same browser-facing `/api/v1` paths. Direct local
+The [container stack](containers.md) uses the fixed internal API hostname.
+The proposed production ingress must preserve browser-facing `/api/v1` paths. Direct local
 traffic is throttled by the backend's connecting IP, so users of this local proxy
 share an IP bucket. Do not weaken forwarded-header trust to bypass this limit.
 
@@ -138,8 +137,7 @@ Traces/video are off to avoid recording credentials; test reports and review
 screenshots stay in ignored local output directories.
 
 Validation used Windows Node 24, Python 3.13, PostgreSQL 18.3, Mailpit 1.31.2, and
-Playwright Chromium. WSL2 Ubuntu validation remains pending until that environment
-is supplied. No global installation, permission changes, Git operations, or
+Playwright Chromium. Current Linux validation is recorded in the [release report](portfolio-release.md). No global installation, permission changes, Git operations, or
 cloud deployment is part of this milestone.
 
 References: [Next.js rewrites](https://nextjs.org/docs/app/api-reference/config/next-config-js/rewrites),

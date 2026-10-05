@@ -1,12 +1,12 @@
 # Release and operations runbook
 
-Milestone 20, 2026-10-02. This is an **unexecuted cloud runbook**. Only the local validation described in the [audit](release-audit.md) was performed. Publishing, resource creation, production migrations and public DNS require separate authorization. The [proposal](deployment-proposal.md) defines the resources and costs; current development Compose is not a production manifest.
+Milestone 20, 2026-10-02. This is an **unexecuted cloud runbook**. Only local validation was performed; see the [current container release evidence](container-release.md) and the [historical audit](release-audit.md). Publishing, resource creation, production migrations and public DNS require separate authorization. The [proposal](deployment-proposal.md) defines the resources and costs; current development Compose is not a production manifest.
 
 ## Release gate and inventory
 
 A release operator owns the checklist and a second reviewer should review security/network and restore evidence before public launch. Record actual names, timestamps and evidence; no reviewers or approvals are implied here.
 
-1. Resolve the deployment blockers in the audit. Update vulnerable base packages/images and rescan **all** selected runtime images, including the eventual ingress/host. For each residual finding record package, advisory, reachability, vendor status, mitigation, accountable owner and expiry; never suppress a severity globally. Reject unreviewed critical/high findings.
+1. Resolve the deployment blockers in the audit. Update vulnerable base packages/images and rescan **all** selected runtime images, including the eventual ingress/host. For each residual finding record package, advisory, reachability, vendor status, mitigation, accountable owner and expiry; never suppress a severity globally. Reject unreviewed critical/high findings. Also review interpreter and embedded-library vendor advisories against actual runtime versions/linkage: package scans missed CPython and bundled OpenSSL findings in the [October 5 review](container-release.md).
 2. Choose domain, account, region, budget and operator. Validate AWS engine/class availability, SES production access and alarm delivery. Review IAM grants, production configuration and data retention. No fixture exceptions, test credentials, test database initializer or Mailpit.
 3. Build locked dependencies and scanned base digests; record source SHA-256 manifest, image content IDs and migration head. Record the previous compatible image digest before publishing. Scan the final images after build, not just lockfiles. ECR tags are immutable; deploy digests. Publishing remains disabled until authorized.
 4. Run the local checks below, then staged cloud probes for real DNS/TLS, metadata/private-target rejection, redirects, deadlines, client-IP trust, cookie flags, Origin/CSRF rejection, auth ownership, SES, pending reconciliation and worker replacement. Do not use customer targets without permission. Verify host/task limits and database connection headroom.
@@ -20,13 +20,13 @@ Use the existing Python `.venv`, Node 24/npm 11, Docker, and project-local brows
 ```bash
 .venv/bin/ruff check backend
 .venv/bin/ruff format --check backend
-.venv/bin/ruff check scripts containers
-.venv/bin/ruff format --check scripts containers
+.venv/bin/ruff check --config backend/pyproject.toml scripts containers
+.venv/bin/ruff format --check --config backend/pyproject.toml scripts containers
 (cd backend && ../.venv/bin/mypy app)
 .venv/bin/python -m pytest scripts/tests -q
 (cd frontend && npm run check && npm run api:check && npm run build)
-BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env build api frontend
-BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env -f compose.yaml -f compose.test.yaml build backend-tests
+BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env build --no-cache --pull api frontend postgres redis
+BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env -f compose.yaml -f compose.test.yaml build --no-cache --pull backend-tests
 .venv/bin/python scripts/verify_local_stack.py
 ```
 
@@ -49,8 +49,8 @@ Proposed host schedule: daily at 02:00 UTC, PostgreSQL 18 `pg_dump --format=cust
 Monthly, restore the latest backup to a **new isolated database/host**, using matching PostgreSQL major version and the recorded application image. Deny outbound probe/email delivery during restoration; do not start Beat. Validate archive format/checksum, restore transaction success, Alembic head, all-table counts/fingerprints and critical relationships, and application read paths. Existing `scripts/local_stack.py restore` deliberately requires a new `devpulse_restore_<name>_test` database and rejects overwrite. Example against an explicitly disposable local stack:
 
 ```bash
-.venv/bin/python scripts/local_stack.py --project LOCAL_DISPOSABLE_PROJECT backup .cache/new-release-backup.dump
-.venv/bin/python scripts/local_stack.py --project LOCAL_DISPOSABLE_PROJECT restore .cache/new-release-backup.dump --database devpulse_restore_release_test
+.venv/bin/python scripts/local_stack.py --project devpulse-local-test backup .cache/new-release-backup.dump
+.venv/bin/python scripts/local_stack.py --project devpulse-local-test restore .cache/new-release-backup.dump --database devpulse_restore_release_test
 ```
 
 The helper is local-only and does not upload or select production targets. The cloud implementation must preserve these refusal/transaction guarantees. Never run `pg_restore --clean` against the live database. Keep restored schedules paused and notifications isolated until an operator approves their reconciliation. Old sessions and consumed tokens may be present in an older backup: revoke restored sessions/auth tokens using a reviewed transactional maintenance procedure before reopening accounts. Check delivery state before resuming notifications to avoid unexpected repeat emails.

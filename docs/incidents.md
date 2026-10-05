@@ -127,7 +127,7 @@ dedicated `_test` database and test Redis connection. From `backend/`:
 ```bash
 python -m ruff check . --no-cache
 python -m ruff format --check . --no-cache
-python -m mypy --cache-dir /tmp/devpulse-m12-mypy
+python -m mypy app
 python -m pip check
 python - <<'PYTEST'
 import os
@@ -186,9 +186,9 @@ cache; see the [development guide](development.md) for normal browser setup.
   status filtering, open/resolved details, refresh/reload, retained evidence, and
   no horizontal overflow on the detail view. Other SMTP-dependent browser flows
   were not rerun.
-- Linux Chromium was downloaded under `/tmp/devpulse-m12-browsers`. Its missing
+- Linux Chromium was downloaded into a project-local cache. Its missing
   NSPR, NSS, and ALSA runtime libraries were downloaded from Ubuntu packages and
-  extracted under `/tmp/devpulse-m12-browser-libs`, supplied through a test-only
+  extracted into a project-local directory, supplied through a test-only
   `LD_LIBRARY_PATH`. No machine packages or services were installed or changed.
   The temporary Node toolchain was reused from milestone 11.
 

@@ -1,0 +1,112 @@
+{
+  "review_date": "2026-10-04",
+  "environment": {
+    "platform": "Ubuntu 24.04 WSL2",
+    "python": "3.13.15",
+    "node": "24.21.0",
+    "postgresql": "18.6",
+    "redis": "real local service",
+    "celery": "real prefork workers and Beat"
+  },
+  "backend": {
+    "tests": "317",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "316.764"
+  },
+  "real_worker_tests_included": 17,
+  "frontend": {
+    "tests_passed": 107,
+    "test_files": 19,
+    "format": "passed",
+    "eslint": "passed",
+    "typescript": "passed",
+    "api_contract": "passed",
+    "production_build": "passed"
+  },
+  "native_browser_suites": [
+    {
+      "suite": "accounts-monitors",
+      "passed": 6,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "incidents",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "dashboard",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "history",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "assertions",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "notifications",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "demo",
+      "passed": 1,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  ],
+  "operational_tests_passed": 20,
+  "ruff": {
+    "backend_files": 115,
+    "operational_files": 9,
+    "lint": "passed",
+    "format": "passed"
+  },
+  "mypy": {
+    "files": 67,
+    "status": "passed"
+  },
+  "pip_check": "passed",
+  "actionlint": "1.7.12 passed",
+  "migrations": {
+    "head": "f16b4d8e302a",
+    "empty_schema_upgrade": "passed",
+    "schema_drift": "passed",
+    "roundtrip": "passed"
+  },
+  "blocked": {
+    "reason": "Docker launcher reports no usable Docker command / inactive WSL integration.",
+    "checks": [
+      "Clean Compose startup and private service connectivity",
+      "Final application/test image builds and scans",
+      "Two container browser tests",
+      "Ten Compose outage/restart/restore smoke checks",
+      "Final 100-monitor 10000-probe benchmark rerun"
+    ]
+  },
+  "benchmark_reference": {
+    "path": "docs/evidence/m19-performance-2026-09-30.json",
+    "date": "2026-09-30",
+    "rerun": false
+  },
+  "warnings": [
+    "Existing Starlette/AnyIO deprecations",
+    "Unpatched braces advisory in development tool chain",
+    "Unresolved infrastructure and historical runtime image advisories"
+  ],
+  "public_deployment": false
+}

@@ -85,10 +85,15 @@ it("preserves loaded incidents on a refresh failure", async () => {
   ).toBeVisible();
 });
 it("renders retained evidence after raw check references are removed", async () => {
+  vi.mocked(getIncident).mockResolvedValue({
+    ...incident,
+    started_at: "2025-12-31T19:00:00-05:00",
+  });
   mount(<IncidentDetailView id={incident.id} />);
   expect(
     await screen.findByRole("heading", { name: incident.monitor_name }),
   ).toBeVisible();
+  expect(screen.getAllByText("2026-01-01 00:00:00 UTC")).toHaveLength(2);
   expect(
     within(screen.getByRole("region", { name: "Opening evidence" })).getByText(
       "HTTP 503",

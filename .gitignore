@@ -34,3 +34,18 @@ build/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Local cloud credentials, editor state, and database exports
+.aws/
+.vscode/
+.idea/
+*.env
+*.dump
+*.backup
+*.db
+*.sqlite
+*.sqlite3
+*.p12
+*.pfx
+*.swp
+*.swo

@@ -1,9 +1,10 @@
 # Account and session API
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 5 implements account access at the API level. Milestone 6 adds browser
-forms, route protection, and same-origin forwarding; see the [account UI guide](account-ui.md).
-Unverified accounts may log in. Milestone 7 requires verified email for creating
-or enabling monitors; see the [monitor API guide](monitors.md).
+DevPulse uses database-backed sessions, browser account forms and same-origin API
+requests. Unverified accounts may sign in, but creating or enabling monitors
+requires verified email. See the [account UI](account-ui.md) and
+[monitor API](monitors.md) guides.
 
 ## Local prerequisites and startup
 
@@ -210,8 +211,7 @@ explicitly enabled without a working Mailpit. Use a local test instance only.
 The test covers receipt and use of both kinds of code without printing them.
 
 Validation for this milestone used Windows Python 3.13, PostgreSQL 18.3, and
-portable Mailpit 1.31.2. WSL2 Ubuntu validation remains pending availability of
-that environment. Existing Starlette/AnyIO test-client deprecations remain
+portable Mailpit 1.31.2. Current Linux validation is recorded in the [release report](portfolio-release.md). Existing Starlette/AnyIO test-client deprecations remain
 visible. No frontend changes, Docker services, or deployment were introduced.
 
 References: [OWASP CSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html),

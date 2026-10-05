@@ -238,10 +238,12 @@ def run(args):
             passed("Redis outage and reconnect reconcile PostgreSQL pending work")
 
             stack.command("stop", "postgres")
+            # A stopped container loses its Docker DNS record. Allow the resolver's
+            # timeout as well as the database connection timeout before asserting 503.
             code = (
                 "import httpx; "
-                "print(httpx.get('http://127.0.0.1:8000/health/ready').status_code); "
-                "print(httpx.get('http://127.0.0.1:8000/health/live').status_code)"
+                "print(httpx.get('http://127.0.0.1:8000/health/ready',timeout=15).status_code); "
+                "print(httpx.get('http://127.0.0.1:8000/health/live',timeout=3).status_code)"
             )
             require(
                 stack.command("exec", "-T", "api", "python", "-c", code).split() == ["503", "200"],

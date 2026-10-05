@@ -23,10 +23,10 @@ consumes both `maintenance` and `notifications`. Milestone 18 adds an optional
 [Dockerized local stack](containers.md); the native workflow below remains supported.
 AWS and deployment remain deferred.
 
-The examples use the existing project location:
+Run the examples from your local project directory:
 
 ```bash
-cd /home/mail2/projects/devpulse
+cd devpulse
 ```
 
 Do not share `node_modules`, Python virtual environments, or `.next` output
@@ -83,19 +83,19 @@ dismissal, labeled fields, feedback announcements, and palette contrast. They
 run locally in jsdom without an API server or external websites. Browser-based
 responsive and focus checks remain necessary because jsdom does not lay out CSS.
 
-The initial Windows checks do not replace a WSL validation run. Ubuntu/WSL was
-not available during the foundation work. Continue to keep platform-specific
-dependency directories separate.
+See the [final validation report](portfolio-release.md) for current Linux results.
+Keep platform-specific dependency directories separate.
 
 ## Backend
 
 In a separate WSL terminal, from the project root:
 
 ```bash
-# Use the existing root .venv (Python 3.13.15 in this workspace).
+# On a fresh checkout, create the project environment first.
+python3.13 -m venv .venv
 source .venv/bin/activate
 cd backend
-python -m pip install --require-hashes -r requirements-dev.lock --cache-dir /tmp/devpulse-pip-cache
+python -m pip install --require-hashes -r requirements-dev.lock --cache-dir ../.cache/pip
 ```
 
 Follow the [database guide](database.md) to create dedicated development/test

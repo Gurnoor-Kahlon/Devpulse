@@ -1,11 +1,11 @@
 # Dashboard analytics and polling
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 13 replaces the Overview placeholder with owned PostgreSQL aggregates,
-current monitor states, recent incidents, and Recharts trends. It uses the
-existing scheduler/worker pipeline and does not dispatch probes from reads.
-Milestone 14 adds [per-monitor analytics and check-history pagination](monitor-history.md)
-using the same metric rules. [Assertions](assertions.md) and [notifications/retention](notifications.md)
-are implemented in milestones 15 and 16. Public demo data and benchmarks remain deferred.
+The Overview page combines owned PostgreSQL aggregates, current monitor states,
+recent incidents and Recharts trends. It reads stored results without dispatching
+probes. [Monitor details](monitor-history.md) use the same metric definitions;
+[assertions](assertions.md), [notifications](notifications.md), and the restricted
+[public demo](public-demo.md) share the existing monitoring pipeline.
 
 ## Metric definitions
 
@@ -120,7 +120,7 @@ run the suite against the dedicated `_test` database and Redis:
 ```bash
 python -m ruff check . --no-cache
 python -m ruff format --check . --no-cache
-python -m mypy --cache-dir /tmp/devpulse-m13-mypy
+python -m mypy app
 python -m pip check
 python -m alembic current --check-heads
 python -m alembic check
@@ -189,4 +189,3 @@ and [TanStack Query v5 query API](https://tanstack.com/query/latest/docs/framewo
 
 All test servers and worker/Beat processes were stopped by their harnesses.
 No development observation data was created. This record predates milestone 14.
-Suggested commit: `feat: add monitoring dashboard analytics and polling`.

@@ -1,4 +1,5 @@
-# Public demo and landing page (milestone 17)
+# Public demo and landing page
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
 The server-rendered `/` landing page links to `/demo`, sign-in, and the existing
 registration flow. Signup requires real email verification before monitor creation.
@@ -139,12 +140,15 @@ npm run build
 TEST_DEMO_FIXTURES=1 npm run test:e2e -- demo.spec.ts
 ```
 
-On this workspace, the existing local browser dependencies require:
+Install Chromium into a project-local cache from `frontend/`:
 
 ```bash
-export PLAYWRIGHT_BROWSERS_PATH=/home/mail2/projects/devpulse/.cache/playwright-linux
-export LD_LIBRARY_PATH=/home/mail2/projects/devpulse/.cache/browser-libs/extracted/usr/lib/x86_64-linux-gnu
+export PLAYWRIGHT_BROWSERS_PATH="$PWD/../.cache/playwright"
+npx --no-install playwright install chromium
 ```
+
+Chromium also requires its platform runtime libraries. Use a machine or runner
+that supplies them; see [browser setup](account-ui.md#browser-tests).
 
 The browser flow checks real public metrics and private API denial, desktop/mobile
 layout, keyboard skip/table navigation, reduced motion, read-only refresh, and the
@@ -173,4 +177,5 @@ captures for fixture provenance and private data; copying captures does not edit
   No new dependencies, migrations, development-account publications, machine-level
   installations, or Git operations were needed.
 
-Containerization, CI/performance work, and deployment remain outside milestone 17.
+Current container and CI workflows are documented in [containers](containers.md)
+and [performance](performance.md). Deployment remains unapproved.

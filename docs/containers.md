@@ -1,10 +1,18 @@
-# Dockerized local stack (milestone 18)
+# Dockerized local stack
 
 This is a local development and validation stack. It does not provision cloud
 resources or publish a site. Use the Docker CLI from the Ubuntu workspace, not
 Docker Desktop's internal WSL distribution. An existing Docker Engine and Compose
 are prerequisites; no machine installation, host permission, ownership, or shell
 configuration changes are needed.
+
+Upgrading an existing Debian-based stack requires a logical backup/restore into
+a new Alpine PostgreSQL cluster before cutover. Do not start the new image on an
+old database volume; read the migration caution under services and persistence.
+
+The first frontend build compiles Node against patched system OpenSSL. That cold
+step took about 195 minutes with two compiler jobs in the verified run; unchanged
+builds reuse the compiled stage. See [release build evidence](container-release.md).
 
 ## Start and stop
 
@@ -94,10 +102,32 @@ The separate test target adds test code and the hashed development dependencies.
 PostgreSQL query/parameter/error-detail logging is disabled to keep private row
 values out of container logs; application logs retain their existing safe format.
 
+All four runtime images are built locally from immutable base-image digests.
+Python 3.13.16, Node 24.21.0 and PostgreSQL 18 use Alpine 3.24.
+Node is built from the checksummed upstream source against OpenSSL 3.5.9;
+psycopg 3.3.6 uses its C implementation linked to system libpq 18.6 and patched
+OpenSSL, instead of bundled binary-wheel libraries. Build tools stay in build
+stages. A cold frontend build compiles Node from source and takes substantially
+longer than copying the upstream binary; subsequent unchanged local builds can
+reuse that stage. The host Python environment remains 3.13.15. PostgreSQL's
+Go-based `gosu` helper is replaced by packaged `su-exec` with the same direct
+privilege-drop/exec behavior; its nghttp2 library is patched. Redis retains 7.4.11
+on Alpine 3.21 with pinned OpenSSL security revisions. Alpine 3.21 main support
+ends **2026-11-01**; rebase Redis and repeat validation before that date.
+
+**Existing Debian PostgreSQL volumes:** do not attach an existing Bookworm data
+volume directly to the Alpine image. The libc/locale behavior and database user
+ID differ. Keep the old digest available, take a logical backup using the old
+stack, restore into a new isolated Alpine cluster, validate all data and indexes,
+and plan a separate cutover. The release checks use fresh volumes; they do not
+migrate personal or production databases. Shutdown/restart checks reuse only the
+new Alpine volumes. Native Ubuntu PostgreSQL is unaffected.
+
 Base images are pinned by immutable registry digest. Python runtime dependencies
 use `pip --require-hashes`; frontend dependencies use `npm ci` with the existing
-lockfile. No project dependency update is part of this milestone. Updating an
-image pin is an explicit future maintenance change followed by these checks.
+lockfile. Update image pins deliberately and rerun the checks below.
+Known release advisories and validation gaps are listed in the
+[current release report](portfolio-release.md).
 
 ## Readiness, migrations and restart semantics
 
@@ -106,7 +136,7 @@ wait for healthy PostgreSQL, then a successful migration exit, before starting
 application services. Redis and Mailpit health are also prerequisites. The frontend
 waits for API readiness. A failed migration prevents application startup. Migrations
 are explicit in their own service, never run independently by every replica.
-Current migration head remains `f16b4d8e302a`; this milestone adds no migration.
+Current migration head is `f16b4d8e302a`.
 
 API health checks call `/health/ready`, which requires PostgreSQL. `/health/live`
 remains available during database loss. Worker/Beat checks verify their PID and
@@ -175,7 +205,7 @@ Build the runtime/test images and run the dedicated, uniquely named smoke projec
 
 ```bash
 python3 scripts/local_stack.py init
-docker compose --env-file .cache/compose.env build api frontend
+docker compose --env-file .cache/compose.env build api frontend postgres redis
 docker compose --env-file .cache/compose.env -f compose.yaml -f compose.test.yaml build backend-tests
 .venv/bin/python scripts/verify_local_stack.py
 ```
@@ -256,12 +286,12 @@ continues to work and is documented separately in [development](development.md).
 - The smoke summary and test dump are retained locally in
   `.cache/devpulse-smoke-4ed1fbec/`; browser captures are in `.cache/ui-review/m18/`.
   Disposable validation containers/volumes were removed after verification. Existing
-  Trackline containers and host PostgreSQL/Redis were not changed.
+  unrelated containers and host PostgreSQL/Redis were not changed.
 
-Suggested commit: `feat: add reproducible local Docker stack and restore checks`.
 
-Milestone 18 is complete. CI/performance infrastructure (milestone 19), release
-preparation and deployment (milestone 20) are not included.
+The result above is historical. See [CI/performance](performance.md) and the
+[current release report](portfolio-release.md) for subsequent validation.
+Deployment remains unapproved.
 
 ## Milestone 20 release audit follow-up
 

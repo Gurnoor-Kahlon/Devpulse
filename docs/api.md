@@ -3,8 +3,11 @@
 DevPulse exposes process/database health, account/session and monitor APIs, and
 development API documentation. See the [authentication guide](authentication.md)
 for account endpoints, cookies, CSRF, SMTP configuration, and recovery, and the
-[monitor guide](monitors.md) for owned configuration CRUD. Probe execution and
-jobs belong to later milestones.
+[monitor guide](monitors.md) for owned configuration CRUD.
+[Workers](jobs.md) and the [scheduler](scheduling.md) execute checks independently;
+[dashboard](dashboard.md), [history](monitor-history.md), [incidents](incidents.md),
+[assertions](assertions.md), [notifications](notifications.md) and
+[demo](public-demo.md) document the other implemented API groups.
 
 ## Application lifecycle
 
@@ -79,7 +82,7 @@ Errors have this shape:
 ```
 
 `fields` is present only for validation failures. The field example illustrates
-the shared contract; it is not an implemented monitor or account endpoint.
+the shared validation contract used by account and monitor endpoints.
 
 - Request validation failures return `422` and safe field descriptions. Input
   values, validation context, and custom validator exception messages are omitted.

@@ -1,6 +1,7 @@
 # Monitor detail analytics and check evidence
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 14 adds `/monitors/[id]`. Monitor names in the list open this detail
+`/monitors/[id]` shows stored monitor history. Monitor names in the list open this detail
 view; Edit actions still open `/monitors/[id]/edit`. Incident details also link
 back to their monitor's history. The page combines current configuration and
 health, scoped history windows, a latency trend, final HTTP status distribution,
@@ -8,9 +9,8 @@ paginated individual attempts, and the existing owned incident list.
 
 The same [visibility-aware polling](dashboard.md#polling) refreshes stored
 analytics, checks, and incidents. Reads never create runs, send network probes,
-retry failures, or transition incidents. No new dependencies, database tables,
-migrations, retention jobs, or response assertions were introduced by milestone 14.
-Milestone 15 adds [assertion snapshots](assertions.md) to expanded check and incident evidence.
+retry failures, or transition incidents. Expanded check and incident evidence
+includes retained [assertion snapshots](assertions.md).
 
 ## Owned read-only API
 
@@ -119,7 +119,7 @@ head is now `f16b4d8e302a` (milestone 16). From the activated backend directory:
 ```bash
 python -m ruff check . --no-cache
 python -m ruff format --check . --no-cache
-python -m mypy --cache-dir /tmp/devpulse-m14-mypy
+python -m mypy app
 python -m pip check
 python -m alembic current --check-heads
 python -m alembic check
@@ -181,5 +181,4 @@ its test schema. No Mailpit or development observations are required.
   No service configuration, file ownership, or permissions were changed.
 
 The harness stopped its own servers/workers and removed isolated test schemas.
-No development monitoring observations were created. Milestone 15 was not started.
-Suggested commit: `feat: add monitor detail analytics and check history`.
+No development monitoring observations were created.

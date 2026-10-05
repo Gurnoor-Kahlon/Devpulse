@@ -1,10 +1,10 @@
 # Response assertions
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 15 adds owned assertion definitions, an editor at
-`/monitors/[id]/assertions`, and bounded evaluation in the existing probe worker.
-Check history and opening, confirmation, and recovery incident evidence display
-captured definitions and results. Milestone 16 adds [notification delivery and
-retention jobs](notifications.md), preserving these snapshots.
+Owned response assertions are edited at `/monitors/[id]/assertions` and evaluated
+inside the bounded probe worker. Check history and incident evidence retain the
+definitions and results used for each observation.
+[Notification and retention jobs](notifications.md) preserve incident snapshots.
 
 ## Definitions and API
 
@@ -185,13 +185,5 @@ Nothing seeds or fabricates development monitoring history.
 The previous temporary runtime/browser caches were absent. Validation restored
 Node 24.21.0 from its checksum-verified official Linux archive, Linux Chromium,
 and unpacked browser support libraries in this project's `.cache/` only.
-To reuse these local validation assets from the repository root:
-
-```bash
-export PATH="$PWD/.cache/node24/node-v24.21.0-linux-x64/bin:$PATH"
-export PLAYWRIGHT_BROWSERS_PATH="$PWD/.cache/playwright-linux"
-export LD_LIBRARY_PATH="$PWD/.cache/browser-libs/extracted/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-```
-
-Suggested commit message: `feat: add bounded response assertions and retained evidence`.
-Milestone 15 is complete. Stop before milestone 16.
+Use Node 24 and project-local Chromium as described in the
+[browser test guide](account-ui.md#browser-tests).

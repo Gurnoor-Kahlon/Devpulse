@@ -1,5 +1,7 @@
 "use client";
 
+import { formatUtc } from "@/lib/format";
+
 import { AssertionEvidence } from "@/components/monitors/assertion-evidence";
 import { DeliveryList } from "@/components/notifications/delivery-list";
 import Link from "next/link";
@@ -35,11 +37,11 @@ function Evidence({
         </div>
         <div>
           <dt className="text-muted">Started</dt>
-          <dd>{new Date(value.started_at).toLocaleString()}</dd>
+          <dd>{formatUtc(value.started_at)}</dd>
         </div>
         <div>
           <dt className="text-muted">Finished</dt>
-          <dd>{new Date(value.finished_at).toLocaleString()}</dd>
+          <dd>{formatUtc(value.finished_at)}</dd>
         </div>
         <div>
           <dt className="text-muted">Request</dt>
@@ -123,17 +125,17 @@ export function IncidentDetailView({ id }: { id: string }) {
           <dl className="mb-6 flex flex-wrap gap-x-8 gap-y-3 text-sm">
             <div>
               <dt className="text-muted">First failure</dt>
-              <dd>{new Date(query.data.started_at).toLocaleString()}</dd>
+              <dd>{formatUtc(query.data.started_at)}</dd>
             </div>
             <div>
               <dt className="text-muted">Confirmed</dt>
-              <dd>{new Date(query.data.confirmed_at).toLocaleString()}</dd>
+              <dd>{formatUtc(query.data.confirmed_at)}</dd>
             </div>
             <div>
               <dt className="text-muted">Recovered</dt>
               <dd>
                 {query.data.resolved_at
-                  ? new Date(query.data.resolved_at).toLocaleString()
+                  ? formatUtc(query.data.resolved_at)
                   : "Not observed"}
               </dd>
             </div>

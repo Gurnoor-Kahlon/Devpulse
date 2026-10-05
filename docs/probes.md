@@ -1,11 +1,11 @@
 # Safe manual probes
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 9 executes one real GET or HEAD for an enabled, saved monitor owned by
-a verified account. There is no browser action or API endpoint for immediate
-probing. Milestone 10 adds [Celery execution and lease recovery](jobs.md).
-Milestone 11 adds [scheduling](scheduling.md); milestone 12 adds [scheduled retries
-and incident views](incidents.md). Milestone 14 adds [safe raw check history](monitor-history.md);
-[response assertions](assertions.md) are implemented in milestone 15.
+The executor performs a bounded GET or HEAD for a saved monitor owned by a
+verified account. [Celery workers](jobs.md) handle
+[scheduled probes](scheduling.md), [retries/incidents](incidents.md) and
+[response assertions](assertions.md). An operator CLI supports manual probes;
+there is no public arbitrary-URL probe endpoint.
 
 ## Run a saved monitor
 

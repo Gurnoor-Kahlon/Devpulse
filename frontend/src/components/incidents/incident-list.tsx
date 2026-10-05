@@ -1,5 +1,7 @@
 "use client";
 
+import { formatUtc } from "@/lib/format";
+
 import Link from "next/link";
 import { useState } from "react";
 import { usePollingQuery } from "@/lib/use-polling-query";
@@ -117,19 +119,17 @@ export function IncidentList({
                   <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted">
                     <div>
                       <dt>First failure</dt>
-                      <dd>{new Date(incident.started_at).toLocaleString()}</dd>
+                      <dd>{formatUtc(incident.started_at)}</dd>
                     </div>
                     <div>
                       <dt>Confirmed</dt>
-                      <dd>
-                        {new Date(incident.confirmed_at).toLocaleString()}
-                      </dd>
+                      <dd>{formatUtc(incident.confirmed_at)}</dd>
                     </div>
                     <div>
                       <dt>Recovery</dt>
                       <dd>
                         {incident.resolved_at
-                          ? new Date(incident.resolved_at).toLocaleString()
+                          ? formatUtc(incident.resolved_at)
                           : "Not observed"}
                       </dd>
                     </div>

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("incident history retains evidence across desktop and mobile after archive and pruning", async ({
   page,
-}) => {
+}, testInfo) => {
   test.skip(
     process.env.TEST_INCIDENT_FIXTURES !== "1",
     "Requires the opt-in isolated incident fixture.",
@@ -55,6 +55,11 @@ test("incident history retains evidence across desktop and mobile after archive 
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({
+      path: testInfo.outputPath(`incident-resolved-${width}.png`),
+      fullPage: true,
+    });
     await page.getByRole("link", { name: "Back to incidents" }).click();
     await page.getByLabel("Incident status").selectOption("open");
     await page

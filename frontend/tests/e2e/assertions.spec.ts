@@ -61,6 +61,7 @@ test("assertion editor saves real definitions while check and incident snapshots
         page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       )
       .toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: testInfo.outputPath(`assertions-${width}.png`),
       fullPage: true,

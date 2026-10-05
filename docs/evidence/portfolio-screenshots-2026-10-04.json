@@ -1,0 +1,104 @@
+{
+  "captured_on": "2026-10-04",
+  "provenance": "Actual Chromium captures from isolated real PostgreSQL/HTTP/SMTP fixtures. Controlled failures and disposable example.com accounts; no production data. Test retry clocks accelerated for native browser setup. No bitmap editing.",
+  "files": [
+    {
+      "path": "docs/screenshots/portfolio/dashboard-desktop.png",
+      "width": 1280,
+      "height": 1734,
+      "bytes": 176098,
+      "sha256": "fa938b3d9f2f6b0e2f1d220b58756fa60aed3a59fc2f177bb185dbdf121541de"
+    },
+    {
+      "path": "docs/screenshots/portfolio/dashboard-mobile.png",
+      "width": 360,
+      "height": 2913,
+      "bytes": 166503,
+      "sha256": "8fb6b2c337d0c66c169add15125368147137e517d5e71b27f01eb73ac498887a"
+    },
+    {
+      "path": "docs/screenshots/portfolio/monitor-history-desktop.png",
+      "width": 1280,
+      "height": 4083,
+      "bytes": 399814,
+      "sha256": "f9335f41fd317ad183b3e7912bdb594433481d2f2dfa5c2c7ec63162dc107645"
+    },
+    {
+      "path": "docs/screenshots/portfolio/monitor-history-mobile.png",
+      "width": 360,
+      "height": 5459,
+      "bytes": 367665,
+      "sha256": "ad83b41b59fd2f401c1c76c3f4555dea60c147860851a2612b61d93e4710077b"
+    },
+    {
+      "path": "docs/screenshots/portfolio/incident-desktop.png",
+      "width": 1280,
+      "height": 2304,
+      "bytes": 208003,
+      "sha256": "585c43bd6ee38ece4ccc73bffe35dc4f582b0d147dc3e5b75a20f8e0169bb050"
+    },
+    {
+      "path": "docs/screenshots/portfolio/incident-mobile.png",
+      "width": 360,
+      "height": 3368,
+      "bytes": 197756,
+      "sha256": "e8a5ec8b974aa958640ef24781ec8028c75aee9d45ee25ecbad9a4aec2cf6ace"
+    },
+    {
+      "path": "docs/screenshots/portfolio/notifications-desktop.png",
+      "width": 1280,
+      "height": 1523,
+      "bytes": 171440,
+      "sha256": "62096b9d7e23052f7f695be559dddc6878c0023e3b1561939007ceff60d53c15"
+    },
+    {
+      "path": "docs/screenshots/portfolio/notifications-mobile.png",
+      "width": 360,
+      "height": 1977,
+      "bytes": 148297,
+      "sha256": "1fd42eadb2f5c7b1de67ddb54bacc653d0149f761808b76f47e8ee546a0321a1"
+    },
+    {
+      "path": "docs/screenshots/portfolio/landing-desktop.png",
+      "width": 1280,
+      "height": 2973,
+      "bytes": 635947,
+      "sha256": "e0ea3407d8175c96749a2abab0ff2762c91fc8ad70fa57ecf4aab4b18f3efeff"
+    },
+    {
+      "path": "docs/screenshots/portfolio/landing-mobile.png",
+      "width": 360,
+      "height": 2766,
+      "bytes": 199783,
+      "sha256": "674836368e1b09f8255822b66068557a05dea73d46f8bc6f422eadcde2d9b64f"
+    },
+    {
+      "path": "docs/screenshots/portfolio/demo-desktop.png",
+      "width": 1280,
+      "height": 1758,
+      "bytes": 168605,
+      "sha256": "c0a6c796750a0771a9dfd5bacd2fee67a2c9c943816ae78c426a6f21ebd69dad"
+    },
+    {
+      "path": "docs/screenshots/portfolio/demo-mobile.png",
+      "width": 360,
+      "height": 2944,
+      "bytes": 174164,
+      "sha256": "20970aaa6357830f0bb2a5e1c69aa4e386fd79687af724fc53ba7e49386e383c"
+    },
+    {
+      "path": "docs/screenshots/portfolio/assertions-desktop.png",
+      "width": 1280,
+      "height": 1570,
+      "bytes": 144555,
+      "sha256": "774bd270f52bcf3af1a41f3b732a91c8ea78e4301ce38c3698af521e6a0d309e"
+    },
+    {
+      "path": "docs/screenshots/portfolio/assertions-mobile.png",
+      "width": 360,
+      "height": 1962,
+      "bytes": 119083,
+      "sha256": "37dab04e29cae722cdc9f17f504392ccfe594ec8d5a438ddb670a752f6f3940a"
+    }
+  ]
+}

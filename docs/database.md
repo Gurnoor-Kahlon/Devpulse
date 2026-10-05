@@ -1,4 +1,5 @@
 # PostgreSQL and migrations
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
 Milestone 4 established synchronous SQLAlchemy sessions and Alembic migrations.
 Revision `0001` records an empty baseline in `alembic_version`. Milestone 5 adds
@@ -56,15 +57,12 @@ If these names already exist, inspect their purpose before reusing them; do not
 drop an existing database to repeat setup. The database-owning roles can run
 local migrations without superuser or cluster-wide database-creation privileges.
 
-The current Ubuntu workspace already has `devpulse` and `devpulse_test` configured
-for peer authentication. Do not recreate roles or databases. The local backend
-uses a URL shaped like
-`postgresql+psycopg://mail2@localhost/devpulse?host=/var/run/postgresql`.
-The explicit Unix-socket query parameter selects peer authentication; `localhost`
-satisfies the application's explicit-host validation and is not used for TCP in
-this example. Substitute the existing matching local database role if different.
-Use `devpulse_test` for tests. No password or authentication-service changes are
-needed for this existing setup.
+For an existing local peer-authenticated PostgreSQL setup, reuse its matching
+OS/database role rather than recreating accounts. A URL can take the form
+`postgresql+psycopg://YOUR_LOCAL_ROLE@localhost/devpulse?host=/var/run/postgresql`.
+The Unix-socket query parameter selects peer authentication; the explicit host
+satisfies application validation. Use the separate `devpulse_test` database for
+tests. These are examples, not pre-provisioned accounts.
 
 Copy `backend/.env.example` to the ignored `backend/.env` and replace the database
 password placeholder. Percent-encode URL-special characters in credentials.

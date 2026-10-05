@@ -93,6 +93,7 @@ test("monitor management persists create, edit, pause, resume, and archive acros
   await expect(row.getByText("No data", { exact: true })).toBeVisible();
   await expect(row.getByText("Never checked")).toBeVisible();
   await assertNoOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: "../.cache/monitors-desktop.png",
     fullPage: true,
@@ -121,6 +122,7 @@ test("monitor management persists create, edit, pause, resume, and archive acros
   await page.setViewportSize({ width: 360, height: 780 });
   await page.getByLabel("Search monitors").clear();
   await assertNoOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: "../.cache/monitors-mobile.png",
     fullPage: true,
@@ -128,6 +130,7 @@ test("monitor management persists create, edit, pause, resume, and archive acros
   await row.getByRole("link", { name: "Edit Billing endpoint" }).click();
   await expect(page.getByLabel("Timeout (seconds)")).toHaveValue("8");
   await assertNoOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: "../.cache/monitor-form-mobile.png",
     fullPage: true,
@@ -143,6 +146,7 @@ test("monitor management persists create, edit, pause, resume, and archive acros
   await expect(archive).toBeFocused();
   await archive.click();
   await assertNoOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: "../.cache/monitor-archive-mobile.png",
     animations: "disabled",

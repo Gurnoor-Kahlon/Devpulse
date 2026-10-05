@@ -1,0 +1,262 @@
+{
+  "recorded_at": "2026-10-05T20:42:45.200467+00:00",
+  "scope": "Local release-container validation only; no deployment or cloud resource creation.",
+  "docker": {
+    "client": "29.2.0",
+    "server": "29.2.0",
+    "compose": "5.0.2",
+    "ubuntu": "24.04.5 LTS",
+    "accessible": true
+  },
+  "build": {
+    "no_cache": true,
+    "pull": true,
+    "platform": "linux/amd64",
+    "runtime_images": [
+      "devpulse-backend:local",
+      "devpulse-frontend:local",
+      "devpulse-postgres:local",
+      "devpulse-redis:local"
+    ],
+    "test_image": "devpulse-backend-tests:local",
+    "all_passed": true,
+    "logs_sha256": {
+      "final-build.log": "124bd6f39393b70739f13757fa175625e93f4d54a2f99479527e318ce4c5dd9c",
+      "frontend-license-build.log": "c260b6cad489dbdbe0c1d75ab78cacef28c09ef1bbe05865e9be9ca9fbbea367"
+    },
+    "node_compile_install_seconds": 11683.8,
+    "ci_job_timeout_minutes": 240,
+    "note": "All application/source/dependency stages built with --no-cache --pull. After this cold build, the final frontend runtime stage was freshly rebuilt with --no-cache-filter runtime to include upstream Node license notices, reusing the source-compiled Node stage produced in this same pass."
+  },
+  "backend": {
+    "passed": 317,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 374.13,
+    "warnings": 2,
+    "enabled": [
+      "unit",
+      "PostgreSQL integration",
+      "Redis",
+      "real prefork workers",
+      "scheduler",
+      "SMTP/Mailpit"
+    ],
+    "test_project_removed": true,
+    "python": "3.13.16",
+    "psycopg_implementation": "c"
+  },
+  "frontend": {
+    "tests_passed": 107,
+    "files_passed": 19,
+    "format": true,
+    "lint": true,
+    "types": true,
+    "api_contract": true,
+    "container_production_build": true
+  },
+  "container_browser": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 3.4
+  },
+  "operational_tests": {
+    "passed": 20,
+    "failed": 0
+  },
+  "static": {
+    "backend_ruff_lint": true,
+    "backend_ruff_format_files": 115,
+    "operational_ruff_lint": true,
+    "operational_ruff_format_files": 9,
+    "mypy_files": 67,
+    "actionlint_version": "1.7.12",
+    "actionlint_passed": true,
+    "test_image_pip_check": true
+  },
+  "smoke": {
+    "project": "devpulse-smoke-11c30da6",
+    "started_at": "2026-10-05T20:26:19.144648+00:00",
+    "checks": [
+      "fresh volume startup, readiness, migration head and schema drift",
+      "non-root application services, single Beat and loopback-only host ports",
+      "same-origin proxy, private API denial, signup and real SMTP verification",
+      "Beat to real Redis/prefork probes, durable retries, incident recovery and email delivery",
+      "pending run persists while probe worker is stopped and completes after restart",
+      "Redis outage and reconnect reconcile PostgreSQL pending work",
+      "database outage reports not-ready without losing API liveness and reconnects",
+      "Backup restores all row fingerprints and migration; existing restore target is rejected",
+      "Full container recreation preserves PostgreSQL rows and Redis AOF",
+      "complete stack restarts against retained data with idempotent migrations"
+    ],
+    "controlled_observations": 3,
+    "controlled_failed_runs": 1,
+    "snapshot": {
+      "rate_limit_buckets": {
+        "rows": 6,
+        "sha256": "1e7a65a071c98edee53debf1fdfb4f5f70e8dd18ca50f33cee725e0d7fe88784"
+      },
+      "users": {
+        "rows": 1,
+        "sha256": "53cf417bda2df544ae53b9b370e3ef0361c9ded9177ecb14ac63d411a0ee4141"
+      },
+      "auth_tokens": {
+        "rows": 1,
+        "sha256": "e086dce5d53bcd447ae5a23a05bce98dd46480adb139533953ba98387e10786d"
+      },
+      "monitors": {
+        "rows": 1,
+        "sha256": "d922f6614f22b4817ca5d0db448a3c25380afac57e708c6616f6a28487d22399"
+      },
+      "notification_channels": {
+        "rows": 1,
+        "sha256": "90ce563336320719e5199a26aced3c4ae78464b73f237e09eadaa9b74a7b98c4"
+      },
+      "sessions": {
+        "rows": 1,
+        "sha256": "1132f6e3c94aed8d3f9b947e6334756be50b0492934992eedc4a173f3757b64b"
+      },
+      "assertions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "check_runs": {
+        "rows": 5,
+        "sha256": "1feb6d789fb5752e453aaecb8aba6112d2840c40974e0ea3c27a9188f635dbcd"
+      },
+      "checks": {
+        "rows": 7,
+        "sha256": "ff6b112d2ded6f7cfabdae2aa7e116e41597f171d351755fdcff97e9c4da31cf"
+      },
+      "incidents": {
+        "rows": 1,
+        "sha256": "108681b32b8bca68130f4db50f231a4da8c69757a54ca479ff0fece361991e2c"
+      },
+      "notification_deliveries": {
+        "rows": 2,
+        "sha256": "5187d7318ea0e6f12f7cb3a2aef11c772eaa35380c80f67f0c290443682f5fb5"
+      },
+      "migration": "f16b4d8e302a"
+    },
+    "backup_sha256": "7405d6e108100a59e2ce9548749a11fb1ee2e1f216f3841391ec1a721c3dac84",
+    "status": "passed",
+    "finished_at": "2026-10-05T20:29:39.422639+00:00"
+  },
+  "smoke_project_removed": true,
+  "default_stack": {
+    "passed": true,
+    "overlay": "none",
+    "checks": [
+      "default development Compose fresh database migration and schema drift",
+      "frontend, proxy, anonymous API denial and default empty demo",
+      "PostgreSQL and Redis server processes dropped root privileges",
+      "Redis PONG; Compose healthy API, workers, Beat and frontend",
+      "default stack shutdown/recreate with retained volumes and idempotent migration"
+    ],
+    "versions": {
+      "api": "Python 3.13.16",
+      "frontend": "v24.21.0",
+      "postgres": "postgres (PostgreSQL) 18.6",
+      "redis": "Redis server v=7.4.11 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=40ff01a501d8e4b6"
+    },
+    "postgres_process_uids": [
+      70,
+      70,
+      70,
+      70
+    ],
+    "redis_process_uids": [
+      999,
+      999,
+      999,
+      999
+    ],
+    "project_removed": true
+  },
+  "initial_failures": [
+    {
+      "check": "first smoke PostgreSQL outage HTTP request",
+      "reason": "Docker DNS resolution took about five seconds, exceeding the default HTTP client timeout.",
+      "diagnostic": {
+        "readiness_status": 503,
+        "readiness_seconds": 5.073,
+        "liveness_status": 200
+      },
+      "fix": "Bounded 15-second readiness assertion timeout, 3-second liveness timeout; complete fresh-volume smoke rerun passed. No application health changes."
+    },
+    {
+      "check": "native operational fixture test under sandbox",
+      "reason": "Socket creation denied by sandbox.",
+      "fix": "Rerun with authorized loopback access; all 20 passed."
+    },
+    {
+      "check": "superseded intermediate benchmark",
+      "reason": "Direct vendor review discovered interpreter and bundled OpenSSL advisories missed by the first candidate package scans.",
+      "fix": "Stopped the benchmark, removed its isolated project, patched the runtime components and reran the entire 100-monitor/10000-probe workload. No aborted-run metrics are used."
+    },
+    {
+      "check": "runtime package version query format",
+      "reason": "apk info with named packages returned descriptions rather than the version-list format expected by the helper.",
+      "fix": "Read P/V records directly from the retained installed-package database; all pinned OpenSSL package revisions and binary linkage assertions passed. No image changes were needed."
+    }
+  ],
+  "npm_audit": {
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "all": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 5,
+      "critical": 0,
+      "total": 5
+    }
+  },
+  "deployment": {
+    "performed": false,
+    "resources_created": false,
+    "public_urls": []
+  },
+  "container_lock_audits": {
+    "requirements-container.lock": {
+      "known_advisories": 0
+    },
+    "requirements-container-build.lock": {
+      "known_advisories": 0
+    }
+  },
+  "frontend_https_check": {
+    "status": 200,
+    "authorized": true,
+    "protocol": "TLSv1.3",
+    "openssl": "3.5.9"
+  },
+  "runtime_linkage_evidence": "container-security-2026-10-05.json",
+  "benchmark": {
+    "passed": true,
+    "distinct_probed_monitors": 100,
+    "real_http_completed_responses": 10000,
+    "completed_successful_http_checks": 10000,
+    "probe_errors": {
+      "none": 10000
+    },
+    "completed_probes_per_second": 18.826,
+    "duration_seconds": 531.17,
+    "disposable_project_removed": true,
+    "dashboard_api_p95_ms": 49.364
+  },
+  "raw_log_sha256": {
+    "backend-tests.log": "edf126a3687eea0304b6f1755bac32578655b5d7d914329a949da93046d2a8be",
+    "container-browser.log": "b946a217581e2cf5c04df5684e1ffc5f1451734457ca9fbb6fccfd5bd182ff4d",
+    "stack-latest.log": "8f21ebbf1a730050f50b63321693be5507a398857a76349281fc99cf5b2d104e",
+    "default-stack.log": "bcdc83e0bc7567c5d431d41688de439b783aedffb92e20b411ef6d4af4901480",
+    "benchmark.log": "197280caaf53164210edf8e08d530f4c82c1b3d9d91866ec9f09368057850dcb"
+  }
+}

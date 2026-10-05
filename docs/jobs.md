@@ -1,9 +1,10 @@
 # Redis and Celery job execution
+Current validation and release gates: [portfolio release report](portfolio-release.md). Dated results below are historical.
 
-Milestone 10 moves saved-monitor probes outside the API into Linux Celery prefork
-workers. Operators can create manual runs. Milestone 11 adds [Beat scheduling
-and automatic reconciliation](scheduling.md); milestone 12 adds [failure retries
-and incidents](incidents.md). The milestone 10 validation record below is historical.
+Saved-monitor probes run outside the API in Linux Celery prefork workers.
+[Beat scheduling](scheduling.md) dispatches due monitors and reconciles durable
+pending work; [failure retries and incidents](incidents.md) use the same pipeline.
+Operators can also enqueue explicitly tagged manual runs.
 
 ## Local configuration and startup
 
@@ -13,14 +14,14 @@ No containers or machine installations are needed. From the project root:
 ```bash
 source .venv/bin/activate
 cd backend
-python -m pip install --require-hashes -r requirements-dev.lock --cache-dir /tmp/devpulse-pip-cache
+python -m pip install --require-hashes -r requirements-dev.lock --cache-dir ../.cache/pip
 ```
 
 `backend/.env` uses `DEVPULSE_DATABASE_URL`, `DEVPULSE_BROKER_URL`, and optionally
 `DEVPULSE_BROKER_KEY_PREFIX`; see [the template](../backend/.env.example).
 Settings are loaded regardless of the working directory; environment variables
-win. The current local PostgreSQL setup uses peer authentication through its
-Unix socket; see [database setup](database.md#local-setup). Keep test settings in
+win. Use the authentication method configured for your local PostgreSQL server;
+see [database setup](database.md#local-setup) for password and peer examples. Keep test settings in
 the separate ignored `backend/.env.test`, never in the application's `.env`.
 
 Redis defaults to `redis://127.0.0.1:6379/0` and prefix `devpulse:`. Only `redis`
@@ -161,7 +162,7 @@ is configuration only, not a service provisioner.
 python -m pip check
 python -m ruff check . --no-cache
 python -m ruff format --check . --no-cache
-python -m mypy --cache-dir /tmp/devpulse-m10-mypy
+python -m mypy app
 python - <<'PYTEST'
 import os
 import pytest

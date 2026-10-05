@@ -66,6 +66,7 @@ test("monitor detail uses real scoped history, paging, evidence and archived vie
         page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       )
       .toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: testInfo.outputPath(`monitor-history-${width}.png`),
       fullPage: true,

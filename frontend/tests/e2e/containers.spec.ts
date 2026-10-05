@@ -35,6 +35,7 @@ test("standalone container serves the public UI, images and same-origin API on d
         page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       )
       .toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: testInfo.outputPath(`container-${width}.png`),
       fullPage: true,

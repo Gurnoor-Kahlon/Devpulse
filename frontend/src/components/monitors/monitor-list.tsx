@@ -1,4 +1,6 @@
 "use client";
+
+import { formatUtc } from "@/lib/format";
 import { usePollingQuery } from "@/lib/use-polling-query";
 
 import Link from "next/link";
@@ -300,9 +302,7 @@ export function MonitorList() {
                           <dt className="inline">Latest check: </dt>
                           <dd className="inline">
                             {monitor.last_completed_check_at
-                              ? new Date(
-                                  monitor.last_completed_check_at,
-                                ).toLocaleString()
+                              ? formatUtc(monitor.last_completed_check_at)
                               : "Never checked"}
                           </dd>
                         </div>

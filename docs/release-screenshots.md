@@ -1,14 +1,23 @@
-# Release screenshots
+# Product screenshots
 
-Captured by the milestone 20 local Chromium suite on 2026-10-02 UTC. These are actual browser captures, not generated mockups. The public demo used an isolated PostgreSQL schema and real controlled HTTP probes, including intentionally induced failures. It contains three completed scheduled observations, not production history. The landing page embeds its labeled earlier local demo capture; it does not advertise current service availability.
+These are actual Chromium captures from the final local release pass on **2026-10-04**. The workspace uses disposable example.com accounts and real HTTP requests to controlled loopback fixtures. Failures are intentionally induced; test retry clocks are accelerated during browser fixture setup. These are product demonstrations, not production history, customer data or a claim of availability.
 
-The [manifest](evidence/m20-screenshots.json) records dimensions, sizes and SHA-256 hashes. Screenshots include only the public surface: no accounts, tokens, private endpoint URLs or response evidence. Desktop width is 1280px; mobile width is 360px. Long pages are captured in full.
+The [capture manifest](evidence/portfolio-screenshots-2026-10-04.json) records dimensions and SHA-256 hashes. Captures contain no passwords, verification codes, cookies, private production endpoints or response bodies. No bitmap editing was used. Desktop width is 1280px; mobile width is 360px. Pages are captured in full, including the intentionally long paginated monitor history.
 
-| Page | Desktop | Mobile |
+| Surface | Desktop | Mobile |
 | --- | --- | --- |
-| Landing | [1280 × 2973](screenshots/m20/landing-1280.png) | [360 × 2766](screenshots/m20/landing-360.png) |
-| Restricted demo | [1280 × 1758](screenshots/m20/demo-1280.png) | [360 × 2944](screenshots/m20/demo-360.png) |
+| Dashboard and analytics | [Overview](screenshots/portfolio/dashboard-desktop.png) | [Overview](screenshots/portfolio/dashboard-mobile.png) |
+| Monitor detail and check history | [Monitor history](screenshots/portfolio/monitor-history-desktop.png) | [Monitor history](screenshots/portfolio/monitor-history-mobile.png) |
+| Resolved incident and retained evidence | [Incident](screenshots/portfolio/incident-desktop.png) | [Incident](screenshots/portfolio/incident-mobile.png) |
+| Notification preferences and SMTP history | [Notifications](screenshots/portfolio/notifications-desktop.png) | [Notifications](screenshots/portfolio/notifications-mobile.png) |
+| Response assertion editor | [Assertions](screenshots/portfolio/assertions-desktop.png) | [Assertions](screenshots/portfolio/assertions-mobile.png) |
+| Landing page | [Landing](screenshots/portfolio/landing-desktop.png) | [Landing](screenshots/portfolio/landing-mobile.png) |
+| Restricted public demo | [Demo](screenshots/portfolio/demo-desktop.png) | [Demo](screenshots/portfolio/demo-mobile.png) |
 
-![Actual local restricted demo with clearly labeled controlled failures](screenshots/m20/demo-1280.png)
+![Actual dashboard with metrics, trends and incidents from controlled HTTP probes](screenshots/portfolio/dashboard-desktop.png)
 
-The layout review found readable labels and no horizontal overflow at the tested widths. The demo states its denominator, observed range, unknown gaps and run-weighted meaning; status is conveyed with text as well as color. Functional browser tests cover the signup CTA, read-only demo navigation and accessible validation feedback. See the [audit](release-audit.md) for the limits of accessibility/browser coverage.
+The dashboard/demo show denominators, observed ranges, unknown gaps and the run-weighted meaning of uptime. The monitor-history suite adds real manual requests to exercise pagination; those requests are excluded from scheduled uptime. The incident screenshot proves retained evidence still renders after raw history pruning. Notification captures show local SMTP acceptance, not inbox delivery. The landing page embeds its explicitly labeled earlier local capture.
+
+Blank-login, registration validation, monitor editing and archive-dialog captures were also reviewed locally. Keyboard/focus, contrast and no-horizontal-overflow checks passed within the [documented browser coverage](portfolio-release.md). This is not a full screen-reader or cross-browser accessibility certification.
+
+The [2026-10-02 public-only capture manifest](evidence/m20-screenshots.json) and files under `screenshots/m20/` remain historical evidence.
