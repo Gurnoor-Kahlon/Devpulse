@@ -1,23 +1,45 @@
-# Product screenshots
+# Real Docker showcase gallery
 
-These are actual Chromium captures from the final local release pass on **2026-10-04**. The workspace uses disposable example.com accounts and real HTTP requests to controlled loopback fixtures. Failures are intentionally induced; test retry clocks are accelerated during browser fixture setup. These are product demonstrations, not production history, customer data or a claim of availability.
+Captured October 5, 2026 from the complete local Docker stack: Next.js, FastAPI, PostgreSQL, Redis, Celery prefork workers and Beat. Five controlled demo endpoints produced **35 scheduled runs and 49 actual HTTP attempts**. Three incidents were confirmed, checkout recovered, and four incident/recovery emails were accepted by Mailpit. These are controlled observations, not production users or traffic.
 
-The [capture manifest](evidence/portfolio-screenshots-2026-10-04.json) records dimensions and SHA-256 hashes. Captures contain no passwords, verification codes, cookies, private production endpoints or response bodies. No bitmap editing was used. Desktop width is 1280px; mobile width is 360px. Pages are captured in full, including the intentionally long paginated monitor history.
+[Reproduce the scenario](showcase.md) · [Run and screenshot hashes](assets/showcase-evidence.json) · [Animation provenance](assets/animation-evidence.json).
 
-| Surface | Desktop | Mobile |
-| --- | --- | --- |
-| Dashboard and analytics | [Overview](screenshots/portfolio/dashboard-desktop.png) | [Overview](screenshots/portfolio/dashboard-mobile.png) |
-| Monitor detail and check history | [Monitor history](screenshots/portfolio/monitor-history-desktop.png) | [Monitor history](screenshots/portfolio/monitor-history-mobile.png) |
-| Resolved incident and retained evidence | [Incident](screenshots/portfolio/incident-desktop.png) | [Incident](screenshots/portfolio/incident-mobile.png) |
-| Notification preferences and SMTP history | [Notifications](screenshots/portfolio/notifications-desktop.png) | [Notifications](screenshots/portfolio/notifications-mobile.png) |
-| Response assertion editor | [Assertions](screenshots/portfolio/assertions-desktop.png) | [Assertions](screenshots/portfolio/assertions-mobile.png) |
-| Landing page | [Landing](screenshots/portfolio/landing-desktop.png) | [Landing](screenshots/portfolio/landing-mobile.png) |
-| Restricted public demo | [Demo](screenshots/portfolio/demo-desktop.png) | [Demo](screenshots/portfolio/demo-mobile.png) |
+## Overview
 
-![Actual dashboard with metrics, trends and incidents from controlled HTTP probes](screenshots/portfolio/dashboard-desktop.png)
+![Real dashboard: 35 observations, 80% observed uptime, three operational monitors and two open incidents](assets/dashboard.png)
 
-The dashboard/demo show denominators, observed ranges, unknown gaps and the run-weighted meaning of uptime. The monitor-history suite adds real manual requests to exercise pagination; those requests are excluded from scheduled uptime. The incident screenshot proves retained evidence still renders after raw history pruning. Notification captures show local SMTP acceptance, not inbox delivery. The landing page embeds its explicitly labeled earlier local capture.
+The 80% ratio reflects the deliberately induced failures in this short scenario. It is not an availability claim. Historical latency occupies one hourly bucket; unobserved hours remain empty.
 
-Blank-login, registration validation, monitor editing and archive-dialog captures were also reviewed locally. Keyboard/focus, contrast and no-horizontal-overflow checks passed within the [documented browser coverage](portfolio-release.md). This is not a full screen-reader or cross-browser accessibility certification.
+![Compact tour of real application pages](assets/showcase.gif)
 
-The [2026-10-02 public-only capture manifest](evidence/m20-screenshots.json) and files under `screenshots/m20/` remain historical evidence.
+The four-frame GIF is approximately 288 KiB. It uses real browser frames, resized and color-quantized only. Navigation order is dashboard → monitor history → earlier open incident → later recovery; it is not a continuous recording.
+
+## Monitor history and current states
+
+![Slower endpoint response-time history and actual individual checks](assets/monitor-history.png)
+
+![Five actual monitors with three operational and two down](assets/monitors.png)
+
+## Incident confirmation and recovery
+
+| Confirmed incident | Observed recovery |
+| --- | --- |
+| ![Checkout incident after three failed HTTP attempts](assets/incident-open.png) | ![The same incident resolved after a successful worker probe, with SMTP delivery history](assets/incident-recovery.png) |
+
+## Assertions
+
+![Saved typed JSON assertion requiring available to equal true](assets/assertion-config.png)
+
+[View the full assertion-failure capture](assets/assertion-result.png): the endpoint returned HTTP 200, but the stored JSON assertion failed. Expandable evidence records the expected value and failed result without retaining response bodies.
+
+## Mobile
+
+[View the real mobile dashboard](assets/dashboard-mobile.png), captured at 390px width.
+
+## Capture scope
+
+All observations came through Beat → Redis → maintenance dispatcher → Redis → prefork probes → PostgreSQL. The helper seeds only monitor/assertion configuration and advances next-due times. It never inserts check/run/incident history, alters recorded timestamps or accelerates retry deadlines. See the [scenario and source](showcase.md).
+
+Captures use a synthetic `portfolio@example.com` account. Playwright masks only loopback target URLs with a visible slate rectangle; statistics and evidence remain unchanged. No credentials, tokens, personal email, private targets, response bodies or filesystem paths appear. Screenshots are actual browser output, not designed mockups. The optional animation changes only image size and palette. Desktop captures use 1440px width; full-page images intentionally retain the application's evidence and caveats.
+
+Earlier native browser screenshots under `screenshots/portfolio/` and `screenshots/m20/` remain dated historical test evidence. Their manifests are [October 4](evidence/portfolio-screenshots-2026-10-04.json) and [October 2](evidence/m20-screenshots.json). Unlike the current Docker showcase, native fixture setup accelerated retry clocks; those earlier captures are not presented as this worker-driven run.

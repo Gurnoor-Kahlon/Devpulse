@@ -2,151 +2,168 @@
 
 **Reliability at a glance.**
 
-DevPulse monitors HTTP APIs on a schedule, records response times and assertion results, and follows failures through retries, incidents and recovery. A private workspace provides historical analytics and opt-in incident email; a read-only demo exposes only explicitly published monitoring summaries.
+DevPulse is a full-stack API monitoring platform built to explore background jobs, reliability engineering, incident detection, and observability. It runs locally with Docker and has been validated through automated tests and controlled load testing.
 
-[Product screenshots](docs/release-screenshots.md) · [Local setup](#running-locally) · [Documentation](docs/index.md) · [Release status](docs/portfolio-release.md)
+[Run locally](#run-locally) · [Reproduce the showcase](docs/showcase.md) · [Architecture and guides](docs/index.md) · [Validation evidence](docs/portfolio-release.md)
 
-**Deployment:** runs locally; no public application or live-demo URL is available. The [release report](docs/portfolio-release.md) records the remaining security and deployment gates.
+## Preview
 
-## Product preview
+![DevPulse dashboard with five controlled monitors, measured latency, uptime and open incidents](docs/assets/dashboard.png)
 
-![DevPulse dashboard showing observed uptime, response latency and incident history from controlled local HTTP probes](docs/screenshots/portfolio/dashboard-desktop.png)
+Actual application captures from the complete local Docker stack. Celery Beat and workers produced every displayed observation, retry, incident and recovery. These are deliberately controlled demo endpoints, not production traffic. The short observation period occupies a single hourly chart bucket; empty history stays empty.
 
-Actual browser capture from a disposable test account and real local HTTP probes, including deliberately induced failures. The displayed observations are test evidence, not production traffic or customer uptime. [View mobile, monitor history and notification captures](docs/release-screenshots.md).
+![Short tour of the actual dashboard, monitor history, open incident and recovery](docs/assets/showcase.gif)
+
+| Monitor latency history | Incident and recovery |
+| --- | --- |
+| ![Measured response latency for the slower controlled endpoint](docs/assets/monitor-history.png) | ![Resolved checkout incident with original failure, confirmation and recovery evidence](docs/assets/incident-recovery.png) |
+| Response assertion configuration | Actual monitor states |
+| ![JSON Pointer assertion requiring available to equal true](docs/assets/assertion-config.png) | ![Five monitored endpoints: healthy, slower, two failing and recovered](docs/assets/monitors.png) |
+
+[Full gallery, assertion failure evidence and capture provenance](docs/release-screenshots.md). Target URLs are masked in captures; measurements and evidence are unchanged.
 
 ## What it does
 
-- Schedule GET/HEAD checks with expected status, text and typed JSON assertions.
-- Track observed uptime and response latency across 24-hour, 7-day and 30-day windows.
-- Retry failures, confirm incidents after three failed attempts and record recovery on success.
-- Inspect individual attempts, retained incident evidence and notification delivery status.
-- Publish selected read-only summaries while keeping account data, target URLs and response evidence private.
-
-## Tech stack
-
-| Area | Technologies |
-| --- | --- |
-| Frontend | Next.js App Router, React, strict TypeScript, Tailwind CSS, TanStack Query, Recharts, Radix Dialog |
-| Backend | Python 3.13, FastAPI, Pydantic, SQLAlchemy, Alembic, HTTPX, dnspython |
-| Data and jobs | PostgreSQL 18, Redis, Celery prefork workers and Beat |
-| Testing | Pytest, Vitest, React Testing Library, Playwright Chromium, Mailpit |
-| Delivery tooling | Docker Compose, digest-pinned images, hashed Python locks, npm lockfile, GitHub Actions configuration |
+- Schedules HTTP API health checks and tracks response times and observed uptime.
+- Evaluates expected status codes, text assertions and typed JSON assertions.
+- Retries failures, confirms incidents after three failed attempts, and records recovery automatically.
+- Sends opt-in incident and recovery email notifications.
+- Provides historical analytics, individual check evidence and retained incident history.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    Browser -->|same-origin requests| Next[Next.js]
-    Next --> API[FastAPI]
+    Browser --> Next[Next.js]
+    Next -->|same-origin API proxy| API[FastAPI]
     API --> PG[(PostgreSQL)]
-    Beat[Celery Beat] -->|dispatch tick| Redis[(Redis broker)]
-    Redis --> Dispatcher[Maintenance worker]
-    Dispatcher -->|claim due and pending work| PG
-    Dispatcher -->|enqueue run UUIDs| Redis
-    Redis --> Probe[Probe worker]
-    Probe -->|bounded HTTP/S| Targets[Monitored APIs]
-    Probe -->|results and incident transitions| PG
-    Dispatcher -->|durable email deliveries| SMTP[SMTP]
+    Beat[Celery Beat] -->|dispatch ticks| Redis[(Redis)]
+    Redis --> Maintenance[Celery maintenance worker]
+    Maintenance -->|claim due monitors and pending runs| PG
+    Maintenance -->|enqueue run IDs| Redis
+    Redis --> Probe[Celery probe worker]
+    Probe -->|bounded HTTP requests| Endpoint[Monitored endpoint]
+    Probe -->|checks, incidents and recovery| PG
+    Maintenance -->|incident and recovery email| SMTP[SMTP / local Mailpit]
 ```
 
-PostgreSQL owns configuration, runs, fenced leases, incidents and delivery state. Redis carries task messages; it is not the history store. The browser polls stored results and never runs probes.
+PostgreSQL owns monitoring configuration, durable runs, fenced leases and history. Redis transports jobs. The browser reads stored observations; probes execute in workers.
 
-## Monitoring flow
+## Tech stack
 
-1. Beat triggers a bounded dispatcher; due monitors become durable pending runs.
-2. The dispatcher publishes run IDs through Redis after the database transaction commits.
-3. A Celery worker claims a fenced lease, validates the destination and performs the HTTP request.
-4. Status and configured assertions are evaluated within response-size and time limits.
-5. The worker persists the attempt and advances retry, incident or recovery state atomically.
-6. Dashboard/history reads reflect stored results; the notification worker processes durable email intent.
+| Area | Technologies |
+| --- | --- |
+| Frontend | Next.js, React, TypeScript, Tailwind CSS, TanStack Query, Recharts, Radix Dialog |
+| Backend | Python 3.13, FastAPI, Pydantic, SQLAlchemy, Alembic, HTTPX |
+| Data | PostgreSQL 18, Redis |
+| Background jobs | Celery prefork workers, Celery Beat |
+| Testing | Pytest, Vitest, React Testing Library, Playwright, Mailpit |
+| Infrastructure | Docker Compose, digest-pinned runtime images, hashed Python locks, npm lockfile, GitHub Actions configuration |
 
-## Reliability and security
+## Engineering highlights
 
-Late acknowledgments, duplicate-safe database effects and expiring fenced leases support recovery after worker loss. The dispatcher reconciles unpublished and expired work; missed intervals are not fabricated. Notification retries are independent of probing. Raw checks expire after 30 days while incidents retain compact evidence.
+- **Durable background execution:** Beat scheduling, Redis transport, bounded asynchronous HTTP checks, fenced leases and duplicate-safe database effects.
+- **Failure lifecycle:** durable retry state, three-attempt confirmation, automatic recovery and independently retried email delivery.
+- **Useful evidence:** immutable assertion snapshots, retained incident evidence, and history that distinguishes missing observations from downtime.
+- **SSRF protection:** every DNS answer validated, numeric connection pinning, TLS hostname verification, disabled redirects/proxies, and bounded response sizes and deadlines.
 
-Accounts use Argon2id password hashes, opaque database-backed sessions, email verification, CSRF tokens and exact Origin checks. API queries enforce ownership. Production mode requires secure cookies and HTTPS configuration. Secrets belong in ignored local configuration, not images or source.
+## Verified results
 
-The probe executor rejects unsafe protocols and private, loopback, reserved and metadata destinations; validates every DNS answer; pins the connection to a validated address; and preserves TLS hostname verification. Redirects and environment proxies are disabled. [Security details and current limitations](docs/portfolio-release.md#security-and-public-file-review).
+The final release validation recorded **317 backend tests**, **107 frontend component tests**, **12 browser workflows**, **20 operational safeguards**, and **all 10 container stack checks** passing. Two additional container browser tests and default Compose startup/restart also passed.
 
-## Testing
+The final four runtime images had **zero reported vulnerability advisories at every severity** in the October 5, 2026 Trivy scans, without suppression. The controlled local benchmark completed **10,000 successful HTTP probes across 100 simulated monitors**, at **18.826 probes/second** and **49.364 ms dashboard API p95**.
 
-Verified release checks: native browser coverage on **2026-10-04**, refreshed container and static checks on **2026-10-05**:
+[Exact images, dates, test scope and security evidence](docs/container-release.md). Native browser workflows were verified October 4; container/static validation and the benchmark were refreshed October 5. These results do not claim a hosted CI run or production usage.
 
-- **317 backend tests**, zero failures/skips, inside the final Alpine container: PostgreSQL, real Redis/Celery workers, scheduler recovery and SMTP.
-- **107 frontend tests** and **20 operational safeguard tests**.
-- **12 native Chromium tests** (October 4) and **2 container browser tests** (October 5).
-- **10 stack checks** plus a fresh default Compose startup/restart: migrations, health, actual jobs, outages, persistence and backup/restore.
-- Ruff lint/format, mypy, ESLint, TypeScript, API contract, actionlint and the container production build passed.
-- Four freshly rebuilt runtime images: **zero Trivy findings at every severity** in the October 5 scan; no advisory suppression.
+## Demo scenario
 
-[Container builds, advisory inventory and validation evidence](docs/container-release.md). The Actions workflow has been checked locally, not claimed as a successful hosted run.
+Five controlled endpoints demonstrate a healthy catalog, a slower search response, a billing outage, a JSON assertion failure, and checkout failure followed by recovery. The full Next.js/FastAPI/PostgreSQL/Redis/Celery/Beat stack produces the UI data. Configuration and next-due times are set by test-only tools; check rows, retry clocks, incidents and observation timestamps are never fabricated.
 
-## Performance
-
-The **2026-10-05 controlled local benchmark** completed **10,000 real HTTP probes across 100 simulated monitor configurations**, with **10,000 successful and zero failed probes**, two probe-worker processes and **18.826 completed probes/second**. Dashboard API p95 was **49.364 ms** under the documented sampling workload. Workload duration was **531.17 seconds**.
-
-These are accelerated local fixture measurements using the final scanned images, not production usage, customer counts, internet latency or a capacity guarantee. [Method, hardware, queue/database evidence and reproduction](docs/performance.md).
-
-## Running locally
-
-The primary path uses Docker Engine with Compose v2-compatible commands and Python 3 for the initializer. On Windows, use Ubuntu WSL2 with Docker integration enabled. Node/Python application runtimes, PostgreSQL, Redis and Mailpit run in containers.
-
-For an existing Debian-based PostgreSQL stack, read the [logical backup/restore migration warning](docs/containers.md) before starting these Alpine images. Use a new database volume.
-
-The first build compiles Node against patched OpenSSL and can take several hours; unchanged rebuilds reuse the compiled stage. [Measured build details](docs/container-release.md).
-
-From the project directory:
+With the images built and the [showcase prerequisites](docs/showcase.md#reproduce) installed:
 
 ```bash
-python3 scripts/local_stack.py init
-BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env config --quiet
-BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env up --build -d --wait
+.venv/bin/python scripts/showcase.py
 ```
 
-Open [the local application](http://localhost:3000) and [Mailpit](http://localhost:8025). Register, retrieve the verification code from Mailpit, verify your account, then create a monitor for a public HTTP/S endpoint you are authorized to check. Enable incident email in **Notifications** if desired. The demo is empty until an operator explicitly publishes a monitor.
+The command creates an isolated stack, captures the real UI into `.cache/showcase-output/`, verifies results, and removes its disposable containers and volumes. [Scenario, commands, inspection mode and evidence](docs/showcase.md).
 
-Compose starts PostgreSQL, Redis, migrations, API, frontend, probe/maintenance workers and exactly one Beat. Only the web and Mailpit interfaces are exposed, on loopback. To stop while retaining data:
+## Run locally
+
+1. Clone this repository using its GitHub **Code** menu, or download and extract its ZIP. Open a terminal in the project directory.
+2. Copy the optional frontend environment example and generate Compose's private database environment:
+
+   ```bash
+   cp .env.example frontend/.env.local
+   python3 scripts/local_stack.py init
+   ```
+
+   The example disables Next.js CLI telemetry for native tooling. Compose uses `.cache/compose.env`; the initializer generates its random database password and preserves an existing file. Application services need no native Python or Node installation to run in Docker.
+
+3. Start the complete stack (Docker Engine/Compose and Python 3 are prerequisites):
+
+   ```bash
+   BUILDX_GIT_INFO=false docker compose --env-file .cache/compose.env up --build -d --wait
+   ```
+
+   Migrations run automatically before the API and workers start. **The first cold build can take several hours** because Node is compiled against patched system OpenSSL; subsequent unchanged builds reuse the compiled stage. Existing Debian PostgreSQL volumes require [logical backup/restore into a new Alpine cluster](docs/containers.md), not direct reuse.
+
+4. Open [DevPulse](http://localhost:3000) and [Mailpit](http://localhost:8025). Register, obtain the verification code from Mailpit, verify your account, and add an authorized public HTTP/S endpoint. Enable incident email under **Notifications**.
+
+Stop while preserving your data:
 
 ```bash
 docker compose --env-file .cache/compose.env down
 ```
 
-The development stack is **not a production deployment manifest**. See [container operations and restore](docs/containers.md) for port overrides, test stacks and backups, or [native development](docs/development.md) for separate database, API, worker, scheduler and frontend startup.
+Only the application and Mailpit bind host ports, on loopback. [Container operations](docs/containers.md) · [Native development](docs/development.md) · [Configuration](docs/api.md#configuration).
 
-### Environment variables
+## Testing
 
-Compose's initializer creates `.cache/compose.env` with a random local database password and preserves an existing file. Keep it with the stack's volumes. Do not print resolved Compose configuration or publish environment files.
-
-For a fresh native checkout, copy the safe templates:
+After [development setup](docs/development.md), export the dedicated test PostgreSQL/Redis settings and start Mailpit for the integration suite:
 
 ```bash
-cp backend/.env.example backend/.env
-cp .env.example frontend/.env.local
-```
-
-Set the database URL, Redis broker URL, exact application origin and SMTP settings in `backend/.env`. The root example contains only an optional frontend telemetry setting. Native tests require a separate `TEST_DATABASE_URL` ending in `_test` and `TEST_REDIS_URL`; never point tests at development or production data. [Configuration reference](docs/api.md#configuration).
-
-## Development
-
-With Python 3.13 and Node 24/npm 11 installed, create `.venv`, install the hashed Python development lock, and run `npm ci` in `frontend/`. See [setup](docs/development.md) for details.
-
-```bash
+# Backend: unit, PostgreSQL, Redis/prefork workers and real SMTP
+(cd backend && ../.venv/bin/python -m pytest --run-integration --run-worker --run-mailpit)
+# Operational safeguards
+.venv/bin/python -m pytest scripts/tests
+# Frontend components
+(cd frontend && npm test)
+# Browser workflows (see the fixture-specific commands in the browser guide)
+(cd frontend && npm run test:e2e)
+# Static checks and generated API contract
 .venv/bin/ruff check backend
 .venv/bin/ruff format --check backend
 (cd backend && ../.venv/bin/mypy app)
-(cd backend && ../.venv/bin/python -m pytest --run-integration --run-worker --run-mailpit)
-.venv/bin/python -m pytest scripts/tests
-(cd frontend && npm run check && npm run api:check && npm run build)
+.venv/bin/ruff check --config backend/pyproject.toml scripts containers/fixtures containers/showcase
+(cd frontend && npm run check && npm run api:check)
 ```
 
-Export the dedicated test database/broker settings and start local Mailpit before the complete backend suite. [Browser tests](docs/account-ui.md#browser-tests) and feature-specific fixture commands are documented in the linked guides.
+[Browser prerequisites and fixture suites](docs/account-ui.md#browser-tests) · [Container tests and full stack smoke](docs/containers.md#controlled-fixtures-and-validation).
 
-## Engineering decisions
+## Security
 
-PostgreSQL supplies transactional state and row-level coordination across workers. Redis keeps queue delivery lightweight while durable pending work survives broker loss. Celery provides separate probe and maintenance execution; asynchronous HTTPX bounds each probe's DNS, TLS, network and body work. Generated OpenAPI types keep browser contracts aligned with FastAPI.
+Accounts use Argon2id password hashes, verified email, opaque database-backed sessions, CSRF tokens and exact Origin checks. API queries enforce resource ownership. URL validation and destination checks reject unsafe schemes and private, loopback, reserved and metadata addresses; narrowly scoped fixture exceptions exist only for local tests and are rejected in production mode.
 
-## Known limitations and next improvements
+Secrets are supplied through ignored environment files. Runtime images are pinned and were scanned after rebuilding. The clean runtime scan is dated evidence, not a guarantee against future vulnerabilities; one disclosed development-only `braces` advisory remains outside those images. [Security scope and limitations](docs/portfolio-release.md#security-and-public-file-review).
 
-Monitoring runs from one configured location. Observed uptime is a run-weighted success ratio, not time-weighted availability or an SLA. Email is the only notification channel; SMTP acceptance does not guarantee inbox delivery. Retries/fencing prevent duplicate database effects but cannot guarantee exactly-once external HTTP requests or email.
+## Performance
 
-Before a public deployment: rescan the selected deployment artifacts, validate production ingress/network isolation, prove cloud restore and operational alarms, and obtain deployment approval. Later improvements could include additional probe regions, notification providers and broader browser/accessibility coverage. The [AWS proposal](docs/deployment-proposal.md) is costed preparation, not deployed infrastructure.
+**Controlled local benchmark — October 5, 2026**, using the final validated runtime images:
+
+| Measurement | Result |
+| --- | ---: |
+| Simulated monitors | 100 |
+| HTTP probes | 10,000 |
+| Successful / failed | 10,000 / 0 |
+| Throughput | 18.826 probes/sec |
+| Dashboard API p95 latency | 49.364 ms |
+
+The workload used accelerated scheduling and a small controlled HTTP response. It measures this local workload, not production customers, internet latency or maximum capacity. [Method, hardware, sampling and raw evidence](docs/performance.md).
+
+## Known limitations
+
+Monitoring originates from one location, notifications are email-only, and raw check history is retained for 30 days. Infrastructure is portfolio-scale. Observed uptime is a run-weighted ratio, not an SLA; duplicate external HTTP requests or email remain possible after ambiguous failures.
+
+## Project status
+
+**Feature-complete portfolio project. Designed for local Docker execution rather than permanent hosted operation.**

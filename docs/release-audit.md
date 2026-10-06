@@ -1,8 +1,8 @@
 # Release audit — milestone 20
 
-This is the historical 2026-10-02 audit. See the [current portfolio release report](portfolio-release.md) for the latest results and blockers.
+This is the historical 2026-10-02 audit. See the [current portfolio release report](portfolio-release.md) for the latest results and local portfolio status.
 
-**Milestone 20's local audit and deployment approval package are complete. Deployment recommendation: NO-GO.** No cloud resource, paid service, image publication, public DNS or deployment was created. No repository operations were performed. Audit evidence was gathered on 2026-10-01/02 in Ubuntu 24.04 WSL2 using Python 3.13.15, Node 24.21.0, PostgreSQL 18 and real Redis/Celery workers.
+**Milestone 20's local audit is complete.** Its cloud design study is retained as optional historical engineering work, not a portfolio completion requirement. No cloud resource, paid service, image publication, public DNS or deployment was created. No repository operations were performed. Audit evidence was gathered on 2026-10-01/02 in Ubuntu 24.04 WSL2 using Python 3.13.15, Node 24.21.0, PostgreSQL 18 and real Redis/Celery workers.
 
 The package consists of this audit, [AWS topology/cost proposal](deployment-proposal.md), [release/operations runbook](release-runbook.md), [actual screenshot gallery](release-screenshots.md), and sanitized [validation](evidence/m20-validation.json), [dependency](evidence/m20-dependency-audit.json), [image](evidence/m20-image-audit.json), [cost](evidence/m20-cost-model.json) and [source manifest](evidence/m20-source-manifest.json) evidence. This completes preparation; it does not certify production security, cloud capacity, accessibility compliance or availability.
 
@@ -51,7 +51,7 @@ The [milestone 19 evidence](performance.md) remains the historical 100-monitor/1
 | Packaging / CI | Allowlisted build contexts exclude local secrets; runtime packages are locked, bases digest-pinned, API contract generated, CI Actions pinned/read-only with no publishing/deployment job. Remote execution is unverified. |
 | Service health | API readiness checks startup/DB; worker health checks process/DB/broker, not completed-work freshness. Per-monitor stale state exists. The handoff's planned authenticated monitoring-service-status endpoint is **absent**; no endpoint or aggregate heartbeat exporter is claimed. |
 
-## Image advisory findings: deployment blocker
+## Historical image findings — remediated October 5
 
 Trivy 0.75.0, database updated 2026-10-02T01:05:41Z, scanned final local image filesystems. Counts below are package/advisory occurrences, **not unique CVEs or demonstrated exploits**. Vendor statuses and fixed versions are retained per match in [image evidence](evidence/m20-image-audit.json). Raw descriptions, secrets, response data and environment configuration are excluded.
 
@@ -64,13 +64,13 @@ Trivy 0.75.0, database updated 2026-10-02T01:05:41Z, scanned final local image f
 
 The backend/frontend final language-package findings are zero; this is separate from the clean application lockfile audits. Fix versions were reported for 13 backend, one frontend, 59 PostgreSQL and all 20 Redis occurrences. Other matches have affected/deferred/will-not-fix statuses. For example, Debian SQLite/Perl/zlib matches include critical vendor advisories; scanner severity alone does not establish that DevPulse exercises the vulnerable path. No finding was accepted, suppressed or declared unreachable in this audit.
 
-Required next security work before any deployment: refresh selected patched base/database/broker pins, rebuild and rerun relevant regression tests, rescan final artifacts, then perform per-finding vendor/reachability review for residual matches. Do not install unpinned OS upgrades during runtime or silently change database major versions to clear scanner output. Record fixed-version verification, remaining risks, owner and expiry. The local Mailpit and fixture images are development-only, excluded from the proposed deployment. Host AMI, Caddy, managed-service patch levels and cloud policies do not yet exist and therefore were not scanned. This audit is not a penetration test or supply-chain attestation.
+The follow-up image work below was completed in the [October 5 validation](container-release.md). The October 2 recommendation was to refresh selected patched base/database/broker pins, rebuild and rerun relevant regression tests, rescan final artifacts, then perform per-finding vendor/reachability review for residual matches. Do not install unpinned OS upgrades during runtime or silently change database major versions to clear scanner output. Record fixed-version verification, remaining risks, owner and expiry. The local Mailpit and fixture images are development-only, excluded from the proposed deployment. Host AMI, Caddy, managed-service patch levels and cloud policies do not yet exist and therefore were not scanned. This audit is not a penetration test or supply-chain attestation.
 
-## Open launch gates and owner decisions
+## Optional hosting considerations (historical design study)
 
 | Gate | Required disposition before public deployment |
 | --- | --- |
-| Image advisories | Remediate available fixes; reviewed disposition for every residual critical/high match. Current status blocks launch. |
+| Image advisories | Remediate available fixes; reviewed disposition for every residual critical/high match. Completed for the four local runtime images on October 5. |
 | Production ingress/isolation | Implement/review TLS, request limits/security headers, trusted client-IP forwarding, host/task metadata and private-network egress rejection; prove with staged adversarial requests. |
 | Operational detection | Implement aggregate freshness/lease/pending/delivery/backup/Beat metrics and tested alarm delivery; readiness alone is inadequate. Decide whether to implement the planned authenticated service-status endpoint or formally accept its omission. |
 | Cloud restore and load | Time an isolated encrypted restore; measure chosen instance/task sizes, worker replacement and realistic external DNS/TLS/failure load; verify DB connection headroom. |
@@ -78,6 +78,6 @@ Required next security work before any deployment: refresh selected patched base
 | Budget / risk | Approve single-host failure risk or managed alternative, region/data retention, monthly budget and overages; proposal estimates $112.23 / $424.36 USD at stated assumptions. |
 | Publishing / live URL | Separate explicit approval, approved immutable image digests, staged smoke results and rollback record. No live URL currently exists. |
 
-These are disclosed outcomes of the audit, not work performed on cloud resources or implied authorization for another milestone. Existing native services and unrelated containers were preserved; disposable validation stacks and the audit's Mailpit process were removed after checks. The repository owner handles all repository operations.
+These conditional hosting considerations are outside current portfolio scope, not work performed on cloud resources or implied authorization for another milestone. Existing native services and unrelated containers were preserved; disposable validation stacks and the audit's Mailpit process were removed after checks. The repository owner handles all repository operations.
 
 Suggested commit message: `chore: complete release audit and deployment approval package`.

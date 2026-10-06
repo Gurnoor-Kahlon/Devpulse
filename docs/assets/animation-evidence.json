@@ -1,0 +1,14 @@
+{
+  "file": "showcase.gif",
+  "frames": [
+    "tour-dashboard.png",
+    "tour-monitor.png",
+    "tour-incident.png",
+    "tour-recovery.png"
+  ],
+  "description": "Actual browser captures; resized and quantized only.",
+  "width": 1008,
+  "height": 770,
+  "bytes": 294541,
+  "sha256": "f64dba88adf5638ac91b7a842419d67a5217b1ae4c9b55864a4c875839eba189"
+}

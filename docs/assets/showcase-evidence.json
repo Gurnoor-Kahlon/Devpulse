@@ -1,0 +1,1624 @@
+{
+  "started_at": "2026-10-05T21:42:20.814723+00:00",
+  "project": "devpulse-showcase-efda123d",
+  "pipeline": "Beat \u2192 Redis \u2192 maintenance dispatcher \u2192 Redis \u2192 prefork probes \u2192 PostgreSQL",
+  "configuration_only_seed": true,
+  "history_timestamps_modified": false,
+  "runtime_images_rebuilt": false,
+  "rounds": [
+    {
+      "round": 1,
+      "phase": "healthy baseline",
+      "completed_at": "2026-10-05T21:43:25.277584+00:00"
+    },
+    {
+      "round": 2,
+      "phase": "healthy baseline",
+      "completed_at": "2026-10-05T21:43:42.185864+00:00"
+    },
+    {
+      "round": 3,
+      "phase": "healthy baseline",
+      "completed_at": "2026-10-05T21:43:53.068180+00:00"
+    },
+    {
+      "round": 4,
+      "phase": "healthy baseline",
+      "completed_at": "2026-10-05T21:44:04.039500+00:00"
+    },
+    {
+      "round": 5,
+      "phase": "HTTP 503 and HTTP 200 assertion failures",
+      "completed_at": "2026-10-05T21:44:49.398885+00:00"
+    },
+    {
+      "round": 6,
+      "phase": "checkout recovered; billing/inventory remain down",
+      "completed_at": "2026-10-05T21:45:32.779763+00:00"
+    },
+    {
+      "round": 7,
+      "phase": "checkout recovered; billing/inventory remain down",
+      "completed_at": "2026-10-05T21:46:14.289321+00:00"
+    }
+  ],
+  "migration": "f16b4d8e302a",
+  "images": {
+    "api": "sha256:3abe8344c40ee47ea92d518772b366478f67fd706a73968972d33aaa962e6ef8",
+    "frontend": "sha256:604d650a3c64f29200599751b5b94d3a028632ac59d41d953e8baeb4ca5725b1",
+    "postgres": "sha256:ccef8e81ccd9a03eeb493985adb58f50b444f1e7432cc36ac7179f724a6ea59f",
+    "redis": "sha256:a52ee088dc180d67fb50f689bceb668a19606136fc75f36f12bc5323288409a0"
+  },
+  "captures": [
+    {
+      "file": "incident-open.png",
+      "route": "/incidents/{id}",
+      "stage": "incident",
+      "target_url_masked": false,
+      "sha256": "3371976844c75a0d2da9adea1c380a5a46e5033da4e37dbc84e51c166dead583",
+      "captured_at": "2026-10-05T21:44:53.211242+00:00"
+    },
+    {
+      "file": "tour-incident.png",
+      "route": "/incidents/{id}",
+      "stage": "incident",
+      "target_url_masked": false,
+      "sha256": "c067c190655a8f02a4252e79b2c631e1919ba5c5a3a416e5227790db0e19d915",
+      "captured_at": "2026-10-05T21:44:53.612798+00:00"
+    },
+    {
+      "file": "dashboard.png",
+      "route": "/dashboard",
+      "stage": "recovery",
+      "target_url_masked": false,
+      "sha256": "f6898a8fa81d59d3d027db2073933da544d4eac132c5366a2949d4ddcdb0efa9",
+      "captured_at": "2026-10-05T21:48:05.218092+00:00"
+    },
+    {
+      "file": "monitors.png",
+      "route": "/monitors",
+      "stage": "recovery",
+      "target_url_masked": true,
+      "sha256": "ec8c67553f6b83e5bd926f50ca406e239d03ba4d848efdb00fd18e1b9df4646b",
+      "captured_at": "2026-10-05T21:48:05.769507+00:00"
+    },
+    {
+      "file": "monitor-history.png",
+      "route": "/monitors/{id}",
+      "stage": "recovery",
+      "target_url_masked": true,
+      "sha256": "1c21d3c1805639a712e4bc8052b91810f1c5289c5786ee3b4f0a029a6e79e6cc",
+      "captured_at": "2026-10-05T21:48:06.613018+00:00"
+    },
+    {
+      "file": "incident-recovery.png",
+      "route": "/incidents/{id}",
+      "stage": "recovery",
+      "target_url_masked": false,
+      "sha256": "d339871e121b2569bbdbeb04e4cc62f38937d298de48a695ce0802d945e8d30f",
+      "captured_at": "2026-10-05T21:48:07.192900+00:00"
+    },
+    {
+      "file": "assertion-config.png",
+      "route": "/monitors/{id}/assertions",
+      "stage": "recovery",
+      "target_url_masked": false,
+      "sha256": "1f6d7995a3031a6be10d63fb3e4973b0963b3256fc310b90f1e859d278f3d31a",
+      "captured_at": "2026-10-05T21:48:07.596975+00:00"
+    },
+    {
+      "file": "assertion-result.png",
+      "route": "/monitors/{id}",
+      "stage": "recovery",
+      "target_url_masked": true,
+      "sha256": "ecc5095966661698b2173fb951545ad12a952b947f036295fce37e7b1891e067",
+      "captured_at": "2026-10-05T21:48:08.573447+00:00"
+    },
+    {
+      "file": "tour-dashboard.png",
+      "route": "/dashboard",
+      "stage": "recovery",
+      "target_url_masked": false,
+      "sha256": "319c04eec5d083e350e937cfa2c3ce89a24031fdc12c2eb53cab7124b19a56ca",
+      "captured_at": "2026-10-05T21:48:09.302086+00:00"
+    },
+    {
+      "file": "tour-monitor.png",
+      "route": "/monitors/{id}",
+      "stage": "recovery",
+      "target_url_masked": true,
+      "sha256": "f72a3cbeec249bdde878f2ad01274856f2c1429cd1242b6a36e56b6a403d9506",
+      "captured_at": "2026-10-05T21:48:09.962838+00:00"
+    },
+    {
+      "file": "tour-recovery.png",
+      "route": "/incidents/{id}",
+      "stage": "recovery",
+      "target_url_masked": false,
+      "sha256": "b8e19830653113e466131d59b31410c31f17e75e1ed73700b16f4d08e51da11e",
+      "captured_at": "2026-10-05T21:48:10.391476+00:00"
+    },
+    {
+      "file": "dashboard-mobile.png",
+      "route": "/dashboard",
+      "stage": "recovery",
+      "target_url_masked": false,
+      "sha256": "c18f2e1707cd6239843760920146b43e9b4b04c350fede2fcc5175828c424736",
+      "captured_at": "2026-10-05T21:48:11.052528+00:00"
+    }
+  ],
+  "snapshot": {
+    "monitors": {
+      "catalog": {
+        "id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "name": "Catalog API \u00b7 healthy",
+        "state": "operational"
+      },
+      "checkout": {
+        "id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "name": "Checkout API \u00b7 recovery scenario",
+        "state": "operational"
+      },
+      "search": {
+        "id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "name": "Search API \u00b7 slower response",
+        "state": "operational"
+      },
+      "billing": {
+        "id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "name": "Billing API \u00b7 controlled outage",
+        "state": "down"
+      },
+      "inventory": {
+        "id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "name": "Inventory API \u00b7 JSON assertion",
+        "state": "down"
+      }
+    },
+    "runs": [
+      {
+        "id": "31c5bf07-c436-4873-9ec8-9d2ab9f02080",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:20.220428+00:00",
+        "completed_at": "2026-10-05 21:43:21.377227+00:00"
+      },
+      {
+        "id": "4dbcfb7c-7c2c-49b8-95f0-e7dde8601206",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:20.220428+00:00",
+        "completed_at": "2026-10-05 21:43:20.813259+00:00"
+      },
+      {
+        "id": "c59393e6-cbd0-443b-a408-f1f1077819fd",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:20.220428+00:00",
+        "completed_at": "2026-10-05 21:43:21.020987+00:00"
+      },
+      {
+        "id": "7b99c017-6d5d-4ea9-892e-37354f5e298d",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:20.220428+00:00",
+        "completed_at": "2026-10-05 21:43:21.185067+00:00"
+      },
+      {
+        "id": "7da2b92f-6108-4a56-9a73-2c160059a3b6",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:20.220428+00:00",
+        "completed_at": "2026-10-05 21:43:21.257534+00:00"
+      },
+      {
+        "id": "23232740-32e1-44ae-91ae-2ad44acfcbef",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:35.204423+00:00",
+        "completed_at": "2026-10-05 21:43:35.467835+00:00"
+      },
+      {
+        "id": "39d86ad0-d849-4a66-9fe1-fab580b435a4",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:35.204423+00:00",
+        "completed_at": "2026-10-05 21:43:36.251902+00:00"
+      },
+      {
+        "id": "9d580ce0-c712-4c5f-a437-ec188a783274",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:35.204423+00:00",
+        "completed_at": "2026-10-05 21:43:35.812483+00:00"
+      },
+      {
+        "id": "15018f3f-c952-40fb-996a-d8d3c1f9d61c",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:35.204423+00:00",
+        "completed_at": "2026-10-05 21:43:35.445660+00:00"
+      },
+      {
+        "id": "6451bd19-abfe-458b-a81e-ca61a7bdfeb7",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:35.204423+00:00",
+        "completed_at": "2026-10-05 21:43:35.619183+00:00"
+      },
+      {
+        "id": "b8900950-610f-472b-a217-b2d1f446a78b",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:50.189039+00:00",
+        "completed_at": "2026-10-05 21:43:50.568675+00:00"
+      },
+      {
+        "id": "0b455af1-9bd4-4b5a-9326-8aeea6816f51",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:50.189039+00:00",
+        "completed_at": "2026-10-05 21:43:50.425988+00:00"
+      },
+      {
+        "id": "ae1279a5-a87d-40d7-b9ff-643aba3b77b3",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:50.189039+00:00",
+        "completed_at": "2026-10-05 21:43:50.448869+00:00"
+      },
+      {
+        "id": "20bdedc1-4591-4e83-95b3-c22dff95a1f5",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:50.189039+00:00",
+        "completed_at": "2026-10-05 21:43:50.589299+00:00"
+      },
+      {
+        "id": "efc16351-70ab-42e2-aaec-5825488bf724",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:43:50.189039+00:00",
+        "completed_at": "2026-10-05 21:43:51.497640+00:00"
+      },
+      {
+        "id": "69a72e85-bee9-4d4b-b7a4-c1dc969a9ada",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:00.203934+00:00",
+        "completed_at": "2026-10-05 21:44:00.606889+00:00"
+      },
+      {
+        "id": "fb249cbc-c399-437c-a64b-59073bc7891e",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:00.203934+00:00",
+        "completed_at": "2026-10-05 21:44:01.284135+00:00"
+      },
+      {
+        "id": "6d75161f-2bfa-4319-bfae-317f3e369dfa",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:00.203934+00:00",
+        "completed_at": "2026-10-05 21:44:00.442772+00:00"
+      },
+      {
+        "id": "68b0c67a-4af4-4660-a588-e4e1880f9dac",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:00.203934+00:00",
+        "completed_at": "2026-10-05 21:44:00.462530+00:00"
+      },
+      {
+        "id": "34c0971b-d340-4936-bab3-6aa0b701b3b6",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:00.203934+00:00",
+        "completed_at": "2026-10-05 21:44:00.589758+00:00"
+      },
+      {
+        "id": "9913ec48-2432-418a-a3a2-3d783b397c00",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:15.227025+00:00",
+        "completed_at": "2026-10-05 21:44:16.329651+00:00"
+      },
+      {
+        "id": "29b679ab-9422-4608-b473-1f62b0684450",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:44:15.227025+00:00",
+        "completed_at": "2026-10-05 21:44:15.479447+00:00"
+      },
+      {
+        "id": "b3654dd9-5116-4993-be87-be2845f9f3df",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:44:15.227025+00:00",
+        "completed_at": "2026-10-05 21:44:45.540307+00:00"
+      },
+      {
+        "id": "3302183e-4e67-45fc-9db2-8b66d7cc81fc",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:44:15.227025+00:00",
+        "completed_at": "2026-10-05 21:44:45.557148+00:00"
+      },
+      {
+        "id": "7144b186-7f0b-4c8c-a57e-217b360fdbfb",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:44:15.227025+00:00",
+        "completed_at": "2026-10-05 21:44:45.806870+00:00"
+      },
+      {
+        "id": "5adbef55-d0f7-49d7-bc52-66af0d32214b",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:45:00.228166+00:00",
+        "completed_at": "2026-10-05 21:45:30.471815+00:00"
+      },
+      {
+        "id": "05ca6024-6201-4c97-b317-9858f3dc2307",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:45:00.228166+00:00",
+        "completed_at": "2026-10-05 21:45:00.459950+00:00"
+      },
+      {
+        "id": "b1d12fe6-1860-418d-b5bb-2f10f4d67adc",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:45:00.228166+00:00",
+        "completed_at": "2026-10-05 21:45:01.105340+00:00"
+      },
+      {
+        "id": "c6321231-4f07-4310-b4ea-71d37eb56eac",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:45:00.228166+00:00",
+        "completed_at": "2026-10-05 21:45:00.916614+00:00"
+      },
+      {
+        "id": "9edb8e7d-54fa-4b83-aac5-1d52dba8e631",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:45:00.228166+00:00",
+        "completed_at": "2026-10-05 21:45:30.433591+00:00"
+      },
+      {
+        "id": "a0364bd7-13d4-4ad7-bfc3-f2731186fc80",
+        "monitor_id": "dd05e967-8095-45a0-823f-7f137f9195db",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:45:40.209921+00:00",
+        "completed_at": "2026-10-05 21:45:40.473852+00:00"
+      },
+      {
+        "id": "713eee56-2885-4dfa-9457-0547b0140d36",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:45:40.209921+00:00",
+        "completed_at": "2026-10-05 21:46:10.440716+00:00"
+      },
+      {
+        "id": "fdedb817-0d45-4038-ac1d-0812c887646c",
+        "monitor_id": "8624b303-fe5c-4316-bad3-86fe34aee318",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:45:40.209921+00:00",
+        "completed_at": "2026-10-05 21:45:41.459659+00:00"
+      },
+      {
+        "id": "3cd8a708-3e72-4c14-b6a3-8ffd642d00c9",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "success",
+        "attempts": 1,
+        "scheduled_at": "2026-10-05 21:45:40.209921+00:00",
+        "completed_at": "2026-10-05 21:45:40.516201+00:00"
+      },
+      {
+        "id": "bd7220ff-9297-455b-84be-57edd4583a16",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "trigger": "scheduled",
+        "state": "completed",
+        "outcome": "failure",
+        "attempts": 3,
+        "scheduled_at": "2026-10-05 21:45:40.209921+00:00",
+        "completed_at": "2026-10-05 21:46:10.429815+00:00"
+      }
+    ],
+    "checks": [
+      {
+        "run_id": "4dbcfb7c-7c2c-49b8-95f0-e7dde8601206",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:20.698464+00:00",
+        "finished_at": "2026-10-05 21:43:20.813259+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 114.799,
+        "assertions": []
+      },
+      {
+        "run_id": "7da2b92f-6108-4a56-9a73-2c160059a3b6",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:20.698819+00:00",
+        "finished_at": "2026-10-05 21:43:21.257534+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 558.72,
+        "assertions": []
+      },
+      {
+        "run_id": "c59393e6-cbd0-443b-a408-f1f1077819fd",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:20.973469+00:00",
+        "finished_at": "2026-10-05 21:43:21.020987+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 47.521,
+        "assertions": []
+      },
+      {
+        "run_id": "7b99c017-6d5d-4ea9-892e-37354f5e298d",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:21.134405+00:00",
+        "finished_at": "2026-10-05 21:43:21.185067+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 50.664,
+        "assertions": [
+          {
+            "reason": "matched",
+            "status": "passed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "31c5bf07-c436-4873-9ec8-9d2ab9f02080",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:21.330542+00:00",
+        "finished_at": "2026-10-05 21:43:21.377227+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 46.689,
+        "assertions": []
+      },
+      {
+        "run_id": "15018f3f-c952-40fb-996a-d8d3c1f9d61c",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:35.391191+00:00",
+        "finished_at": "2026-10-05 21:43:35.445660+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 54.473,
+        "assertions": []
+      },
+      {
+        "run_id": "23232740-32e1-44ae-91ae-2ad44acfcbef",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:35.419064+00:00",
+        "finished_at": "2026-10-05 21:43:35.467835+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 48.775,
+        "assertions": []
+      },
+      {
+        "run_id": "6451bd19-abfe-458b-a81e-ca61a7bdfeb7",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:35.566894+00:00",
+        "finished_at": "2026-10-05 21:43:35.619183+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 52.293,
+        "assertions": [
+          {
+            "reason": "matched",
+            "status": "passed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "39d86ad0-d849-4a66-9fe1-fab580b435a4",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:35.587579+00:00",
+        "finished_at": "2026-10-05 21:43:36.251902+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 664.329,
+        "assertions": []
+      },
+      {
+        "run_id": "9d580ce0-c712-4c5f-a437-ec188a783274",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:35.755533+00:00",
+        "finished_at": "2026-10-05 21:43:35.812483+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 56.951,
+        "assertions": []
+      },
+      {
+        "run_id": "0b455af1-9bd4-4b5a-9326-8aeea6816f51",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:50.368797+00:00",
+        "finished_at": "2026-10-05 21:43:50.425988+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 57.193,
+        "assertions": []
+      },
+      {
+        "run_id": "ae1279a5-a87d-40d7-b9ff-643aba3b77b3",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:50.400360+00:00",
+        "finished_at": "2026-10-05 21:43:50.448869+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 48.512,
+        "assertions": []
+      },
+      {
+        "run_id": "b8900950-610f-472b-a217-b2d1f446a78b",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:50.525469+00:00",
+        "finished_at": "2026-10-05 21:43:50.568675+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 43.206,
+        "assertions": [
+          {
+            "reason": "matched",
+            "status": "passed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "20bdedc1-4591-4e83-95b3-c22dff95a1f5",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:50.548997+00:00",
+        "finished_at": "2026-10-05 21:43:50.589299+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 40.304,
+        "assertions": []
+      },
+      {
+        "run_id": "efc16351-70ab-42e2-aaec-5825488bf724",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:43:50.656118+00:00",
+        "finished_at": "2026-10-05 21:43:51.497640+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 841.526,
+        "assertions": []
+      },
+      {
+        "run_id": "6d75161f-2bfa-4319-bfae-317f3e369dfa",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:00.399709+00:00",
+        "finished_at": "2026-10-05 21:44:00.442772+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 43.063,
+        "assertions": []
+      },
+      {
+        "run_id": "68b0c67a-4af4-4660-a588-e4e1880f9dac",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:00.417947+00:00",
+        "finished_at": "2026-10-05 21:44:00.462530+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 44.587,
+        "assertions": []
+      },
+      {
+        "run_id": "34c0971b-d340-4936-bab3-6aa0b701b3b6",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:00.544277+00:00",
+        "finished_at": "2026-10-05 21:44:00.589758+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 45.483,
+        "assertions": [
+          {
+            "reason": "matched",
+            "status": "passed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "69a72e85-bee9-4d4b-b7a4-c1dc969a9ada",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:00.564636+00:00",
+        "finished_at": "2026-10-05 21:44:00.606889+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 42.256,
+        "assertions": []
+      },
+      {
+        "run_id": "fb249cbc-c399-437c-a64b-59073bc7891e",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:00.706603+00:00",
+        "finished_at": "2026-10-05 21:44:01.284135+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 577.536,
+        "assertions": []
+      },
+      {
+        "run_id": "29b679ab-9422-4608-b473-1f62b0684450",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:15.431314+00:00",
+        "finished_at": "2026-10-05 21:44:15.479447+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 48.136,
+        "assertions": []
+      },
+      {
+        "run_id": "b3654dd9-5116-4993-be87-be2845f9f3df",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:15.453740+00:00",
+        "finished_at": "2026-10-05 21:44:15.504735+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 51.0,
+        "assertions": []
+      },
+      {
+        "run_id": "3302183e-4e67-45fc-9db2-8b66d7cc81fc",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:15.647406+00:00",
+        "finished_at": "2026-10-05 21:44:15.701924+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 54.52,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "7144b186-7f0b-4c8c-a57e-217b360fdbfb",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:15.673424+00:00",
+        "finished_at": "2026-10-05 21:44:15.717605+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 44.181,
+        "assertions": []
+      },
+      {
+        "run_id": "9913ec48-2432-418a-a3a2-3d783b397c00",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:44:15.827651+00:00",
+        "finished_at": "2026-10-05 21:44:16.329651+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 502.003,
+        "assertions": []
+      },
+      {
+        "run_id": "b3654dd9-5116-4993-be87-be2845f9f3df",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:44:30.425579+00:00",
+        "finished_at": "2026-10-05 21:44:30.475958+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 50.381,
+        "assertions": []
+      },
+      {
+        "run_id": "3302183e-4e67-45fc-9db2-8b66d7cc81fc",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:44:30.443755+00:00",
+        "finished_at": "2026-10-05 21:44:30.487488+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 43.734,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "7144b186-7f0b-4c8c-a57e-217b360fdbfb",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:44:30.567323+00:00",
+        "finished_at": "2026-10-05 21:44:30.613761+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 46.443,
+        "assertions": []
+      },
+      {
+        "run_id": "b3654dd9-5116-4993-be87-be2845f9f3df",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:44:45.487017+00:00",
+        "finished_at": "2026-10-05 21:44:45.540307+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 53.293,
+        "assertions": []
+      },
+      {
+        "run_id": "3302183e-4e67-45fc-9db2-8b66d7cc81fc",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:44:45.509801+00:00",
+        "finished_at": "2026-10-05 21:44:45.557148+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 47.353,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "7144b186-7f0b-4c8c-a57e-217b360fdbfb",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:44:45.751975+00:00",
+        "finished_at": "2026-10-05 21:44:45.806870+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 54.901,
+        "assertions": []
+      },
+      {
+        "run_id": "05ca6024-6201-4c97-b317-9858f3dc2307",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:00.412642+00:00",
+        "finished_at": "2026-10-05 21:45:00.459950+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 47.31,
+        "assertions": []
+      },
+      {
+        "run_id": "b1d12fe6-1860-418d-b5bb-2f10f4d67adc",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:00.443912+00:00",
+        "finished_at": "2026-10-05 21:45:01.105340+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 661.432,
+        "assertions": []
+      },
+      {
+        "run_id": "9edb8e7d-54fa-4b83-aac5-1d52dba8e631",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:00.552226+00:00",
+        "finished_at": "2026-10-05 21:45:00.601569+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 49.347,
+        "assertions": []
+      },
+      {
+        "run_id": "5adbef55-d0f7-49d7-bc52-66af0d32214b",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:00.700235+00:00",
+        "finished_at": "2026-10-05 21:45:00.747278+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 47.048,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "c6321231-4f07-4310-b4ea-71d37eb56eac",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:00.862078+00:00",
+        "finished_at": "2026-10-05 21:45:00.916614+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 54.541,
+        "assertions": []
+      },
+      {
+        "run_id": "9edb8e7d-54fa-4b83-aac5-1d52dba8e631",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:45:15.377760+00:00",
+        "finished_at": "2026-10-05 21:45:15.429241+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 51.482,
+        "assertions": []
+      },
+      {
+        "run_id": "5adbef55-d0f7-49d7-bc52-66af0d32214b",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:45:15.414980+00:00",
+        "finished_at": "2026-10-05 21:45:15.464265+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 49.287,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "9edb8e7d-54fa-4b83-aac5-1d52dba8e631",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:45:30.381222+00:00",
+        "finished_at": "2026-10-05 21:45:30.433591+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 52.373,
+        "assertions": []
+      },
+      {
+        "run_id": "5adbef55-d0f7-49d7-bc52-66af0d32214b",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:45:30.410452+00:00",
+        "finished_at": "2026-10-05 21:45:30.471815+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 61.365,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "a0364bd7-13d4-4ad7-bfc3-f2731186fc80",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:40.425633+00:00",
+        "finished_at": "2026-10-05 21:45:40.473852+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 48.222,
+        "assertions": []
+      },
+      {
+        "run_id": "3cd8a708-3e72-4c14-b6a3-8ffd642d00c9",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:40.460204+00:00",
+        "finished_at": "2026-10-05 21:45:40.516201+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 56.0,
+        "assertions": []
+      },
+      {
+        "run_id": "fdedb817-0d45-4038-ac1d-0812c887646c",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:40.615567+00:00",
+        "finished_at": "2026-10-05 21:45:41.459659+00:00",
+        "outcome": "success",
+        "http_status": 200,
+        "duration_ms": 844.096,
+        "assertions": []
+      },
+      {
+        "run_id": "bd7220ff-9297-455b-84be-57edd4583a16",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:40.648083+00:00",
+        "finished_at": "2026-10-05 21:45:40.701385+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 53.359,
+        "assertions": []
+      },
+      {
+        "run_id": "713eee56-2885-4dfa-9457-0547b0140d36",
+        "attempt": 1,
+        "started_at": "2026-10-05 21:45:40.875490+00:00",
+        "finished_at": "2026-10-05 21:45:40.933726+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 58.246,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "bd7220ff-9297-455b-84be-57edd4583a16",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:45:55.416121+00:00",
+        "finished_at": "2026-10-05 21:45:55.466691+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 50.572,
+        "assertions": []
+      },
+      {
+        "run_id": "713eee56-2885-4dfa-9457-0547b0140d36",
+        "attempt": 2,
+        "started_at": "2026-10-05 21:45:55.443755+00:00",
+        "finished_at": "2026-10-05 21:45:55.497446+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 53.698,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      },
+      {
+        "run_id": "bd7220ff-9297-455b-84be-57edd4583a16",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:46:10.364330+00:00",
+        "finished_at": "2026-10-05 21:46:10.429815+00:00",
+        "outcome": "failure",
+        "http_status": 503,
+        "duration_ms": 65.492,
+        "assertions": []
+      },
+      {
+        "run_id": "713eee56-2885-4dfa-9457-0547b0140d36",
+        "attempt": 3,
+        "started_at": "2026-10-05 21:46:10.373656+00:00",
+        "finished_at": "2026-10-05 21:46:10.440716+00:00",
+        "outcome": "failure",
+        "http_status": 200,
+        "duration_ms": 67.062,
+        "assertions": [
+          {
+            "reason": "value_mismatch",
+            "status": "failed",
+            "definition": {
+              "id": "cccb8133-6816-424a-8c01-d323836bdcee",
+              "kind": "json_equals",
+              "pointer": "/available",
+              "expected": true
+            }
+          }
+        ]
+      }
+    ],
+    "incidents": [
+      {
+        "id": "2b620fe8-b0f7-4917-9ff4-62945d2e6e13",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "started_at": "2026-10-05 21:44:15.453740+00:00",
+        "confirmed_at": "2026-10-05 21:44:45.540307+00:00",
+        "resolved_at": null
+      },
+      {
+        "id": "02158b92-5c70-45f7-8eef-d9893f75f719",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "started_at": "2026-10-05 21:44:15.647406+00:00",
+        "confirmed_at": "2026-10-05 21:44:45.557148+00:00",
+        "resolved_at": null
+      },
+      {
+        "id": "17a8ca8b-8777-4cd5-91b7-62468edcd977",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "started_at": "2026-10-05 21:44:15.673424+00:00",
+        "confirmed_at": "2026-10-05 21:44:45.806870+00:00",
+        "resolved_at": "2026-10-05 21:45:00.916614+00:00"
+      }
+    ],
+    "deliveries": [
+      {
+        "transition": "opened",
+        "status": "sent",
+        "attempts": 1
+      },
+      {
+        "transition": "opened",
+        "status": "sent",
+        "attempts": 1
+      },
+      {
+        "transition": "opened",
+        "status": "sent",
+        "attempts": 1
+      },
+      {
+        "transition": "resolved",
+        "status": "sent",
+        "attempts": 1
+      }
+    ]
+  },
+  "dashboard": {
+    "window": "24h",
+    "start": "2026-10-04T21:46:19.200373Z",
+    "end": "2026-10-05T21:46:19.200373Z",
+    "bucket_seconds": 3600,
+    "metrics": {
+      "successful_runs": 28,
+      "failed_runs": 7,
+      "observations": 35,
+      "excluded_runs": 0,
+      "uptime_percent": 80.0,
+      "response_count": 35,
+      "mean_latency_ms": 175.49882857142853,
+      "first_observation_at": "2026-10-05T21:43:20.220428Z",
+      "last_observation_at": "2026-10-05T21:45:40.209921Z"
+    },
+    "buckets": [
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-04T21:46:19.200373Z",
+        "end": "2026-10-04T22:00:00Z",
+        "partial": true
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-04T22:00:00Z",
+        "end": "2026-10-04T23:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-04T23:00:00Z",
+        "end": "2026-10-05T00:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T00:00:00Z",
+        "end": "2026-10-05T01:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T01:00:00Z",
+        "end": "2026-10-05T02:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T02:00:00Z",
+        "end": "2026-10-05T03:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T03:00:00Z",
+        "end": "2026-10-05T04:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T04:00:00Z",
+        "end": "2026-10-05T05:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T05:00:00Z",
+        "end": "2026-10-05T06:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T06:00:00Z",
+        "end": "2026-10-05T07:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T07:00:00Z",
+        "end": "2026-10-05T08:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T08:00:00Z",
+        "end": "2026-10-05T09:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T09:00:00Z",
+        "end": "2026-10-05T10:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T10:00:00Z",
+        "end": "2026-10-05T11:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T11:00:00Z",
+        "end": "2026-10-05T12:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T12:00:00Z",
+        "end": "2026-10-05T13:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T13:00:00Z",
+        "end": "2026-10-05T14:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T14:00:00Z",
+        "end": "2026-10-05T15:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T15:00:00Z",
+        "end": "2026-10-05T16:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T16:00:00Z",
+        "end": "2026-10-05T17:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T17:00:00Z",
+        "end": "2026-10-05T18:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T18:00:00Z",
+        "end": "2026-10-05T19:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T19:00:00Z",
+        "end": "2026-10-05T20:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 0,
+        "failed_runs": 0,
+        "observations": 0,
+        "excluded_runs": 0,
+        "uptime_percent": null,
+        "response_count": 0,
+        "mean_latency_ms": null,
+        "first_observation_at": null,
+        "last_observation_at": null,
+        "start": "2026-10-05T20:00:00Z",
+        "end": "2026-10-05T21:00:00Z",
+        "partial": false
+      },
+      {
+        "successful_runs": 28,
+        "failed_runs": 7,
+        "observations": 35,
+        "excluded_runs": 0,
+        "uptime_percent": 80.0,
+        "response_count": 35,
+        "mean_latency_ms": 175.49882857142853,
+        "first_observation_at": "2026-10-05T21:43:20.220428Z",
+        "last_observation_at": "2026-10-05T21:45:40.209921Z",
+        "start": "2026-10-05T21:00:00Z",
+        "end": "2026-10-05T21:46:19.200373Z",
+        "partial": true
+      }
+    ],
+    "monitors": {
+      "total": 5,
+      "operational": 3,
+      "down": 2,
+      "confirming_failure": 0,
+      "unknown": 0,
+      "paused": 0,
+      "stale": 0,
+      "awaiting_check": 0
+    },
+    "open_incidents": 2,
+    "recent_incidents": [
+      {
+        "id": "17a8ca8b-8777-4cd5-91b7-62468edcd977",
+        "monitor_id": "bac5123c-2e76-4b6e-8093-e62369dfce47",
+        "monitor_name": "Checkout API \u00b7 recovery scenario",
+        "started_at": "2026-10-05T21:44:15.673424Z",
+        "confirmed_at": "2026-10-05T21:44:45.806870Z",
+        "resolved_at": "2026-10-05T21:45:00.916614Z",
+        "status": "resolved"
+      },
+      {
+        "id": "02158b92-5c70-45f7-8eef-d9893f75f719",
+        "monitor_id": "b6e43fa6-0917-4adc-a0ce-95e9b8ba49ab",
+        "monitor_name": "Inventory API \u00b7 JSON assertion",
+        "started_at": "2026-10-05T21:44:15.647406Z",
+        "confirmed_at": "2026-10-05T21:44:45.557148Z",
+        "resolved_at": null,
+        "status": "open"
+      },
+      {
+        "id": "2b620fe8-b0f7-4917-9ff4-62945d2e6e13",
+        "monitor_id": "3e11db2f-3d04-4b1f-a30f-d9408e15fc3b",
+        "monitor_name": "Billing API \u00b7 controlled outage",
+        "started_at": "2026-10-05T21:44:15.453740Z",
+        "confirmed_at": "2026-10-05T21:44:45.540307Z",
+        "resolved_at": null,
+        "status": "open"
+      }
+    ]
+  },
+  "status": "passed",
+  "finished_at": "2026-10-05T21:46:28.729427+00:00",
+  "disposable_stack_removed": true,
+  "cleanup_verified_at": "2026-10-05T21:53:40.128005+00:00"
+}

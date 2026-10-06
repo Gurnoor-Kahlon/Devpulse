@@ -1,18 +1,19 @@
 # Portfolio release report
 
-**2026-10-05 — NOT READY FOR PUBLIC RELEASE.** Runtime image remediation and local Docker validation are complete. The remaining release blocker is the unimplemented/unapproved production deployment and public URLs. No deployment, image push, cloud resource creation or public DNS change was performed.
+**2026-10-05 — Feature-complete local Docker portfolio project.** The public-facing working files are prepared for GitHub and resume presentation. Permanent hosting, public application URLs and paid cloud infrastructure are outside the project's completion criteria. No deployment or cloud resources are planned or required.
 
-## Release blockers
+## Completion scope
 
-1. **Resolved — critical/high production runtime image advisories.** Fresh baseline scans found 241 critical/high package-advisory matches (54 distinct IDs). Pinned Alpine bases, PostgreSQL helper replacement and vendor library patches remove them. Direct vendor review also found and fixed three critical/high CPython advisory IDs plus embedded OpenSSL occurrences missed by the scanner. All four final runtime images report **zero findings at every severity**, without suppression. [Every advisory, cause and remediation](container-release.md#image-findings-and-remediation).
-2. **Resolved — Docker validation.** Docker 29.2.0 and Compose 5.0.2 are accessible from Ubuntu WSL. All runtime/test images built from scratch; 317 backend tests, two container browser tests, ten full-stack checks and default Compose startup/restart passed. The 100-monitor/10,000-probe benchmark below uses the final scanned images.
-3. **Open — production deployment and public URLs.** Current Compose is local development configuration. Production ingress/TLS, trusted client-IP handling, network/metadata isolation, cloud alarms, encrypted restore drills, domain/email identity and authorization remain gates in the [proposal](deployment-proposal.md). No public URL exists. Deployment was explicitly outside this pass.
+- **Runtime image remediation complete:** four final images have zero reported advisories at every severity in the October 5 scans, without suppression. [Inventory and remediation](container-release.md#image-findings-and-remediation).
+- **Full local Docker validation complete:** clean builds, migrations, actual jobs, outages, browser checks, persistence, restore and restart passed. The final 100-monitor/10,000-probe benchmark uses those scanned images.
+- **Real portfolio showcase:** a reproducible five-monitor Docker scenario exercises Beat, Redis, workers, assertions, incident confirmation, recovery and local email. New [captures](release-screenshots.md) and [run evidence](assets/showcase-evidence.json) show actual worker-generated observations, with no seeded history.
+- **Publication scope:** the working-file audit excludes private configuration and repository metadata. The owner must separately check the eventual publication contents and history; no repository commands or metadata inspection were performed.
 
 [October 5 container release evidence](container-release.md) supersedes the earlier unavailable-Docker and runtime-image findings. Redis's current Alpine 3.21 base remains supported through **2026-11-01**; rebase and revalidate before that date. Existing Debian PostgreSQL volumes need logical backup/restore into a new Alpine cluster, not direct reuse. Only disposable validation volumes were created here.
 
-The [October 4 source manifest](evidence/portfolio-source-manifest-2026-10-04.json) and native validation remain historical records. The [October 5 source manifest](evidence/container-source-manifest-2026-10-05.json) identifies current reviewed public files without repository metadata. Temporary validation stacks were removed; native PostgreSQL/Redis and private configuration were preserved.
+The [October 4 source manifest](evidence/portfolio-source-manifest-2026-10-04.json) and native validation remain historical records. The [October 5 source manifest](evidence/container-source-manifest-2026-10-05.json) identifies the reviewed public files at that validation point without repository metadata. Temporary validation stacks were removed; native PostgreSQL/Redis and private configuration were preserved.
 
-## Changes made
+## Runtime remediation changes (earlier October 5 pass)
 
 - Rebased Python/Node/PostgreSQL runtime images, patched Redis libraries, and replaced PostgreSQL's vulnerable bundled Go helper. Added minimal PostgreSQL/Redis Dockerfiles and explicit build-context allowlists; Python is patched to 3.13.16; Node, PostgreSQL, Redis and application dependency versions are retained. Two container-only locks pin the psycopg C extension and its build tools.
 - Updated CI/build commands and benchmark source fingerprints for all four images. Corrected the outage smoke assertion's timeout for Docker DNS and reran the entire fresh-volume suite. [Diagnosis and complete results](container-release.md#container-validation).
@@ -52,6 +53,12 @@ Earlier October 4 portfolio work, retained as history:
 
 October 5 container/static results are in the [sanitized validation record](evidence/container-validation-2026-10-05.json). October 4 native browser, secret review and lock audits retain their [original evidence](evidence/portfolio-validation-2026-10-04.json). Existing Starlette/AnyIO deprecation warnings remain. No application behavior or schema changed. Existing application locks are unchanged; two container-only locks pin the source-built psycopg extension and its build tools.
 
+## Real Docker portfolio showcase — October 5
+
+The new [showcase](showcase.md) produced 35 completed scheduled runs (28 successful, 7 failed) and 49 real HTTP attempts across five controlled endpoints. Three incidents were confirmed; one recovered and two remained open. Four incident/recovery emails were accepted by local SMTP. All runs were scheduled by Beat and processed through Redis/Celery; no run, check or incident history was seeded. The [sanitized record](assets/showcase-evidence.json) includes timestamps, assertion outcomes, image IDs and capture hashes. The images exactly match the previously scanned release images; no runtime dependencies or image definitions changed.
+
+The reproduction scripts add five refusal checks for unsafe showcase configuration. All **25 current operational tests** pass (the 20 release safeguards plus these five checks). New screenshots and a compact four-frame GIF were captured from the actual application. Target URLs alone are masked. The historical validation counts below remain dated evidence rather than being relabeled as new runs.
+
 ## Real user flow review
 
 The following coverage uses the actual application code and database. Native browser fixture setup executes real loopback probes through the executor but accelerates test retry clocks; independent prefork-worker tests exercise Redis/Beat and real durable delays. This is complementary coverage, not a claim that fixture setup is a deployed background service.
@@ -70,11 +77,17 @@ The following coverage uses the actual application code and database. Native bro
 
 The visual review covers landing/demo, blank login, registration validation, account feedback, dashboard/charts, monitor list/edit/detail, assertions, incident evidence and notification preferences/history at desktop/mobile widths. Monitor creation shares the validated editor. There is no separate general Settings page or analytics page: monitor settings, notification preferences, dashboard and detail analytics are the implemented surfaces. No dead Settings link was added. Loading, empty, failure and stale-data behavior is covered by component and browser tests. Chromium and keyboard/contrast checks do not amount to a full screen-reader or cross-browser accessibility certification.
 
+## Final portfolio audit — October 5
+
+The README rendered successfully in Chromium, including six preview images and its Mermaid diagram. All 245 relative links across 28 Markdown documents resolved, including heading anchors. New screenshots were visually reviewed; the four-frame GIF is 294,541 bytes. The filtered public-file Trivy secret scan found zero matches, and no personal machine paths were found. Private environment files remain excluded. The five-endpoint showcase ran against the exact previously scanned runtime images and its disposable stack/volumes were removed afterward. See the [final audit record](evidence/showcase-audit-2026-10-05.json).
+
+Runtime dependencies and image definitions were unchanged, so the expensive image builds, vulnerability scans and 10,000-probe benchmark were not repeated. Their October 5 results remain dated, linked evidence. The local showcase is a separate demonstration, not a replacement performance benchmark.
+
 ## Security and public-file review
 
 On October 4, a filesystem secret scan was run against an explicitly filtered copy of public candidate files. It excluded repository metadata, local credential directories, environments, dependencies, caches and generated outputs. **No secret scanner matches were found.** Known private configuration values were also compared without printing them; the only initial matches were the intentionally public unauthenticated loopback Redis default, not credentials. No credential rotation was indicated by these findings. `.env.example` files contain placeholders/local defaults only.
 
-This establishes the inspected working-file result, **not Git history or index safety**. Repository metadata was neither read nor changed. Ignore rules do not remove an already tracked file or an old secret from history; the owner must review the eventual publication contents/history before making the repository public. Screenshots show disposable example.com fixture accounts and controlled loopback endpoints, not personal data or production targets. Captures contain no passwords, codes, cookies or response bodies.
+This establishes the inspected working-file result, **not Git history or index safety**. Repository metadata was neither read nor changed. Ignore rules do not remove an already tracked file or an old secret from history; the owner must review the eventual publication contents/history before making the repository public. The new screenshots show a synthetic example.com account; loopback target URLs are masked, and no personal data or production targets appear. Captures contain no passwords, codes, cookies or response bodies.
 
 Authentication/session/CSRF and per-resource ownership boundaries were reviewed and regression-tested. The SSRF review covered unsafe schemes, URL credentials, local/private/metadata addresses, all DNS answers, mapped/transition addresses, numeric connection pinning, TLS verification, disabled redirects/proxies and bounded bodies/deadlines. No fixture exception or protection was widened. Production fixture exceptions remain rejected. Operational logs use sanitized event/identifier fields; deployment ingress logging still needs its own review.
 
@@ -108,9 +121,9 @@ workloads were stopped before timing. The disposable benchmark project was remov
 
 ## Portfolio recommendations
 
-Suggested repository description: **API monitoring with scheduled checks, response assertions, incident recovery, and historical analytics.**
+Suggested repository description: **Full-stack API monitoring with scheduled checks, incident detection, response assertions, and reliability analytics.**
 
-Suggested topics: `nextjs`, `react`, `typescript`, `fastapi`, `python`, `postgresql`, `redis`, `celery`, `docker`, `playwright`, `monitoring`, `observability`.
+Suggested topics: `nextjs`, `react`, `typescript`, `fastapi`, `python`, `postgresql`, `redis`, `celery`, `docker`, `playwright`, `monitoring`, `observability`, `api-monitoring`.
 
 Four resume bullets, grounded in the evidence above:
 
@@ -119,6 +132,6 @@ Four resume bullets, grounded in the evidence above:
 - Executed a controlled local benchmark of 10,000 HTTP probes across 100 simulated monitors, measuring 18.826 probes/second and 49.364 ms dashboard API p95 latency on the final container images.
 - Developed a responsive monitoring dashboard, opt-in email notifications and a restricted read-only demo, validated with 107 component tests and 12 browser workflows using real database and SMTP fixtures.
 
-The README is prepared for a public repository with honest current status; it must not be described as a live deployed project yet. No project license was added or changed. Upstream Node license notices are retained inside the runtime image. Remaining product limits include one monitoring location, email-only delivery, 30-day raw history, run-weighted uptime and possible duplicate external effects after ambiguous worker/SMTP failures. Cloud resilience and security controls remain deployment work, not implemented features.
+The README is prepared for a public repository with honest current status; it must not be described as a live deployed project yet. No project license was added or changed. Upstream Node license notices are retained inside the runtime image. Remaining product limits include one monitoring location, email-only delivery, 30-day raw history, run-weighted uptime and possible duplicate external effects after ambiguous worker/SMTP failures. The optional cloud design study is outside portfolio completion scope.
 
-Suggested commit message: `fix: remediate runtime images and verify container release`.
+Suggested commit message: `docs: publish verified local Docker portfolio showcase`.

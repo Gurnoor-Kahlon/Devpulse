@@ -1,10 +1,10 @@
 # Deployment proposal — milestone 20
 
-**Unapproved design, 2026-10-02. No resources, image publication, DNS changes or deployment have been performed.** The [release audit](release-audit.md) is currently **NO-GO for deployment**. This package is a concrete basis for a later approval; it is not an instruction to deploy the development Compose files.
+**Archived design study, 2026-10-02; scope updated 2026-10-05.** DevPulse is a feature-complete local Docker portfolio project. No paid hosting or AWS resources are planned. This optional architecture/cost exercise is retained as engineering documentation, not an active deployment recommendation or completion requirement. No resources, image publication, DNS changes or deployment were performed. Prices below are dated study assumptions, not current purchasing advice.
 
-## Recommendation and availability
+## Historical options and availability
 
-For an owner-operated portfolio launch, propose **one on-demand Linux m7i.large (2 vCPU, 8 GiB), us-east-1**, with PostgreSQL and Redis on the same host. Estimated baseline is **USD112.23/month**, including the assumptions below. A separately priced managed alternative is **USD424.36/month**. Both need staging measurements on the selected hardware. The [milestone 19 benchmark](performance.md) ran locally against a tiny controlled HTTP response and cannot establish cloud capacity or an SLA.
+The historical single-host option modeled **one on-demand Linux m7i.large (2 vCPU, 8 GiB), us-east-1**, with PostgreSQL and Redis on the same host. Estimated baseline is **USD112.23/month**, including the assumptions below. A separately priced managed alternative is **USD424.36/month**. Both need staging measurements on the selected hardware. The [milestone 19 benchmark](performance.md) ran locally against a tiny controlled HTTP response and cannot establish cloud capacity or an SLA.
 
 The single host is a failure domain for the UI, scheduler, database and broker. Host/AZ loss and maintenance cause downtime and delayed observations. Backups reduce data loss; they do not supply failover. Proposed recovery objectives are **RPO 24 hours, RTO 4 hours**, subject to a successful cloud restore drill. No availability promise is made. Choose the managed option if the owner cannot accept this risk and can fund its higher recurring cost.
 

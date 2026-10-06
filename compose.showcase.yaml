@@ -1,0 +1,10 @@
+# Use only after compose.yaml and compose.test.yaml in an isolated showcase project.
+# Mounted demo tools reuse the validated images; no runtime dependency changes.
+services:
+  api:
+    environment:
+      DEVPULSE_SHOWCASE: "1"
+    volumes: [./containers/showcase:/showcase:ro]
+  fixtures:
+    volumes: [./containers/showcase:/showcase:ro]
+    command: [python, /showcase/server.py]

@@ -1,8 +1,8 @@
 # Runtime image remediation and Docker validation
 
-Release blockers 1 and 2, **2026-10-05**. This work concerns local release artifacts
+Runtime remediation and local Docker validation, **2026-10-05**. This work concerns local release artifacts
 and validation. It does not deploy the application, publish images, create cloud
-resources, or establish public URLs. Production deployment remains a separate gate.
+resources, or establish public URLs. Permanent deployment is outside the local portfolio completion criteria.
 
 ## Image findings and remediation
 
@@ -212,7 +212,7 @@ peaks are sampled lower bounds. Other validation stacks and heavy test/build
 workloads were stopped before timing. The disposable benchmark project was removed.
 [Full report, exact images, source hashes and hardware](evidence/container-performance-2026-10-05.json).
 
-**Blockers 1 and 2 are resolved as of October 5.** The only remaining release
-blocker is production deployment/public URLs, which this work did not begin.
+**Runtime remediation and Docker validation are complete as of October 5.**
+The project is complete for local portfolio use; no cloud deployment or public URL is required.
 [Build/test evidence](evidence/container-validation-2026-10-05.json) and
-[current source manifest](evidence/container-source-manifest-2026-10-05.json).
+[source manifest from this validation pass](evidence/container-source-manifest-2026-10-05.json).

@@ -305,4 +305,4 @@ authenticated-reload Chromium container tests pass.
 
 The final ten-check stack validation passed again after these changes. See the
 [release audit](release-audit.md) for current evidence, remaining image advisories
-and deployment blockers. This Compose file remains a development configuration.
+and historical deployment considerations. This Compose file is the supported local portfolio configuration.

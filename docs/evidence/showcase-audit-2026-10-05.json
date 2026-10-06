@@ -1,0 +1,57 @@
+{
+  "review_date": "2026-10-05",
+  "status": "passed",
+  "project_status": "Feature-complete local Docker portfolio project",
+  "scope": "Public working files only. Repository metadata, index and history were not accessed.",
+  "showcase": {
+    "scheduled_runs": 35,
+    "successful_runs": 28,
+    "failed_runs": 7,
+    "http_attempts": 49,
+    "incidents": 3,
+    "resolved_incidents": 1,
+    "open_incidents": 2,
+    "smtp_accepted_notifications": 4,
+    "history_seeded": false,
+    "real_beat_redis_prefork_pipeline": true,
+    "runtime_image_ids_match_final_scans": true,
+    "stack_and_test_volumes_removed": true
+  },
+  "validation": {
+    "operational_tests_passed": 25,
+    "operational_tests_failed": 0,
+    "new_showcase_refusal_tests": 5,
+    "ruff_lint_and_format": "passed",
+    "capture_javascript_and_compose_prettier": "passed",
+    "documentation_render": {
+      "markdown_documents": 28,
+      "relative_links_checked": 245,
+      "markdown_images": 13,
+      "readme_images_rendered": 6,
+      "mermaid_diagrams_rendered": 1,
+      "errors": []
+    }
+  },
+  "public_file_review": {
+    "secret_scanner": "Trivy 0.75.0 filesystem secret scanner",
+    "secret_matches": 0,
+    "known_local_credential_matches": 0,
+    "personal_machine_path_matches": 0,
+    "unfinished_prose_placeholders": 0,
+    "private_ignore_cases_checked": 10,
+    "public_example_files_retained": true,
+    "screenshots_visually_reviewed": true,
+    "target_urls_masked": true
+  },
+  "retained_evidence": {
+    "runtime_security": "docs/evidence/container-security-2026-10-05.json",
+    "benchmark": "docs/evidence/container-performance-2026-10-05.json",
+    "runtime_dependencies_and_images_changed": false,
+    "full_image_builds_scans_benchmark_repeated": false
+  },
+  "notes": [
+    "Historical machine-readable audits retain the assessment made on their original date; they do not impose current hosting requirements.",
+    "The existing development-only braces advisory remains disclosed.",
+    "Readiness covers inspected working files, not uninspected repository history or index."
+  ]
+}
